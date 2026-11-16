@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, BookOpen, ShieldCheck, ClipboardList, HeartPulse, PackageCheck, ThermometerSun, AlertTriangle, ExternalLink } from "lucide-react";
+import { ArrowLeft, BookOpen, ShieldCheck, ClipboardList, HeartPulse, PackageCheck, ThermometerSun, AlertTriangle, ExternalLink } from "lucide-react";
 
 const guides = [
  { id:"label", icon:ClipboardList, no:"01", title:"Read the medicine label", intro:"A medicine label helps identify exactly what is inside the pack and how it should be handled.", items:["Medicine or brand name and active ingredient, where shown.","Strength and dosage form, such as 500 mg tablet or oral solution.","Manufacturer, batch number and expiry date.","Storage conditions, warnings and the instructions supplied by the prescriber or pharmacist."] },
