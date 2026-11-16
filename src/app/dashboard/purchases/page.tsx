@@ -109,48 +109,26 @@ export default function PurchasesPage() {
   }
 
   async function updateStatus(order: Order, status: string) {
-    setError(""); setSuccess("");
+    if (busy) return;
+    setBusy(true); setError(""); setSuccess("");
     const db = createClient();
-    const createdBatchIds: string[] = [];
-    const updatedLines: { id: string; received: number }[] = [];
     try {
-      if (status === "received" && order.status !== "received") {
-        const { data: lines, error: lineError } = await db.from("purchase_order_items")
-          .select("id,medicine_id,quantity,unit_cost,received_quantity")
-          .eq("purchase_order_id", order.id);
-        if (lineError) throw lineError;
-        for (const line of lines ?? []) {
-          const remaining = Math.max(0, Number(line.quantity) - Number(line.received_quantity || 0));
-          if (!remaining) continue;
-          if (!line.medicine_id) throw new Error("A purchase line is missing its medicine record.");
-          const { data: batch, error: batchError } = await db.from("stock_batches").insert({
-            medicine_id: line.medicine_id,
-            supplier_id: order.supplier_id,
-            quantity: remaining,
-          }).select("id").single();
-          if (batchError) throw batchError;
-          createdBatchIds.push(batch.id);
-          const { error: costError } = await db.from("stock_batch_costs").insert({
-            batch_id: batch.id,
-            purchase_unit_cost: Number(line.unit_cost || 0),
-          });
-          if (costError) throw costError;
-          updatedLines.push({ id: line.id, received: Number(line.received_quantity || 0) });
-          const { error: lineUpdateError } = await db.from("purchase_order_items")
-            .update({ received_quantity: line.quantity }).eq("id", line.id);
-          if (lineUpdateError) throw lineUpdateError;
-        }
+      if (status === "received") {
+        const { data, error } = await db.rpc("receive_purchase_order", { p_order_id: order.id });
+        if (error) throw error;
+        const received = Number((data as { received_units?: number } | null)?.received_units ?? 0);
+        setSuccess(`Purchase received atomically. ${received} units added to stock and batch costs recorded.`);
+      } else {
+        const { error } = await db.from("purchase_orders")
+          .update({ status }).eq("id", order.id).eq("status", "draft");
+        if (error) throw error;
+        setSuccess("Order status updated.");
       }
-      const { error } = await db.from("purchase_orders")
-        .update({ status, received_at: status === "received" ? new Date().toISOString() : null })
-        .eq("id", order.id);
-      if (error) throw error;
-      setSuccess(status === "received" ? "Received quantities were added to inventory and purchase costs recorded." : "Order status updated.");
       await load();
     } catch (e) {
-      if (createdBatchIds.length) await db.from("stock_batches").delete().in("id", createdBatchIds);
-      for (const line of updatedLines) await db.from("purchase_order_items").update({ received_quantity: line.received }).eq("id", line.id);
       setError(e instanceof Error ? e.message : "Could not update order status.");
+    } finally {
+      setBusy(false);
     }
   }
 
