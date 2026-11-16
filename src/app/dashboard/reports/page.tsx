@@ -5,7 +5,9 @@ import Link from "next/link";
 import {ArrowLeft,BarChart3,LoaderCircle,TrendingUp} from "lucide-react";
 import {createClient} from "@/lib/supabase/client";
 
-type Tx={id:string;kind:"income"|"expense";amount:number;occurred_at:string};type Sale={id:string;total_amount:number;total_cost:number;sold_at:string};\nconst localMonth=(date:Date)=>date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0");\nconst localDay=(value:string)=>{const d=new Date(value);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+type Tx={id:string;kind:"income"|"expense";amount:number;occurred_at:string};type Sale={id:string;total_amount:number;total_cost:number;sold_at:string};
+const localMonth=(date:Date)=>date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0");
+const localDay=(value:string)=>{const d=new Date(value);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
 export default function ReportsPage(){
  const [tx,setTx]=useState<Tx[]>([]);const [sales,setSales]=useState<Sale[]>([]);const [loading,setLoading]=useState(true);const [error,setError]=useState("");const [month,setMonth]=useState(localMonth(new Date()));
  const load=useCallback(async()=>{try{const db=createClient();const [a,b]=await Promise.all([db.from("transactions").select("id,kind,amount,occurred_at").order("occurred_at",{ascending:false}).limit(5000),db.from("sales").select("id,total_amount,total_cost,sold_at").order("sold_at",{ascending:false}).limit(5000)]);if(a.error)throw a.error;if(b.error)throw b.error;setTx(a.data??[]);setSales(b.data??[]);setError("");}catch(e){setError(e instanceof Error?e.message:"Could not load reports. Financial access is limited to owners and co-owners.");}finally{setLoading(false);}},[]);
