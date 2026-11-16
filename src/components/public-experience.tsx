@@ -49,6 +49,54 @@ function HeartArtwork({ large = false }: { large?: boolean }) {
   </div>;
 }
 
+
+function PulseDock() {
+  const [open,setOpen] = useState(false);
+  return <div className="px-pulse-dock">
+    <AnimatePresence>
+      {open && <motion.div className="px-pulse-panel" initial={{opacity:0,y:14,scale:.96}} animate={{opacity:1,y:0,scale:1}} exit={{opacity:0,y:10,scale:.97}} transition={{duration:.2}}>
+        <div className="px-pulse-panel-top"><span>THE PULSE / QUICK ACCESS</span><button onClick={()=>setOpen(false)} aria-label="Close quick access"><X size={16}/></button></div>
+        <div className="px-pulse-panel-intro"><span className="px-pulse-mini"><HeartPulse size={22}/></span><div><b>Curiosity, one heartbeat away.</b><small>Choose where to explore next.</small></div></div>
+        <Link href="/bio-intelligent" onClick={()=>setOpen(false)}><span><HeartPulse size={16}/></span><div><b>Bio Intelligent</b><small>Explore the human body</small></div><ArrowUpRight size={15}/></Link>
+        <Link href="/medicines" onClick={()=>setOpen(false)}><span><Pill size={16}/></span><div><b>Medicine reference</b><small>Search medicine information</small></div><ArrowUpRight size={15}/></Link>
+        <Link href="/health-library" onClick={()=>setOpen(false)}><span><BookOpen size={16}/></span><div><b>Health library</b><small>Learn with clarity</small></div><ArrowUpRight size={15}/></Link>
+      </motion.div>}
+    </AnimatePresence>
+    <button className={"px-pulse-trigger "+(open?"is-open":"")} onClick={()=>setOpen(!open)} aria-label={open?"Close The Pulse":"Open The Pulse quick access"} aria-expanded={open}>
+      <span className="px-pulse-ripple"/><HeartPulse size={23}/><span className="px-pulse-trigger-label">THE PULSE</span>
+    </button>
+  </div>;
+}
+
+const molecules = [
+  {id:"water",name:"Water",formula:"H₂O",type:"POLAR MOLECULE",fact:"Water's polarity helps it dissolve many substances and makes it essential to transport, temperature regulation and countless cellular processes.",atoms:[{x:50,y:52,t:"O"},{x:25,y:27,t:"H"},{x:76,y:27,t:"H"}],bonds:[[0,1],[0,2]]},
+  {id:"ammonia",name:"Ammonia",formula:"NH₃",type:"NITROGEN COMPOUND",fact:"Ammonia is a small nitrogen-containing molecule. In biology, nitrogen compounds are essential building blocks for amino acids and nucleic acids.",atoms:[{x:50,y:49,t:"N"},{x:22,y:22,t:"H"},{x:78,y:22,t:"H"},{x:50,y:82,t:"H"}],bonds:[[0,1],[0,2],[0,3]]},
+  {id:"methane",name:"Methane",formula:"CH₄",type:"SIMPLE ORGANIC MOLECULE",fact:"Methane is the simplest alkane: one carbon atom bonded to four hydrogen atoms. It is a useful example for understanding covalent bonding and molecular geometry.",atoms:[{x:50,y:50,t:"C"},{x:50,y:13,t:"H"},{x:87,y:50,t:"H"},{x:50,y:87,t:"H"},{x:13,y:50,t:"H"}],bonds:[[0,1],[0,2],[0,3],[0,4]]}
+];
+
+function MoleculeObservatory() {
+  const [active,setActive] = useState("water");
+  const [turn,setTurn] = useState(0);
+  const molecule = molecules.find(item=>item.id===active)!;
+  return <section className="px-molecule-section">
+    <div className="px-molecule-heading"><div><span className="px-kicker">THE MOLECULAR OBSERVATORY / INTERACTIVE</span><h2>Small things.<br/><em>Extraordinary connections.</em></h2></div><p>Explore simple molecular models. Switch molecules and rotate the view to get a feel for how atoms connect.</p></div>
+    <div className="px-molecule-console">
+      <div className="px-molecule-visual">
+        <div className="px-molecule-visual-top"><span>MOLECULAR VIEWER / 3D-INSPIRED SCHEMATIC</span><span>MODEL 0{molecules.findIndex(item=>item.id===active)+1}</span></div>
+        <motion.div className="px-molecule-model" animate={{rotate:turn}} transition={{type:"spring",stiffness:90,damping:16}}>
+          <svg viewBox="0 0 100 100" role="img" aria-label={molecule.name+" conceptual molecular model"}>
+            {molecule.bonds.map(([a,b],i)=><line key={i} x1={molecule.atoms[a].x} y1={molecule.atoms[a].y} x2={molecule.atoms[b].x} y2={molecule.atoms[b].y} stroke="#8bbdca" strokeWidth="2.2" strokeLinecap="round"/>)}
+            {molecule.atoms.map((atom,i)=><g key={i}><circle cx={atom.x} cy={atom.y} r="8.5" fill={atom.t==="O"?"#42aeb6":atom.t==="N"?"#858ac7":atom.t==="C"?"#45657d":"#f8ffff"} stroke={atom.t==="H"?"#91bdc9":"#ffffff"} strokeWidth="1.3"/><text x={atom.x} y={atom.y+.1} textAnchor="middle" dominantBaseline="central" fontSize="7" fontWeight="700" fill={atom.t==="H"?"#416b7d":"#ffffff"}>{atom.t}</text></g>)}
+          </svg>
+        </motion.div>
+        <div className="px-molecule-controls"><button onClick={()=>setTurn(turn-45)} aria-label="Rotate molecule left">↶</button><button onClick={()=>setTurn(0)}>RESET VIEW</button><button onClick={()=>setTurn(turn+45)} aria-label="Rotate molecule right">↷</button></div>
+        <span className="px-molecule-orbit-label">ATOMIC CONNECTIONS / {molecule.atoms.length} ATOMS</span>
+      </div>
+      <div className="px-molecule-info"><span className="px-kicker">SELECT A MODEL</span><div className="px-molecule-tabs">{molecules.map(item=><button key={item.id} className={active===item.id?"active":""} onClick={()=>{setActive(item.id);setTurn(0)}}><span>{item.formula}</span><b>{item.name}</b><ArrowUpRight size={14}/></button>)}</div><div className="px-molecule-detail"><span>{molecule.type}</span><h3>{molecule.name} <small>{molecule.formula}</small></h3><p>{molecule.fact}</p></div><div className="px-model-note"><Atom size={15}/> Simplified educational model. Not to scale and not a precise chemical structure.</div></div>
+    </div>
+  </section>;
+}
+
 function Footer({ profile }: { profile?: Profile }) {
   return <footer className="px-footer"><div className="px-footer-top"><div><Link href="/" className="px-brand"><img src="/logo.jpg" alt=""/><span><b>{profile?.shop_name || "Shishu Medical Hall"}</b><small>{profile?.local_name || "অর্জুন ডাক্তারের দোকান"}</small></span></Link><p>A neighbourhood pharmacy with a space for better understanding of medicines, health and science.</p></div><div className="px-footer-links"><b>Explore</b><Link href="/medicines">Medicine directory</Link><Link href="/pharma">Pharma & science</Link><Link href="/bio-intelligent">Bio Intelligent</Link><Link href="/health-library">Health library</Link></div><div className="px-footer-links"><b>Contact</b><span><MapPin size={14}/>{profile?.address || "Visit our pharmacy"}</span><span><Phone size={14}/>{profile?.phone || "Contact details coming soon"}</span><span><Clock3 size={14}/>Local pharmacy</span></div></div><div className="px-footer-bottom"><span>© {new Date().getFullYear()} {profile?.shop_name || "Shishu Medical Hall"}</span><span>Medicine information is educational and does not replace professional advice.</span></div></footer>;
 }
@@ -82,6 +130,7 @@ export function HomeExperience({ profile = {} }: { profile?: Profile }) {
       <motion.div className="px-section-heading" initial="hidden" whileInView="show" viewport={{once:true,amount:.3}} variants={stagger}><motion.div variants={reveal}><span className="px-kicker">EXPLORE THE KNOWLEDGE SPACE</span><h2>More than a pharmacy.<br/><em>A place to discover.</em></h2></motion.div><motion.p variants={reveal}>A carefully organised starting point for medicine references, pharmaceutical science and clear, useful health knowledge.</motion.p></motion.div>
       <div className="px-discover-grid">{cards.map((c,i)=><motion.div key={c.n} className={"px-discover-card "+c.tone} initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.65,delay:i*.1,ease}}><div className="px-discover-top"><span>{c.n} / EXPLORE</span><c.icon size={21}/></div><small>{c.kicker}</small><h3>{c.title}</h3><p>{c.body}</p><Link href={c.href}>Explore section <ArrowUpRight size={15}/></Link></motion.div>)}</div>
     </section>
+    <MoleculeObservatory/>
     <section className="px-bio-feature">
       <motion.div className="px-bio-art-wrap" initial={{opacity:0,x:-25}} whileInView={{opacity:1,x:0}} viewport={{once:true,amount:.25}} transition={{duration:.8,ease}}><HeartArtwork/><div className="px-art-side-caption">BIO / 001<br/>THE HUMAN BODY</div></motion.div>
       <motion.div className="px-bio-feature-copy" initial={{opacity:0,x:25}} whileInView={{opacity:1,x:0}} viewport={{once:true,amount:.25}} transition={{duration:.8,ease}}><span className="px-kicker">THE FEATURED EXPERIENCE</span><h2>Meet your body.<br/><em>Understand its wonder.</em></h2><p>Bio Intelligent is a visual learning space where biology meets medicine. Explore the heart, cells, DNA, the way medicines work and the research that moves healthcare forward.</p><div className="px-feature-tags"><span><HeartPulse size={14}/> Human systems</span><span><Dna size={14}/> Cells & DNA</span><span><Microscope size={14}/> Research</span></div><Link href="/bio-intelligent" className="px-button-primary">Enter Bio Intelligent <ArrowUpRight size={16}/></Link></motion.div>
@@ -89,6 +138,7 @@ export function HomeExperience({ profile = {} }: { profile?: Profile }) {
     <section className="px-principles"><div className="px-principles-title"><span className="px-kicker">OUR APPROACH</span><h2>Familiar care.<br/><em>Thoughtful knowledge.</em></h2></div><div className="px-principle"><span>01</span><div><b>Rooted in the community</b><p>A familiar local pharmacy, built around everyday needs and trust.</p></div></div><div className="px-principle"><span>02</span><div><b>Information with context</b><p>Clear learning resources that help make complex topics easier to understand.</p></div></div><div className="px-principle"><span>03</span><div><b>Curiosity without confusion</b><p>Explore science in a structured way, without replacing professional advice.</p></div></div></section>
     <section className="px-contact-cta"><div><span className="px-kicker">SHISHU MEDICAL HALL</span><h2>Your neighbourhood pharmacy.<br/><em>Always a little more to learn.</em></h2></div><div><p>{profile.tagline_en || "A familiar address for everyday healthcare."}</p><Link href="/dashboard">Store management <ArrowUpRight size={15}/></Link></div></section>
     <Footer profile={profile}/>
+    <PulseDock/>
   </main>;
 }
 
@@ -127,5 +177,6 @@ export function BioExperience() {
     <section className="px-bio-connection"><div><span className="px-kicker">THE BIGGER PICTURE</span><h2>Biology explains life.<br/><em>Pharmacology connects care.</em></h2></div><p>Understanding the human body gives us a better foundation for understanding medicines — how they work, why they are developed and why safe use matters.</p><Link href="/pharma">Explore pharmaceutical science <ArrowUpRight size={15}/></Link></section>
     <section className="px-bio-disclaimer"><ShieldCheck size={20}/><div><b>Learning, not diagnosis.</b><p>This experience is for general education. It does not diagnose, prescribe or replace advice from a registered doctor or pharmacist. Always follow qualified professional guidance for personal health decisions.</p></div></section>
     <Footer/>
+    <PulseDock/>
   </main>;
 }
