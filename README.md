@@ -22,6 +22,7 @@ The dedicated Neon project is **Shishu Medical Hall**.
 Copy `.env.example` to `.env.local` and configure:
 
 - `NEON_AUTH_BASE_URL`
+- `NEON_AUTH_COOKIE_SECRET` (random secret, at least 32 characters)
 - `NEXT_PUBLIC_NEON_AUTH_URL`
 - `NEON_DATA_API_URL`
 - `NEXT_PUBLIC_NEON_DATA_API_URL`
