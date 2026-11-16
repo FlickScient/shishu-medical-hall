@@ -24,7 +24,7 @@ export default function TransactionsPage(){
       setEntries((data??[]) as Entry[]);
       setNotice("");
     }catch(error){
-      setNotice(error instanceof Error?error.message:"Could not load transactions. Check your Supabase setup and sign-in.");
+      setNotice(error instanceof Error?error.message:"Could not load transactions. Check Neon configuration and your sign-in.");
     }finally{setLoading(false);}
   },[]);
 
