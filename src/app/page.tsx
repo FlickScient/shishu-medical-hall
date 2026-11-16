@@ -22,7 +22,7 @@ export default async function HomePage({searchParams}:{searchParams?:Promise<{la
   </header>
   <section className="hero-section">
    <div className="hero-copy"><div className="eyebrow"><span className="status-dot"/>{en?"PHARMACY • MEDICINE • KNOWLEDGE":"ফার্মেসি • ওষুধ • স্বাস্থ্য জ্ঞান"}</div>
-    <h1>{en?<>Care, knowledge<br/><span>and discovery.</span></>:<>স্বাস্থ্য, জ্ঞান<br/><span>আর নতুন আবিষ্কার।</>}</h1>
+    <h1>{en?<>Care, knowledge<br/><span>and discovery.</span></>:<>স্বাস্থ্য, জ্ঞান<br/><span>আর নতুন আবিষ্কার।</span></>}</h1>
     <p className="hero-description">{shop} — {en?"your local pharmacy, with a growing space to explore medicines, pharmaceutical science and everyday health knowledge.":"আপনার পরিচিত ফার্মেসি, পাশাপাশি ওষুধ, ফার্মাসিউটিক্যাল বিজ্ঞান এবং স্বাস্থ্য বিষয়ে জানার একটি উন্মুক্ত জায়গা।"} <strong>{local}</strong></p>
     <div className="hero-actions"><Link href="/medicines" className="primary-action">{en?"Explore medicines":"ওষুধ খুঁজুন"} <ArrowRight size={17}/></Link><Link href="/pharma" className="secondary-action">{en?"Explore pharma":"ফার্মা জানুন"}</Link></div>
     <div className="hero-trust"><span><ShieldCheck size={16}/>{en?"Local pharmacy":"পরিচিত ফার্মেসি"}</span><i/><span><Activity size={16}/>{en?"Knowledge-led care":"জ্ঞানভিত্তিক স্বাস্থ্যসেবা"}</span></div>
