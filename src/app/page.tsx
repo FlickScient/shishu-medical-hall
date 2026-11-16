@@ -11,7 +11,7 @@ export default function HomePage() {
   return <main className="shell min-h-screen overflow-hidden">
     <header className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8">
       <Link href="/" className="flex items-center gap-3">
-        <div className="brand-gradient flex h-12 w-12 items-center justify-center rounded-2xl text-xl font-black text-white shadow-lg shadow-cyan-900/15">S</div>
+        <img src="/logo.jpg" alt="Shishu Medical Hall logo" className="h-12 w-12 rounded-2xl object-contain bg-white shadow-lg shadow-cyan-900/10"/>
         <div><div className="font-bold tracking-tight">SHISHU MEDICAL HALL</div><div className="text-xs text-slate-500">অর্জুন ডাক্তারের দোকান</div></div>
       </Link>
       <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex"><a href="#about">আমাদের সম্পর্কে</a><a href="#services">সেবা</a><a href="#contact">যোগাযোগ</a></nav>
