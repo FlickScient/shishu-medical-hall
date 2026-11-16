@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { ArrowUpRight, HeartPulse, MapPin, Phone, ShieldCheck, Stethoscope } from "lucide-react";
+import { ArrowUpRight, HeartPulse, MapPin, Phone, ShieldCheck, Stethoscope, Pill, Clock3 } from "lucide-react";
 
 const highlights = [
-  { icon: ShieldCheck, title: "বিশ্বস্ত সেবা", en: "Trusted service", copy: "পরিচিত মানুষের জন্য আন্তরিক ও দায়িত্বশীল সেবা।" },
-  { icon: HeartPulse, title: "ওষুধ ও স্বাস্থ্যসামগ্রী", en: "Medicines & essentials", copy: "দৈনন্দিন প্রয়োজনীয় ওষুধ ও স্বাস্থ্যসামগ্রীর খোঁজ নিন।" },
-  { icon: Stethoscope, title: "স্থানীয় পরিচিতি", en: "A familiar local name", copy: "এলাকায় অনেকেই চেনেন অর্জুন ডাক্তারের দোকান নামে।" }
+  { icon: ShieldCheck, title: "বিশ্বস্ত সেবা", en: "Trusted service", copy: "পরিচিত মানুষের জন্য আন্তরিক ও দায়িত্বশীল সেবা।", copyEn: "Friendly, responsible service for our local community." },
+  { icon: Pill, title: "ওষুধ ও স্বাস্থ্যসামগ্রী", en: "Medicines & essentials", copy: "দৈনন্দিন প্রয়োজনীয় ওষুধ ও স্বাস্থ্যসামগ্রীর খোঁজ নিন।", copyEn: "Everyday medicines and healthcare essentials." },
+  { icon: Stethoscope, title: "স্থানীয় পরিচিতি", en: "A familiar local name", copy: "এলাকায় অনেকেই চেনেন অর্জুন ডাক্তারের দোকান নামে।", copyEn: "A familiar neighbourhood pharmacy." }
 ];
-
 type HomeProfile = { shop_name?: string; local_name?: string; tagline_bn?: string; tagline_en?: string; phone?: string; address?: string; doctor_name?: string; proprietor_name?: string };
 
 export default async function HomePage({ searchParams }: { searchParams?: Promise<{ lang?: string }> }) {
@@ -17,38 +16,45 @@ export default async function HomePage({ searchParams }: { searchParams?: Promis
   if (dataUrl) {
     try {
       const response = await fetch(dataUrl + "/website_content?select=content&content_key=eq.homepage", { next: { revalidate: 60 } });
-      if (response.ok) {
-        const rows = await response.json();
-        profile = rows?.[0]?.content ?? {};
-      }
-    } catch {
-      // Keep the public storefront available with defaults if the Data API is temporarily unavailable.
-    }
+      if (response.ok) { const rows = await response.json(); profile = rows?.[0]?.content ?? {}; }
+    } catch { /* Keep public pages available if the Data API is temporarily unavailable. */ }
   }
   const shopName = profile.shop_name || "Shishu Medical Hall";
   const localName = profile.local_name || "অর্জুন ডাক্তারের দোকান";
   const phone = profile.phone || "";
   const address = profile.address || "";
-  const tagline = isEnglish ? (profile.tagline_en || "Your neighbourhood pharmacy.") : (profile.tagline_bn || "স্বাস্থ্যসেবায় আস্থার এক পরিচিত ঠিকানা.");
-  return <main className="shell min-h-screen overflow-hidden">
-    <header className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8">
-      <Link href="/" className="flex items-center gap-3">
-        <img src="/logo.jpg" alt={`${shopName} logo`} className="h-12 w-12 rounded-2xl object-contain bg-white shadow-lg shadow-cyan-900/10"/>
-        <div><div className="font-bold tracking-tight">{shopName.toUpperCase()}</div><div className="text-xs text-slate-500">{localName}</div></div>
-      </Link>
-      <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex"><a href="#about">{isEnglish ? "About us" : "আমাদের সম্পর্কে"}</a><a href="#services">{isEnglish ? "Services" : "সেবা"}</a><a href="#contact">{isEnglish ? "Contact" : "যোগাযোগ"}</a></nav>
-      <div className="flex items-center gap-2"><Link href={isEnglish ? "/" : "/?lang=en"} className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold">{isEnglish ? "বাংলা" : "EN"}</Link><Link href="/dashboard" className="brand-gradient rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-900/15">Management <ArrowUpRight className="ml-1 inline" size={15}/></Link></div>
+  const tagline = isEnglish ? (profile.tagline_en || "Your neighbourhood pharmacy.") : (profile.tagline_bn || "স্বাস্থ্যসেবায় আস্থার এক পরিচিত ঠিকানা।");
+  const owner = profile.doctor_name || profile.proprietor_name || "";
+  return <main className="site-shell min-h-screen">
+    <header className="site-header">
+      <Link href="/" className="brand-lockup" aria-label={shopName}><img src="/logo.jpg" alt="" className="brand-logo"/><span className="brand-copy"><strong>{shopName}</strong><small>{localName}</small></span></Link>
+      <nav className="desktop-nav" aria-label="Main navigation"><a href="#about">{isEnglish ? "About" : "পরিচিতি"}</a><a href="#services">{isEnglish ? "Our care" : "আমাদের সেবা"}</a><a href="#contact">{isEnglish ? "Contact" : "যোগাযোগ"}</a></nav>
+      <div className="header-actions"><Link href={isEnglish ? "/" : "/?lang=en"} className="language-toggle">{isEnglish ? "বাংলা" : "EN"}</Link><Link href="/dashboard" className="management-link">{isEnglish ? "Store login" : "স্টোর লগইন"} <ArrowUpRight size={15}/></Link></div>
     </header>
-    <section className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-20 pt-12 lg:grid-cols-[1.1fr_.9fr] lg:px-8 lg:pb-28 lg:pt-20">
-      <div className="relative z-10"><div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-100 bg-white/80 px-4 py-2 text-xs font-semibold tracking-wide text-cyan-800"><span className="h-2 w-2 rounded-full bg-teal-500"/> {isEnglish ? "YOUR NEIGHBOURHOOD PHARMACY" : "আপনার এলাকার পরিচিত ফার্মেসি"}</div>
-        <h1 className="max-w-3xl text-5xl font-black leading-[1.08] tracking-tight text-slate-900 sm:text-6xl lg:text-7xl">{isEnglish ? <>A familiar name for <span className="gradient-text">trusted</span><br/>everyday care.</> : <>স্বাস্থ্যসেবায় <span className="gradient-text">আস্থার</span><br/>এক পরিচিত ঠিকানা।</>}</h1>
-        <p className="mt-7 max-w-xl text-base leading-8 text-slate-600">{shopName} — {isEnglish ? "known locally as" : "আপনাদের পরিচিত"} <strong className="text-slate-800">{localName}</strong>। {isEnglish ? "Here for your everyday medicine and healthcare essentials." : "প্রয়োজনীয় ওষুধ ও স্বাস্থ্যসামগ্রীর জন্য পাশে আছি।"}</p>
-        <div className="mt-9 flex flex-wrap gap-3"><a href="#contact" className="brand-gradient rounded-2xl px-6 py-4 text-sm font-bold text-white shadow-xl shadow-cyan-900/15">{isEnglish ? "Contact us" : "যোগাযোগ করুন"} <ArrowUpRight className="ml-2 inline" size={17}/></a><a href="#about" className="rounded-2xl border border-slate-200 bg-white px-6 py-4 text-sm font-bold text-slate-700">{isEnglish ? "Learn more" : "আরও জানুন"}</a></div>
-        <div className="mt-12 flex flex-wrap gap-8 border-t border-slate-200/80 pt-7"><div><div className="text-2xl font-black">01</div><div className="mt-1 text-xs text-slate-500">Local pharmacy</div></div><div><div className="text-2xl font-black">Care</div><div className="mt-1 text-xs text-slate-500">People first</div></div><div><div className="text-2xl font-black">Trust</div><div className="mt-1 text-xs text-slate-500">Built locally</div></div></div>
+    <section className="hero-section">
+      <div className="hero-copy">
+        <div className="eyebrow"><span className="status-dot"/> {isEnglish ? "YOUR LOCAL PHARMACY" : "আপনার এলাকার পরিচিত ফার্মেসি"}</div>
+        <h1>{isEnglish ? <>Everyday care.<br/><span>Close to home.</span></> : <>প্রতিদিনের যত্ন,<br/><span>আপনার কাছেই।</span></>}</h1>
+        <p className="hero-description">{shopName} — {isEnglish ? "known locally as" : "আপনাদের পরিচিত"} <strong>{localName}</strong>। {isEnglish ? "Here for your everyday medicine and healthcare essentials." : "প্রয়োজনীয় ওষুধ ও স্বাস্থ্যসামগ্রীর জন্য পাশে আছি।"}</p>
+        <div className="hero-actions"><a href="#contact" className="primary-action">{isEnglish ? "Get in touch" : "যোগাযোগ করুন"} <ArrowUpRight size={17}/></a><a href="#about" className="secondary-action">{isEnglish ? "Discover more" : "আরও জানুন"}</a></div>
+        <div className="hero-trust"><span><ShieldCheck size={16}/> {isEnglish ? "Local & familiar" : "পরিচিত ও নির্ভরযোগ্য"}</span><i/><span><Clock3 size={16}/> {isEnglish ? "Here when you need us" : "প্রয়োজনে পাশে আছি"}</span></div>
       </div>
-      <div className="relative mx-auto w-full max-w-xl"><div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-blue-200/50 via-cyan-100/60 to-teal-100/70 blur-2xl"/><div className="glass relative overflow-hidden rounded-[2rem] p-5 sm:p-7"><div className="brand-gradient relative flex min-h-[390px] flex-col justify-between overflow-hidden rounded-[1.5rem] p-7 text-white sm:p-9"><div className="absolute -right-16 -top-20 h-72 w-72 rounded-full border border-white/20"/><div className="absolute -bottom-28 -left-12 h-72 w-72 rounded-full border border-white/20"/><div className="relative flex items-center justify-between"><span className="text-xs font-bold tracking-[.2em] text-white/75">SMH / HEALTH & CARE</span><HeartPulse size={28}/></div><div className="relative"><div className="mb-3 text-sm text-white/75">আপনার পাশে, প্রতিদিন</div><div className="text-4xl font-black leading-tight sm:text-5xl">Care that<br/>feels close.</div><p className="mt-5 max-w-xs text-sm leading-7 text-white/80">A familiar name. A little more care in every visit.</p></div><div className="relative flex items-end justify-between"><span className="text-xs tracking-widest text-white/70">{shopName.toUpperCase()}</span><div className="rounded-full border border-white/30 p-3"><ArrowUpRight/></div></div></div><div className="flex items-center justify-between px-2 pt-5"><div><div className="text-sm font-bold">{localName}</div><div className="mt-1 text-xs text-slate-500">{tagline}</div></div><div className="rounded-xl bg-cyan-50 p-3 text-cyan-700"><HeartPulse/></div></div></div></div>
+      <div className="hero-visual" aria-label="Shishu Medical Hall healthcare identity">
+        <div className="visual-orbit orbit-one"/><div className="visual-orbit orbit-two"/>
+        <div className="medical-card">
+          <div className="medical-card-top"><span>SMH <b>/</b> HEALTH & CARE</span><span className="live-mark"><i/> {isEnglish ? "LOCAL PHARMACY" : "স্থানীয় ফার্মেসি"}</span></div>
+          <div className="heart-stage"><div className="heart-halo"/><HeartPulse className="beating-heart" strokeWidth={1.45} aria-hidden="true"/><svg className="pulse-line" viewBox="0 0 360 54" fill="none" aria-hidden="true"><path d="M0 28H92L112 28L128 10L147 46L165 3L184 28H360" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
+          <div className="medical-card-bottom"><div><small>{isEnglish ? "CARE THAT FEELS CLOSE" : "আপনার পাশে, প্রতিদিন"}</small><strong>{localName}</strong></div><span className="card-cross">+</span></div>
+        </div>
+        <div className="floating-note"><span className="note-icon"><HeartPulse size={17}/></span><span><b>{isEnglish ? "People first" : "মানুষ আগে"}</b><small>{isEnglish ? "Care with responsibility" : "যত্ন ও দায়িত্বের সঙ্গে"}</small></span></div>
+      </div>
     </section>
-    <section id="about" className="mx-auto max-w-7xl px-5 py-8 lg:px-8"><div className="mb-8"><div className="text-xs font-bold tracking-[.2em] text-teal-700">{isEnglish ? "WHY " + shopName.toUpperCase() : "কেন শিশু মেডিকেল হল"}</div><h2 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">{isEnglish ? "Familiar people. Familiar trust." : "পরিচিত মানুষ, পরিচিত আস্থা।"}</h2></div><div id="services" className="grid gap-4 md:grid-cols-3">{highlights.map(({icon:Icon,title,en,copy})=><article key={en} className="soft-card p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl"><div className="mb-6 inline-flex rounded-2xl bg-cyan-50 p-3 text-cyan-700"><Icon size={23}/></div><h3 className="text-lg font-bold">{isEnglish ? en : title}</h3><p className="mt-1 text-xs font-medium text-slate-400">{isEnglish ? title : en}</p><p className="mt-4 text-sm leading-7 text-slate-600">{isEnglish ? ["Friendly and responsible service for our local community.", "Everyday medicines and healthcare essentials.", "A familiar local pharmacy, known by its neighbourhood name."][highlights.findIndex(item => item.en === en)] : copy}</p></article>)}</div></section>
-    <footer id="contact" className="mx-auto mt-16 max-w-7xl px-5 pb-10 lg:px-8"><div className="brand-gradient flex flex-col justify-between gap-8 rounded-[2rem] p-8 text-white sm:flex-row sm:items-center sm:p-10"><div><div className="text-xs font-bold tracking-[.2em] text-white/70">{isEnglish ? "COME SAY HELLO" : "যোগাযোগ করুন"}</div><h2 className="mt-3 text-3xl font-black">{isEnglish ? "We are here for you." : "আমরা আছি আপনার পাশে।"}</h2><p className="mt-2 text-sm text-white/75">{isEnglish ? "Find us or call the shop using the details below." : "ঠিকানা ও যোগাযোগের তথ্য নিচে দেওয়া হলো।"}</p></div><div className="flex flex-col gap-3 text-sm"><div className="flex items-center gap-2"><MapPin size={17}/> {isEnglish ? "Address" : "ঠিকানা"} — {address || (isEnglish ? "Not added yet" : "যোগ করা হয়নি")}</div><div className="flex items-center gap-2"><Phone size={17}/> {isEnglish ? "Phone" : "ফোন"} — {phone || (isEnglish ? "Not added yet" : "যোগ করা হয়নি")}</div></div></div><div className="flex flex-col justify-between gap-2 py-7 text-xs text-slate-400 sm:flex-row"><span>© {new Date().getFullYear()} {shopName}</span><span>Made for better everyday care.</span></div></footer>
+    <section id="about" className="intro-strip"><div><span className="section-kicker">{isEnglish ? "A NAME YOU KNOW" : "আপনার চেনা একটি নাম"}</span><h2>{isEnglish ? "Familiar people. Familiar trust." : "পরিচিত মানুষ, পরিচিত আস্থা।"}</h2></div><p>{isEnglish ? "A neighbourhood pharmacy built around the everyday needs of the people it serves." : "এলাকার মানুষের দৈনন্দিন প্রয়োজনকে গুরুত্ব দিয়ে, আন্তরিকতার সঙ্গে সেবা দেওয়াই আমাদের লক্ষ্য।"}</p></section>
+    <section id="services" className="service-grid">{highlights.map(({icon:Icon,title,en,copy,copyEn},index)=><article key={en} className="service-card"><div className="service-icon"><Icon size={21}/></div><div className="service-number">0{index+1}</div><h3>{isEnglish ? en : title}</h3><p>{isEnglish ? copyEn : copy}</p></article>)}</section>
+    <footer id="contact" className="contact-panel">
+      <div className="contact-heading"><span className="section-kicker">{isEnglish ? "COME SAY HELLO" : "যোগাযোগ করুন"}</span><h2>{isEnglish ? "We are here for you." : "আমরা আছি আপনার পাশে।"}</h2><p>{tagline}</p>{owner && <small className="owner-line">{isEnglish ? "Doctor / Proprietor" : "ডাক্তার / স্বত্বাধিকারী"}: {owner}</small>}</div>
+      <div className="contact-details"><div><MapPin size={18}/><span><small>{isEnglish ? "Find us" : "ঠিকানা"}</small><strong>{address || (isEnglish ? "Address to be updated" : "ঠিকানা যোগ করা হয়নি")}</strong></span></div><div><Phone size={18}/><span><small>{isEnglish ? "Call the shop" : "ফোন"}</small><strong>{phone || (isEnglish ? "Phone to be updated" : "ফোন নম্বর যোগ করা হয়নি")}</strong></span></div></div>
+    </footer>
+    <div className="site-footer"><span>© {new Date().getFullYear()} {shopName}</span><span>{isEnglish ? "Made for better everyday care." : "প্রতিদিনের যত্নে, আপনার পাশে।"}</span></div>
   </main>;
 }
