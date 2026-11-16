@@ -328,3 +328,43 @@ $$;
 
 grant execute on function public.create_store_invitation(text,text,text) to authenticated;
 grant execute on function public.accept_store_invitation(text) to authenticated;
+
+
+-- One-time owner bootstrap token. The raw token is never stored in Postgres.
+create table if not exists public.store_bootstrap_tokens (
+  token_hash text primary key,
+  created_at timestamptz not null default now(),
+  expires_at timestamptz not null default (now() + interval '7 days'),
+  consumed_at timestamptz
+);
+alter table public.store_bootstrap_tokens enable row level security;
+
+create or replace function public.bootstrap_store_owner(p_token text)
+returns jsonb
+language plpgsql security definer
+set search_path = public
+set row_security = off
+as $$
+declare
+  v_user_id text;
+  v_email text;
+  v_name text;
+  v_token_hash text;
+begin
+  select id::text, email, name into v_user_id, v_email, v_name
+  from neon_auth."user"
+  where id = (select auth.user_id())::uuid and "emailVerified" = true;
+  if v_user_id is null then raise exception 'Sign in with a verified email before setting up the owner account'; end if;
+  if exists (select 1 from public.store_members) then raise exception 'The initial owner has already been created'; end if;
+  v_token_hash := encode(digest(p_token, 'sha256'), 'hex');
+  perform 1 from public.store_bootstrap_tokens
+    where token_hash = v_token_hash and consumed_at is null and expires_at > now()
+    for update;
+  if not found then raise exception 'Setup code is invalid, expired, or already used'; end if;
+  insert into public.store_members(user_id, display_name, role)
+  values (v_user_id, v_name, 'owner');
+  update public.store_bootstrap_tokens set consumed_at = now() where token_hash = v_token_hash;
+  return jsonb_build_object('role', 'owner', 'email', v_email);
+end;
+$$;
+grant execute on function public.bootstrap_store_owner(text) to authenticated;
