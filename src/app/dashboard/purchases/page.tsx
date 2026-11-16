@@ -110,13 +110,46 @@ export default function PurchasesPage() {
 
   async function updateStatus(order: Order, status: string) {
     setError(""); setSuccess("");
+    const db = createClient();
+    const createdBatchIds: string[] = [];
+    const updatedLines: { id: string; received: number }[] = [];
     try {
-      const db = createClient();
-      const { error } = await db.from("purchase_orders").update({ status, received_at: status === "received" ? new Date().toISOString() : null }).eq("id", order.id);
+      if (status === "received" && order.status !== "received") {
+        const { data: lines, error: lineError } = await db.from("purchase_order_items")
+          .select("id,medicine_id,quantity,unit_cost,received_quantity")
+          .eq("purchase_order_id", order.id);
+        if (lineError) throw lineError;
+        for (const line of lines ?? []) {
+          const remaining = Math.max(0, Number(line.quantity) - Number(line.received_quantity || 0));
+          if (!remaining) continue;
+          if (!line.medicine_id) throw new Error("A purchase line is missing its medicine record.");
+          const { data: batch, error: batchError } = await db.from("stock_batches").insert({
+            medicine_id: line.medicine_id,
+            supplier_id: order.supplier_id,
+            quantity: remaining,
+          }).select("id").single();
+          if (batchError) throw batchError;
+          createdBatchIds.push(batch.id);
+          const { error: costError } = await db.from("stock_batch_costs").insert({
+            batch_id: batch.id,
+            purchase_unit_cost: Number(line.unit_cost || 0),
+          });
+          if (costError) throw costError;
+          updatedLines.push({ id: line.id, received: Number(line.received_quantity || 0) });
+          const { error: lineUpdateError } = await db.from("purchase_order_items")
+            .update({ received_quantity: line.quantity }).eq("id", line.id);
+          if (lineUpdateError) throw lineUpdateError;
+        }
+      }
+      const { error } = await db.from("purchase_orders")
+        .update({ status, received_at: status === "received" ? new Date().toISOString() : null })
+        .eq("id", order.id);
       if (error) throw error;
-      setSuccess("Order status updated.");
+      setSuccess(status === "received" ? "Received quantities were added to inventory and purchase costs recorded." : "Order status updated.");
       await load();
     } catch (e) {
+      if (createdBatchIds.length) await db.from("stock_batches").delete().in("id", createdBatchIds);
+      for (const line of updatedLines) await db.from("purchase_order_items").update({ received_quantity: line.received }).eq("id", line.id);
       setError(e instanceof Error ? e.message : "Could not update order status.");
     }
   }
@@ -157,7 +190,7 @@ export default function PurchasesPage() {
           <label className="mt-5 block text-xs font-bold text-slate-500">NOTE (OPTIONAL)</label><textarea value={note} onChange={e => setNote(e.target.value)} rows={2} placeholder="Delivery date, representative, extra details..." className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-3 text-sm"/>
           <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4"><span className="text-sm font-semibold text-slate-500">Order estimate</span><strong className="text-xl">{money(total)}</strong></div>
           <button disabled={busy || cart.length === 0} className="brand-gradient mt-5 w-full rounded-xl px-4 py-4 text-sm font-bold text-white disabled:opacity-50">{busy ? <LoaderCircle className="mr-2 inline animate-spin" size={16}/> : <Check className="mr-2 inline" size={16}/>} Save purchase draft</button>
-          <p className="mt-3 text-[11px] leading-5 text-slate-400">Saving a draft does not change stock quantities. Receive stock through the inventory receiving workflow.</p>
+          <p className="mt-3 text-[11px] leading-5 text-slate-400">Saving a draft does not change stock. Marking an order received adds its remaining quantities to inventory and records purchase cost for finance roles.</p>
         </form>
       </aside></div>}
     </div>
