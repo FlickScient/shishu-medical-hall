@@ -33,7 +33,7 @@ export default async function HomePage({ searchParams }: { searchParams?: Promis
   return <main className="shell min-h-screen overflow-hidden">
     <header className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8">
       <Link href="/" className="flex items-center gap-3">
-        <img src="/logo.jpg" alt={`${shopName} logo` className="h-12 w-12 rounded-2xl object-contain bg-white shadow-lg shadow-cyan-900/10"/>
+        <img src="/logo.jpg" alt={`${shopName} logo`} className="h-12 w-12 rounded-2xl object-contain bg-white shadow-lg shadow-cyan-900/10"/>
         <div><div className="font-bold tracking-tight">{shopName.toUpperCase()}</div><div className="text-xs text-slate-500">{localName}</div></div>
       </Link>
       <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex"><a href="#about">{isEnglish ? "About us" : "আমাদের সম্পর্কে"}</a><a href="#services">{isEnglish ? "Services" : "সেবা"}</a><a href="#contact">{isEnglish ? "Contact" : "যোগাযোগ"}</a></nav>
