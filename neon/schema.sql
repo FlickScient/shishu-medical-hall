@@ -44,7 +44,7 @@ create table if not exists public.stock_batches (
   supplier_id uuid references public.suppliers(id),
   batch_number text,
   quantity integer not null default 0 check (quantity >= 0),
-  purchase_unit_cost numeric(12,2) not null default 0,
+  purchase_unit_cost numeric(12,2) not null default 0, -- legacy only; app roles have no column privileges
   selling_unit_price numeric(12,2),
   expiry_date date,
   received_at timestamptz not null default now()
