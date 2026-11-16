@@ -1,36 +1,20 @@
-import Link from "next/link";
-import { ArrowUpRight, ArrowRight, Activity, BookOpen, Building2, Dna, FlaskConical, HeartPulse, Microscope, Pill, ShieldCheck, BrainCircuit, ScanHeart, MapPin, Phone, Clock3 } from "lucide-react";
+import { HomeExperience } from "@/components/public-experience";
 
-type HomeProfile = { shop_name?:string; local_name?:string; tagline_bn?:string; tagline_en?:string; phone?:string; address?:string; doctor_name?:string; proprietor_name?:string };
-const destinations = [
- { no:"01", icon:Pill, title:"Medicine directory", bn:"ওষুধের তথ্য", desc:"Brands, generics, strengths and trusted medicine references.", href:"/medicines", label:"MEDICINE INDEX" },
- { no:"02", icon:FlaskConical, title:"Pharma & science", bn:"ফার্মা ও বিজ্ঞান", desc:"The companies, ingredients and processes behind medicines.", href:"/pharma", label:"PHARMA DISCOVERY" },
- { no:"03", icon:BookOpen, title:"Health library", bn:"স্বাস্থ্য জ্ঞান", desc:"Clear guides for understanding labels, storage and safe use.", href:"/health-library", label:"LEARNING LIBRARY" }
-];
-export default async function HomePage({searchParams}:{searchParams?:Promise<{lang?:string}>}) {
- const params=searchParams?await searchParams:{}; const en=params.lang==="en";
- let profile:HomeProfile={}; const dataUrl=process.env.NEXT_PUBLIC_NEON_DATA_API_URL;
- if(dataUrl){try{const r=await fetch(dataUrl+"/website_content?select=content&content_key=eq.homepage",{next:{revalidate:60}});if(r.ok){const rows=await r.json();profile=rows?.[0]?.content??{};}}catch{}}
- const shop=profile.shop_name||"Shishu Medical Hall", local=profile.local_name||"অর্জুন ডাক্তারের দোকান";
- const owner=profile.doctor_name||profile.proprietor_name||"";
- return <main className="site-shell">
-  <header className="site-header"><Link href="/" className="brand-lockup"><img src="/logo.jpg" alt="" className="brand-logo"/><span className="brand-copy"><strong>{shop}</strong><small>{local}</small></span></Link>
-   <nav className="desktop-nav"><Link href="/medicines">{en?"Medicines":"ওষুধ"}</Link><Link href="/pharma">{en?"Pharma":"ফার্মা"}</Link><Link href="/bio-intelligent">Bio Intelligent</Link><Link href="/health-library">{en?"Health library":"স্বাস্থ্য জ্ঞান"}</Link></nav>
-   <div className="header-actions"><Link href={en?"/":"/?lang=en"} className="language-toggle">{en?"বাংলা":"EN"}</Link><Link href="/dashboard" className="management-link">{en?"Store portal":"স্টোর পোর্টাল"} <ArrowUpRight size={14}/></Link></div>
-  </header>
-  <section className="hero-section">
-   <div className="hero-copy"><div className="eyebrow"><span className="status-dot"/>{en?"YOUR NEIGHBOURHOOD PHARMACY":"আপনার এলাকার পরিচিত ফার্মেসি"}</div>
-    <h1>{en?<>Everyday care.<br/><span>Deeper understanding.</span></>:<>প্রতিদিনের যত্ন,<br/><span>জানার নতুন দিগন্ত।</span></>}</h1>
-    <p className="hero-description">{en?<>Welcome to <strong>{shop}</strong> — a familiar local pharmacy with a thoughtful space to explore medicines, biology and pharmaceutical science.</>:<><strong>{shop}</strong> — আপনার পরিচিত ফার্মেসি। ওষুধ, মানবদেহ, ফার্মাসিউটিক্যাল বিজ্ঞান এবং স্বাস্থ্য বিষয়ে জানার একটি সাজানো জায়গা।</>}</p>
-    <div className="hero-actions"><Link href="/medicines" className="primary-action">{en?"Explore medicines":"ওষুধের তথ্য দেখুন"} <ArrowRight size={16}/></Link><Link href="/bio-intelligent" className="secondary-action">{en?"Enter Bio Intelligent":"Bio Intelligent"}</Link></div>
-    <div className="hero-trust"><span><ShieldCheck size={15}/>{en?"Local pharmacy":"পরিচিত ঠিকানা"}</span><i/><span><Activity size={15}/>{en?"Knowledge-led care":"জ্ঞানভিত্তিক যত্ন"}</span></div>
-   </div>
-   <div className="hero-visual hero-visual-new"><div className="hero-visual-label"><span>SMH / BIO INTELLIGENT</span><span><i/> EXPLORATION SPACE</span></div><div className="hero-heart-scene"><div className="heart-aura"/><div className="heart-glass-object"><div className="heart-glass-core"><svg viewBox="0 0 160 150" aria-hidden="true" className="anatomical-glass-heart"><defs><linearGradient id="heartGlass" x1="18" y1="8" x2="136" y2="140" gradientUnits="userSpaceOnUse"><stop stopColor="#fff" stopOpacity=".98"/><stop offset=".42" stopColor="#8fd5f1" stopOpacity=".82"/><stop offset=".72" stopColor="#8f9ee5" stopOpacity=".78"/><stop offset="1" stopColor="#63d9ce" stopOpacity=".9"/></linearGradient><linearGradient id="heartEdge" x1="30" y1="10" x2="126" y2="132" gradientUnits="userSpaceOnUse"><stop stopColor="#fff"/><stop offset="1" stopColor="#9ff7ed"/></linearGradient></defs><path d="M80 137C69 127 19 91 13 58 8 31 24 12 48 12c15 0 25 8 32 21 8-13 18-21 33-21 24 0 40 19 35 46-6 33-56 69-68 79Z" fill="url(#heartGlass)" stroke="url(#heartEdge)" strokeWidth="2"/><path d="M30 43c4-13 14-20 26-19" fill="none" stroke="#fff" strokeOpacity=".85" strokeWidth="4" strokeLinecap="round"/><path d="M18 76h34l11-17 15 37 14-48 13 28h37" fill="none" stroke="#f7ffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity=".95"/></svg></div><span className="heart-glint"/></div><div className="heart-orbit orbit-x"/><div className="heart-orbit orbit-y"/><div className="heart-data data-one"><Activity size={13}/> HUMAN SYSTEMS</div><div className="heart-data data-two"><Dna size={13}/> BIO SCIENCE</div></div><div className="hero-visual-foot"><span>01 — 04</span><span>{en?"THE SCIENCE OF YOU":"আপনার শরীরের বিজ্ঞান"}</span></div></div>
-  </section>
-  <section className="home-quicklinks"><div className="quicklink-intro"><span className="section-kicker">{en?"EXPLORE SHISHU":"এক্সপ্লোর করুন"}</span><h2>{en?"A little more to discover.": "জানার আছে আরও অনেক কিছু।"}</h2><p>{en?"Move between medicine references, pharmaceutical science and practical health knowledge.":"ওষুধের রেফারেন্স থেকে শুরু করে ফার্মা বিজ্ঞান ও ব্যবহারিক স্বাস্থ্যজ্ঞান—সবকিছু আলাদা করে দেখুন।"}</p><Link href="/bio-intelligent" className="text-link">{en?"Explore the knowledge space":"জ্ঞানভিত্তিক জগতে প্রবেশ করুন"} <ArrowUpRight size={15}/></Link></div><div className="quicklink-grid">{destinations.map(({no,icon:Icon,title,bn,desc,href,label})=><Link href={href} key={href} className="explore-card"><div className="explore-top"><span className="explore-icon"><Icon size={19}/></span><span className="service-number">{no}</span></div><small>{label}</small><h3>{en?title:bn}</h3><p>{desc}</p><span className="explore-more">{en?"Explore":"দেখুন"} <ArrowUpRight size={14}/></span></Link>)}</div></section>
-  <section id="bio-intelligent" className="bio-section"><div className="bio-art bio-art-new"><div className="bio-mini-orbit"/><div className="bio-mini-heart"><HeartPulse size={84} strokeWidth={1.05}/><span/></div><div className="bio-art-caption"><span>FIG. 01</span><b>THE HUMAN SYSTEM</b></div><div className="bio-float-tag"><BrainCircuit size={15}/> BIO INTELLIGENT</div></div><div className="bio-copy"><span className="section-kicker">{en?"A CLOSER LOOK AT LIFE":"জীবনকে আরও গভীরভাবে জানুন"}</span><h2>{en?<>The human body<br/><span>is a universe.</span></>:<>মানবদেহ এক বিস্ময়,<br/><span>বিজ্ঞানের চোখে দেখুন।</span></>}</h2><p>{en?"Explore the heart, cells, medicine and the research that turns scientific ideas into better healthcare. Carefully structured learning, without the textbook overload.":"হৃদপিণ্ড, কোষ, ওষুধ এবং গবেষণা—মানবদেহ ও চিকিৎসাবিজ্ঞানের গল্প জানুন সহজ ভাষায়, সুন্দরভাবে সাজানো ছোট ছোট অধ্যায়ে।"}</p><div className="bio-points"><span><ScanHeart size={15}/> Human biology</span><span><FlaskConical size={15}/> Medicine science</span><span><Microscope size={15}/> Research</span></div><Link href="/bio-intelligent" className="bio-button">{en?"Explore Bio Intelligent":"Bio Intelligent এক্সপ্লোর করুন"} <ArrowUpRight size={15}/></Link></div></section>
-  <section className="about-band" id="about"><div><span className="section-kicker">{en?"ROOTED IN YOUR COMMUNITY":"আপনার এলাকার পরিচিত ঠিকানা"}</span><h2>{en?"A familiar pharmacy. A wider world.":"পরিচিত ফার্মেসি, জ্ঞানের আরও বড় পরিসর।"}</h2></div><p>{en?(profile.tagline_en||"Your neighbourhood pharmacy."):(profile.tagline_bn||"স্বাস্থ্যসেবায় আস্থার এক পরিচিত ঠিকানা.")}{owner&&<><br/>{en?"Doctor / Proprietor":"ডাক্তার / স্বত্বাধিকারী"}: {owner}</>}</p></section>
-  <footer className="contact-panel" id="contact"><div className="contact-heading"><span className="section-kicker">{en?"VISIT OR CONTACT":"যোগাযোগ করুন"}</span><h2>{en?"Here when you need us.":"প্রয়োজনে আমরা আছি পাশে।"}</h2><p>{profile.tagline_en||"Your neighbourhood pharmacy."}</p></div><div className="contact-details"><div><MapPin size={17}/><span><small>{en?"Address":"ঠিকানা"}</small><strong>{profile.address||"ঠিকানা যোগ করা হয়নি"}</strong></span></div><div><Phone size={17}/><span><small>{en?"Phone":"ফোন"}</small><strong>{profile.phone||"ফোন নম্বর যোগ করা হয়নি"}</strong></span></div><div><Clock3 size={17}/><span><small>{en?"Store":"স্টোর"}</small><strong>{local}</strong></span></div></div></footer>
-  <div className="site-footer"><span>© {new Date().getFullYear()} {shop}</span><span>{en?"Medicine information is educational, not a substitute for professional advice.":"ওষুধের তথ্য কেবল শিক্ষামূলক; চিকিৎসকের পরামর্শের বিকল্প নয়।"}</span></div>
- </main>;
+type HomeProfile = { shop_name?: string; local_name?: string; tagline_bn?: string; tagline_en?: string; phone?: string; address?: string; doctor_name?: string; proprietor_name?: string };
+
+export default async function HomePage() {
+  let profile: HomeProfile = {};
+  const dataUrl = process.env.NEXT_PUBLIC_NEON_DATA_API_URL;
+  if (dataUrl) {
+    try {
+      const response = await fetch(dataUrl + "/website_content?select=content&content_key=eq.homepage", { next: { revalidate: 60 } });
+      if (response.ok) {
+        const rows = await response.json();
+        profile = rows?.[0]?.content ?? {};
+      }
+    } catch {
+      // The public site remains available if editable profile content is temporarily unavailable.
+    }
+  }
+  return <HomeExperience profile={profile} />;
 }
