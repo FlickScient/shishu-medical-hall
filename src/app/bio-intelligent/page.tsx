@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, HeartPulse, BrainCircuit, Dna, Microscope, FlaskConical, Activity, ShieldCheck, BookOpen, Waves, Atom, Layers3 } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, HeartPulse, BrainCircuit, Dna, Microscope, FlaskConical, Activity, ShieldCheck, BookOpen } from "lucide-react";
 
 const topics = [
   { id: "heart", icon: HeartPulse, no: "01", title: "The human heart", bn: "মানব হৃদপিণ্ড", intro: "A muscular pump that keeps blood moving through the lungs and the rest of the body.", points: ["The right side receives oxygen-poor blood and sends it to the lungs.", "The left side receives oxygen-rich blood from the lungs and pumps it around the body.", "Valves help keep blood moving in the correct direction."] },
