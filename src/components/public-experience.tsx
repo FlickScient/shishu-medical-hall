@@ -2,15 +2,15 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity, ArrowDownRight, ArrowRight, ArrowUpRight, Atom, BookOpen, BrainCircuit,
-  CheckCircle2, ChevronDown, Dna, FlaskConical, HeartPulse, Menu, Microscope,
-  Pill, ScanHeart, ShieldCheck, Sparkles, Stethoscope, X, MapPin, Phone, Clock3
+  ChevronDown, Dna, FlaskConical, HeartPulse, Menu, Microscope,
+  Pill, ShieldCheck, Sparkles, X, MapPin, Phone, Clock3
 } from "lucide-react";
 
 type Profile = { shop_name?: string; local_name?: string; tagline_bn?: string; tagline_en?: string; phone?: string; address?: string; doctor_name?: string; proprietor_name?: string };
-const ease = [0.22, 1, 0.36, 1] as const;
+const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const reveal = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: .7, ease } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: .11 } } };
 
@@ -55,7 +55,6 @@ function Footer({ profile }: { profile?: Profile }) {
 
 export function HomeExperience({ profile = {} }: { profile?: Profile }) {
   const shop = profile.shop_name || "Shishu Medical Hall";
-  const shouldReduce = useReducedMotion();
   const cards = [
     {n:"01",icon:Pill,kicker:"MEDICINE REFERENCE",title:"Know what goes into your medicine.",body:"Explore brand names, generic ingredients, strengths and useful medicine references.",href:"/medicines",tone:"blue"},
     {n:"02",icon:FlaskConical,kicker:"PHARMACEUTICAL SCIENCE",title:"Behind every tablet is a story.",body:"Discover how medicines are researched, developed, manufactured and quality-checked.",href:"/pharma",tone:"mint"},
