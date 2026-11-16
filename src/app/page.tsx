@@ -1,60 +1,38 @@
 import Link from "next/link";
-import { ArrowUpRight, HeartPulse, MapPin, Phone, ShieldCheck, Stethoscope, Pill, Clock3 } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Activity, BookOpen, Building2, Dna, HeartPulse, Microscope, Pill, ShieldCheck, Sparkles, Stethoscope, Syringe, BrainCircuit, ScanHeart, FlaskConical, MapPin, Phone, Clock3 } from "lucide-react";
 
-const highlights = [
-  { icon: ShieldCheck, title: "বিশ্বস্ত সেবা", en: "Trusted service", copy: "পরিচিত মানুষের জন্য আন্তরিক ও দায়িত্বশীল সেবা।", copyEn: "Friendly, responsible service for our local community." },
-  { icon: Pill, title: "ওষুধ ও স্বাস্থ্যসামগ্রী", en: "Medicines & essentials", copy: "দৈনন্দিন প্রয়োজনীয় ওষুধ ও স্বাস্থ্যসামগ্রীর খোঁজ নিন।", copyEn: "Everyday medicines and healthcare essentials." },
-  { icon: Stethoscope, title: "স্থানীয় পরিচিতি", en: "A familiar local name", copy: "এলাকায় অনেকেই চেনেন অর্জুন ডাক্তারের দোকান নামে।", copyEn: "A familiar neighbourhood pharmacy." }
+type HomeProfile = { shop_name?:string; local_name?:string; tagline_bn?:string; tagline_en?:string; phone?:string; address?:string; doctor_name?:string; proprietor_name?:string };
+const care = [
+ { icon: Pill, n:"01", title:"Medicine directory", bn:"ওষুধের তথ্যভান্ডার", desc:"Explore medicine brands, generics, strengths and manufacturers through the Bangladesh medicine index.", href:"/medicines", tag:"MEDICINE EXPLORER" },
+ { icon: Dna, n:"02", title:"Pharma & science", bn:"ফার্মা ও বিজ্ঞান", desc:"Discover pharmaceutical companies, dosage forms, therapeutic classes and how medicines are developed.", href:"/pharma", tag:"PHARMA DISCOVERY" },
+ { icon: BookOpen, n:"03", title:"Health knowledge", bn:"স্বাস্থ্য জ্ঞান", desc:"Understand common medicine terms, safe-use basics and the science behind everyday healthcare.", href:"/health-library", tag:"LEARN & EXPLORE" }
 ];
-type HomeProfile = { shop_name?: string; local_name?: string; tagline_bn?: string; tagline_en?: string; phone?: string; address?: string; doctor_name?: string; proprietor_name?: string };
-
-export default async function HomePage({ searchParams }: { searchParams?: Promise<{ lang?: string }> }) {
-  const params = searchParams ? await searchParams : {};
-  const isEnglish = params.lang === "en";
-  const dataUrl = process.env.NEXT_PUBLIC_NEON_DATA_API_URL;
-  let profile: HomeProfile = {};
-  if (dataUrl) {
-    try {
-      const response = await fetch(dataUrl + "/website_content?select=content&content_key=eq.homepage", { next: { revalidate: 60 } });
-      if (response.ok) { const rows = await response.json(); profile = rows?.[0]?.content ?? {}; }
-    } catch { /* Keep public pages available if the Data API is temporarily unavailable. */ }
-  }
-  const shopName = profile.shop_name || "Shishu Medical Hall";
-  const localName = profile.local_name || "অর্জুন ডাক্তারের দোকান";
-  const phone = profile.phone || "";
-  const address = profile.address || "";
-  const tagline = isEnglish ? (profile.tagline_en || "Your neighbourhood pharmacy.") : (profile.tagline_bn || "স্বাস্থ্যসেবায় আস্থার এক পরিচিত ঠিকানা।");
-  const owner = profile.doctor_name || profile.proprietor_name || "";
-  return <main className="site-shell min-h-screen">
-    <header className="site-header">
-      <Link href="/" className="brand-lockup" aria-label={shopName}><img src="/logo.jpg" alt="" className="brand-logo"/><span className="brand-copy"><strong>{shopName}</strong><small>{localName}</small></span></Link>
-      <nav className="desktop-nav" aria-label="Main navigation"><a href="#about">{isEnglish ? "About" : "পরিচিতি"}</a><a href="#services">{isEnglish ? "Our care" : "আমাদের সেবা"}</a><a href="#contact">{isEnglish ? "Contact" : "যোগাযোগ"}</a></nav>
-      <div className="header-actions"><Link href={isEnglish ? "/" : "/?lang=en"} className="language-toggle">{isEnglish ? "বাংলা" : "EN"}</Link><Link href="/dashboard" className="management-link">{isEnglish ? "Store login" : "স্টোর লগইন"} <ArrowUpRight size={15}/></Link></div>
-    </header>
-    <section className="hero-section">
-      <div className="hero-copy">
-        <div className="eyebrow"><span className="status-dot"/> {isEnglish ? "YOUR LOCAL PHARMACY" : "আপনার এলাকার পরিচিত ফার্মেসি"}</div>
-        <h1>{isEnglish ? <>Everyday care.<br/><span>Close to home.</span></> : <>প্রতিদিনের যত্ন,<br/><span>আপনার কাছেই।</span></>}</h1>
-        <p className="hero-description">{shopName} — {isEnglish ? "known locally as" : "আপনাদের পরিচিত"} <strong>{localName}</strong>। {isEnglish ? "Here for your everyday medicine and healthcare essentials." : "প্রয়োজনীয় ওষুধ ও স্বাস্থ্যসামগ্রীর জন্য পাশে আছি।"}</p>
-        <div className="hero-actions"><a href="#contact" className="primary-action">{isEnglish ? "Get in touch" : "যোগাযোগ করুন"} <ArrowUpRight size={17}/></a><a href="#about" className="secondary-action">{isEnglish ? "Discover more" : "আরও জানুন"}</a></div>
-        <div className="hero-trust"><span><ShieldCheck size={16}/> {isEnglish ? "Local & familiar" : "পরিচিত ও নির্ভরযোগ্য"}</span><i/><span><Clock3 size={16}/> {isEnglish ? "Here when you need us" : "প্রয়োজনে পাশে আছি"}</span></div>
-      </div>
-      <div className="hero-visual" aria-label="Shishu Medical Hall healthcare identity">
-        <div className="visual-orbit orbit-one"/><div className="visual-orbit orbit-two"/>
-        <div className="medical-card">
-          <div className="medical-card-top"><span>SMH <b>/</b> HEALTH & CARE</span><span className="live-mark"><i/> {isEnglish ? "LOCAL PHARMACY" : "স্থানীয় ফার্মেসি"}</span></div>
-          <div className="heart-stage"><div className="heart-halo"/><HeartPulse className="beating-heart" strokeWidth={1.45} aria-hidden="true"/><svg className="pulse-line" viewBox="0 0 360 54" fill="none" aria-hidden="true"><path d="M0 28H92L112 28L128 10L147 46L165 3L184 28H360" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
-          <div className="medical-card-bottom"><div><small>{isEnglish ? "CARE THAT FEELS CLOSE" : "আপনার পাশে, প্রতিদিন"}</small><strong>{localName}</strong></div><span className="card-cross">+</span></div>
-        </div>
-        <div className="floating-note"><span className="note-icon"><HeartPulse size={17}/></span><span><b>{isEnglish ? "People first" : "মানুষ আগে"}</b><small>{isEnglish ? "Care with responsibility" : "যত্ন ও দায়িত্বের সঙ্গে"}</small></span></div>
-      </div>
-    </section>
-    <section id="about" className="intro-strip"><div><span className="section-kicker">{isEnglish ? "A NAME YOU KNOW" : "আপনার চেনা একটি নাম"}</span><h2>{isEnglish ? "Familiar people. Familiar trust." : "পরিচিত মানুষ, পরিচিত আস্থা।"}</h2></div><p>{isEnglish ? "A neighbourhood pharmacy built around the everyday needs of the people it serves." : "এলাকার মানুষের দৈনন্দিন প্রয়োজনকে গুরুত্ব দিয়ে, আন্তরিকতার সঙ্গে সেবা দেওয়াই আমাদের লক্ষ্য।"}</p></section>
-    <section id="services" className="service-grid">{highlights.map(({icon:Icon,title,en,copy,copyEn},index)=><article key={en} className="service-card"><div className="service-icon"><Icon size={21}/></div><div className="service-number">0{index+1}</div><h3>{isEnglish ? en : title}</h3><p>{isEnglish ? copyEn : copy}</p></article>)}</section>
-    <footer id="contact" className="contact-panel">
-      <div className="contact-heading"><span className="section-kicker">{isEnglish ? "COME SAY HELLO" : "যোগাযোগ করুন"}</span><h2>{isEnglish ? "We are here for you." : "আমরা আছি আপনার পাশে।"}</h2><p>{tagline}</p>{owner && <small className="owner-line">{isEnglish ? "Doctor / Proprietor" : "ডাক্তার / স্বত্বাধিকারী"}: {owner}</small>}</div>
-      <div className="contact-details"><div><MapPin size={18}/><span><small>{isEnglish ? "Find us" : "ঠিকানা"}</small><strong>{address || (isEnglish ? "Address to be updated" : "ঠিকানা যোগ করা হয়নি")}</strong></span></div><div><Phone size={18}/><span><small>{isEnglish ? "Call the shop" : "ফোন"}</small><strong>{phone || (isEnglish ? "Phone to be updated" : "ফোন নম্বর যোগ করা হয়নি")}</strong></span></div></div>
-    </footer>
-    <div className="site-footer"><span>© {new Date().getFullYear()} {shopName}</span><span>{isEnglish ? "Made for better everyday care." : "প্রতিদিনের যত্নে, আপনার পাশে।"}</span></div>
-  </main>;
+export default async function HomePage({searchParams}:{searchParams?:Promise<{lang?:string}>}) {
+ const params=searchParams?await searchParams:{};
+ const en=params.lang==="en";
+ let profile:HomeProfile={};
+ const dataUrl=process.env.NEXT_PUBLIC_NEON_DATA_API_URL;
+ if(dataUrl){try{const r=await fetch(dataUrl+"/website_content?select=content&content_key=eq.homepage",{next:{revalidate:60}});if(r.ok){const rows=await r.json();profile=rows?.[0]?.content??{};}}catch{}}
+ const shop=profile.shop_name||"Shishu Medical Hall", local=profile.local_name||"অর্জুন ডাক্তারের দোকান";
+ const owner=profile.doctor_name||profile.proprietor_name||"";
+ return <main className="site-shell">
+  <header className="site-header"><Link href="/" className="brand-lockup"><img src="/logo.jpg" alt="" className="brand-logo"/><span className="brand-copy"><strong>{shop}</strong><small>{local}</small></span></Link>
+   <nav className="desktop-nav"><Link href="/medicines">{en?"Medicines":"ওষুধ"}</Link><Link href="/pharma">{en?"Pharma":"ফার্মা"}</Link><Link href="/health-library">{en?"Health library":"স্বাস্থ্য জ্ঞান"}</Link><a href="#bio-intelligent">Bio Intelligent</a></nav>
+   <div className="header-actions"><Link href={en?"/":"/?lang=en"} className="language-toggle">{en?"বাংলা":"EN"}</Link><Link href="/dashboard" className="management-link">{en?"Store login":"স্টোর লগইন"} <ArrowUpRight size={15}/></Link></div>
+  </header>
+  <section className="hero-section">
+   <div className="hero-copy"><div className="eyebrow"><span className="status-dot"/>{en?"PHARMACY • MEDICINE • KNOWLEDGE":"ফার্মেসি • ওষুধ • স্বাস্থ্য জ্ঞান"}</div>
+    <h1>{en?<>Care, knowledge<br/><span>and discovery.</span></>:<>স্বাস্থ্য, জ্ঞান<br/><span>আর নতুন আবিষ্কার।</>}</h1>
+    <p className="hero-description">{shop} — {en?"your local pharmacy, with a growing space to explore medicines, pharmaceutical science and everyday health knowledge.":"আপনার পরিচিত ফার্মেসি, পাশাপাশি ওষুধ, ফার্মাসিউটিক্যাল বিজ্ঞান এবং স্বাস্থ্য বিষয়ে জানার একটি উন্মুক্ত জায়গা।"} <strong>{local}</strong></p>
+    <div className="hero-actions"><Link href="/medicines" className="primary-action">{en?"Explore medicines":"ওষুধ খুঁজুন"} <ArrowRight size={17}/></Link><Link href="/pharma" className="secondary-action">{en?"Explore pharma":"ফার্মা জানুন"}</Link></div>
+    <div className="hero-trust"><span><ShieldCheck size={16}/>{en?"Local pharmacy":"পরিচিত ফার্মেসি"}</span><i/><span><Activity size={16}/>{en?"Knowledge-led care":"জ্ঞানভিত্তিক স্বাস্থ্যসেবা"}</span></div>
+   </div>
+   <div className="hero-visual"><div className="visual-orbit orbit-one"/><div className="visual-orbit orbit-two"/><div className="medical-card"><div className="medical-card-top"><span>SMH <b>/</b> BIO INTELLIGENT</span><span className="live-mark"><i/> HEALTH SYSTEM</span></div><div className="heart-stage"><div className="heart-halo"/><HeartPulse className="beating-heart" strokeWidth={1.35}/><svg className="pulse-line" viewBox="0 0 360 54" fill="none"><path d="M0 28H92L112 28L128 10L147 46L165 3L184 28H360" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/></svg><div className="heart-glass-shine"/></div><div className="medical-card-bottom"><div><small>{en?"SCIENCE MEETS EVERYDAY CARE":"বিজ্ঞান ও দৈনন্দিন স্বাস্থ্য"}</small><strong>Bio Intelligent</strong></div><span className="card-cross">✳</span></div></div><div className="floating-note"><span className="note-icon"><BrainCircuit size={18}/></span><span><b>{en?"Explore the science":"বিজ্ঞানের খোঁজে"}</b><small>{en?"Understand. Discover. Learn.":"জানুন • বুঝুন • শিখুন"}</small></span></div></div>
+  </section>
+  <section className="home-quicklinks"><div className="quicklink-intro"><span className="section-kicker">{en?"EXPLORE THE PLATFORM":"এক্সপ্লোর করুন"}</span><h2>{en?"More than a pharmacy homepage.":"শুধু একটি ফার্মেসির ওয়েবসাইট নয়।"}</h2><p>{en?"Choose a destination and go deeper.":"আপনার প্রয়োজন অনুযায়ী আলাদা পেজে গিয়ে বিস্তারিত জানুন।"}</p></div><div className="quicklink-grid">{care.map(({icon:Icon,n,title,bn,desc,href,tag})=><Link href={href} key={href} className="explore-card"><div className="explore-top"><span className="explore-icon"><Icon size={21}/></span><span className="service-number">{n}</span></div><small>{tag}</small><h3>{en?title:bn}</h3><p>{desc}</p><span className="explore-more">{en?"Explore page":"পেজে যান"} <ArrowUpRight size={15}/></span></Link>)}</div></section>
+  <section id="bio-intelligent" className="bio-section"><div className="bio-art"><div className="bio-glass-orbit"/><div className="bio-glass-heart"><HeartPulse size={100} strokeWidth={1.1}/><span className="bio-scan-line"/></div><div className="bio-chip chip-a"><Activity size={14}/> LIVE PULSE</div><div className="bio-chip chip-b"><Dna size={14}/> BIO SCIENCE</div></div><div className="bio-copy"><span className="section-kicker">{en?"THE BIO INTELLIGENT SPACE":"বায়ো ইন্টেলিজেন্ট"}</span><h2>{en?<>Curiosity is part<br/>of better care.</>:<>স্বাস্থ্যকে জানুন,<br/><span>বিজ্ঞানের চোখে।</span></>}</h2><p>{en?"A dedicated knowledge experience connecting the human body, medicine and pharmaceutical science. Explore explainers and reference material designed to make complex topics easier to understand.":"মানবদেহ, ওষুধ এবং ফার্মাসিউটিক্যাল বিজ্ঞানের সংযোগ নিয়ে একটি জ্ঞানভিত্তিক অভিজ্ঞতা। জটিল বিষয়গুলো সহজভাবে বুঝতে পড়ুন, জানুন এবং আবিষ্কার করুন।"}</p><div className="bio-points"><span><ScanHeart size={16}/> Human biology</span><span><FlaskConical size={16}/> Medicine science</span><span><Microscope size={16}/> Research & discovery</span></div><Link href="/bio-intelligent" className="bio-button">{en?"Enter Bio Intelligent":"Bio Intelligent-এ প্রবেশ করুন"} <ArrowUpRight size={16}/></Link></div></section>
+  <section className="about-band" id="about"><div><span className="section-kicker">{en?"ROOTED IN THE COMMUNITY":"আপনার এলাকার পরিচিত ঠিকানা"}</span><h2>{en?"A familiar pharmacy, a wider world of knowledge.":"পরিচিত ফার্মেসি, জ্ঞানের আরও বড় পরিসর।"}</h2></div><p>{profile.tagline_bn||"স্বাস্থ্যসেবায় আস্থার এক পরিচিত ঠিকানা।"} {owner&&<><br/>{en?"Doctor / Proprietor":"ডাক্তার / স্বত্বাধিকারী"}: {owner}</>}</p></section>
+  <footer className="contact-panel" id="contact"><div className="contact-heading"><span className="section-kicker">{en?"VISIT OR CONTACT":"যোগাযোগ করুন"}</span><h2>{en?"We are here for you.":"আমরা আছি আপনার পাশে।"}</h2><p>{profile.tagline_en||"Your neighbourhood pharmacy."}</p></div><div className="contact-details"><div><MapPin size={18}/><span><small>{en?"Address":"ঠিকানা"}</small><strong>{profile.address||"ঠিকানা যোগ করা হয়নি"}</strong></span></div><div><Phone size={18}/><span><small>{en?"Phone":"ফোন"}</small><strong>{profile.phone||"ফোন নম্বর যোগ করা হয়নি"}</strong></span></div><div><Clock3 size={18}/><span><small>{en?"Store":"স্টোর"}</small><strong>{local}</strong></span></div></div></footer>
+  <div className="site-footer"><span>© {new Date().getFullYear()} {shop}</span><span>Medicine information is educational, not a substitute for professional advice.</span></div>
+ </main>;
 }
