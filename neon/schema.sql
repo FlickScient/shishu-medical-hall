@@ -255,3 +255,76 @@ create policy owners_manage_ledgers on public.ledger_accounts
 for all to authenticated using (public.can_manage_finances()) with check (public.can_manage_finances());
 create policy owners_manage_ledger_entries on public.ledger_entries
 for all to authenticated using (public.can_manage_finances()) with check (public.can_manage_finances());
+
+
+-- Invitation links are single-use, expiring, and bound to the invited email.
+create table if not exists public.store_invitations (
+  id uuid primary key default gen_random_uuid(),
+  email text not null,
+  role text not null check (role in ('co_owner','editor')),
+  token_hash text not null unique,
+  invited_by text,
+  created_at timestamptz not null default now(),
+  expires_at timestamptz not null default (now() + interval '7 days'),
+  accepted_at timestamptz
+);
+alter table public.store_invitations enable row level security;
+grant select, insert, update, delete on public.store_invitations to authenticated;
+create policy store_invitations_owner_manage on public.store_invitations
+for all to authenticated using (public.current_store_role() = 'owner')
+with check (public.current_store_role() = 'owner');
+
+create or replace function public.create_store_invitation(p_email text, p_role text, p_token text)
+returns uuid
+language plpgsql security definer
+set search_path = public
+set row_security = off
+as $$
+declare v_id uuid;
+begin
+  if public.current_store_role() <> 'owner' then raise exception 'Only the owner can invite team members'; end if;
+  if p_role not in ('co_owner','editor') then raise exception 'Invalid invitation role'; end if;
+  if length(trim(p_email)) < 5 or length(p_token) < 32 then raise exception 'Invalid invitation details'; end if;
+  insert into public.store_invitations(email, role, token_hash, invited_by)
+  values (lower(trim(p_email)), p_role, encode(digest(p_token, 'sha256'), 'hex'), (select auth.user_id())::text)
+  returning id into v_id;
+  return v_id;
+end;
+$$;
+
+create or replace function public.accept_store_invitation(p_token text)
+returns jsonb
+language plpgsql security definer
+set search_path = public
+set row_security = off
+as $$
+declare
+  v_user_id text;
+  v_email text;
+  v_name text;
+  v_invite public.store_invitations%rowtype;
+begin
+  select id::text, email, name into v_user_id, v_email, v_name
+  from neon_auth."user"
+  where id = (select auth.user_id())::uuid;
+  if v_user_id is null then raise exception 'Please sign in before accepting this invitation'; end if;
+  if exists (select 1 from public.store_members where user_id = v_user_id) then
+    raise exception 'This account already has store access';
+  end if;
+  select * into v_invite
+  from public.store_invitations
+  where token_hash = encode(digest(p_token, 'sha256'), 'hex')
+    and lower(email) = lower(v_email)
+    and accepted_at is null
+    and expires_at > now()
+  for update;
+  if v_invite.id is null then raise exception 'Invitation is invalid, expired, or belongs to another email'; end if;
+  insert into public.store_members(user_id, display_name, role, invited_by)
+  values (v_user_id, v_name, v_invite.role, v_invite.invited_by);
+  update public.store_invitations set accepted_at = now() where id = v_invite.id;
+  return jsonb_build_object('role', v_invite.role, 'email', v_invite.email);
+end;
+$$;
+
+grant execute on function public.create_store_invitation(text,text,text) to authenticated;
+grant execute on function public.accept_store_invitation(text) to authenticated;
