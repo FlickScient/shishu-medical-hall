@@ -232,10 +232,10 @@ create policy members_manage_stock on public.stock_batches
 for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
 create policy members_manage_shortages on public.shortage_requests
 for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
-create policy members_manage_purchase_orders on public.purchase_orders
-for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
-create policy members_manage_purchase_items on public.purchase_order_items
-for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
+create policy owners_manage_purchase_orders on public.purchase_orders
+for all to authenticated using (public.can_manage_finances()) with check (public.can_manage_finances());
+create policy owners_manage_purchase_items on public.purchase_order_items
+for all to authenticated using (public.can_manage_finances()) with check (public.can_manage_finances());
 create policy members_manage_contacts on public.company_contacts
 for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
 create policy members_read_homepage on public.website_content
