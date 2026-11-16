@@ -1,10 +1,19 @@
 "use client";
 
-import { createBrowserClient } from "@supabase/ssr";
+import { createClient as createNeonClient, SupabaseAuthAdapter } from "@neondatabase/neon-js";
 
 export function createClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) throw new Error("Supabase environment variables are missing.");
-  return createBrowserClient(url, key);
+  const authUrl = process.env.NEXT_PUBLIC_NEON_AUTH_URL;
+  const dataApiUrl = process.env.NEXT_PUBLIC_NEON_DATA_API_URL;
+
+  if (!authUrl || !dataApiUrl) {
+    throw new Error("Neon Auth and Data API environment variables are missing.");
+  }
+
+  // SupabaseAuthAdapter preserves the existing .from() and signInWithPassword()
+  // call sites while routing both auth and PostgREST queries through Neon.
+  return createNeonClient({
+    auth: { adapter: SupabaseAuthAdapter(), url: authUrl },
+    dataApi: { url: dataApiUrl },
+  });
 }

@@ -1,0 +1,257 @@
+-- Shishu Medical Hall — Neon PostgreSQL schema.
+-- Run after Neon Auth and the Neon Data API have been provisioned.
+create extension if not exists pgcrypto;
+
+create table if not exists public.store_members (
+  id uuid primary key default gen_random_uuid(),
+  user_id text not null unique,
+  display_name text,
+  role text not null check (role in ('owner','co_owner','editor')),
+  invited_by text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.medicines (
+  id uuid primary key default gen_random_uuid(),
+  brand_name text not null,
+  generic_name text,
+  strength text,
+  dosage_form text,
+  manufacturer text,
+  therapeutic_group text,
+  unit_price numeric(12,2),
+  source_name text,
+  source_url text,
+  source_updated_at date,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.suppliers (
+  id uuid primary key default gen_random_uuid(),
+  company_name text not null,
+  contact_person text,
+  mpo_name text,
+  phone text,
+  address text,
+  notes text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.stock_batches (
+  id uuid primary key default gen_random_uuid(),
+  medicine_id uuid not null references public.medicines(id),
+  supplier_id uuid references public.suppliers(id),
+  batch_number text,
+  quantity integer not null default 0 check (quantity >= 0),
+  purchase_unit_cost numeric(12,2) not null default 0,
+  selling_unit_price numeric(12,2),
+  expiry_date date,
+  received_at timestamptz not null default now()
+);
+
+create table if not exists public.transactions (
+  id uuid primary key default gen_random_uuid(),
+  kind text not null check (kind in ('income','expense')),
+  amount numeric(12,2) not null check (amount > 0),
+  description text,
+  occurred_at timestamptz not null default now(),
+  created_by text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.sales (
+  id uuid primary key default gen_random_uuid(),
+  sold_at timestamptz not null default now(),
+  total_amount numeric(12,2) not null default 0,
+  total_cost numeric(12,2) not null default 0,
+  note text,
+  created_by text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.sale_items (
+  id uuid primary key default gen_random_uuid(),
+  sale_id uuid not null references public.sales(id) on delete cascade,
+  medicine_id uuid references public.medicines(id),
+  batch_id uuid references public.stock_batches(id),
+  item_name text not null,
+  quantity integer not null check (quantity > 0),
+  unit_price numeric(12,2) not null,
+  unit_cost numeric(12,2) not null default 0
+);
+
+create table if not exists public.ledger_accounts (
+  id uuid primary key default gen_random_uuid(),
+  ledger_type text not null check (ledger_type in ('customer_due','supplier_debt')),
+  party_name text not null,
+  phone text,
+  notes text,
+  opening_balance numeric(12,2) not null default 0,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.ledger_entries (
+  id uuid primary key default gen_random_uuid(),
+  ledger_id uuid not null references public.ledger_accounts(id) on delete cascade,
+  entry_type text not null check (entry_type in ('charge','payment','adjustment')),
+  amount numeric(12,2) not null check (amount > 0),
+  description text,
+  occurred_at timestamptz not null default now(),
+  created_by text
+);
+
+create table if not exists public.shortage_requests (
+  id uuid primary key default gen_random_uuid(),
+  medicine_id uuid references public.medicines(id),
+  medicine_label text not null,
+  supplier_id uuid references public.suppliers(id),
+  requested_quantity integer,
+  status text not null default 'open' check (status in ('open','ordered','received','cancelled')),
+  note text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.website_content (
+  id uuid primary key default gen_random_uuid(),
+  content_key text not null unique,
+  content jsonb not null default '{}'::jsonb,
+  updated_by text,
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.purchase_orders (
+  id uuid primary key default gen_random_uuid(),
+  supplier_id uuid references public.suppliers(id),
+  status text not null default 'draft' check (status in ('draft','sent','partially_received','received','cancelled')),
+  order_total numeric(12,2) not null default 0,
+  note text,
+  ordered_at timestamptz not null default now(),
+  received_at timestamptz,
+  created_by text
+);
+
+create table if not exists public.purchase_order_items (
+  id uuid primary key default gen_random_uuid(),
+  purchase_order_id uuid not null references public.purchase_orders(id) on delete cascade,
+  medicine_id uuid references public.medicines(id),
+  item_name text not null,
+  quantity integer not null check (quantity > 0),
+  unit_cost numeric(12,2) not null default 0,
+  received_quantity integer not null default 0 check (received_quantity >= 0)
+);
+
+create table if not exists public.company_contacts (
+  id uuid primary key default gen_random_uuid(),
+  company_name text not null,
+  person_name text,
+  role_title text,
+  phone text,
+  territory text,
+  notes text,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists medicines_brand_name_idx on public.medicines (brand_name);
+create index if not exists medicines_generic_name_idx on public.medicines (generic_name);
+create index if not exists stock_batches_expiry_idx on public.stock_batches (expiry_date);
+create index if not exists transactions_occurred_at_idx on public.transactions (occurred_at desc);
+create index if not exists sales_sold_at_idx on public.sales (sold_at desc);
+create index if not exists ledger_entries_ledger_occurred_idx on public.ledger_entries (ledger_id, occurred_at desc);
+create index if not exists shortage_requests_status_idx on public.shortage_requests (status, created_at desc);
+create index if not exists purchase_orders_ordered_at_idx on public.purchase_orders (ordered_at desc);
+
+create or replace function public.current_store_role()
+returns text
+language sql stable security definer
+set search_path = public
+set row_security = off
+as $$
+  select role from public.store_members
+  where user_id = (select auth.user_id())::text
+  limit 1;
+$$;
+
+create or replace function public.is_store_member()
+returns boolean
+language sql stable security definer
+set search_path = public
+set row_security = off
+as $$
+  select exists (
+    select 1 from public.store_members
+    where user_id = (select auth.user_id())::text
+  );
+$$;
+
+create or replace function public.can_manage_finances()
+returns boolean
+language sql stable security definer
+set search_path = public
+set row_security = off
+as $$
+  select coalesce(public.current_store_role() in ('owner','co_owner'), false);
+$$;
+
+alter table public.store_members enable row level security;
+alter table public.medicines enable row level security;
+alter table public.suppliers enable row level security;
+alter table public.stock_batches enable row level security;
+alter table public.transactions enable row level security;
+alter table public.sales enable row level security;
+alter table public.sale_items enable row level security;
+alter table public.ledger_accounts enable row level security;
+alter table public.ledger_entries enable row level security;
+alter table public.shortage_requests enable row level security;
+alter table public.website_content enable row level security;
+alter table public.purchase_orders enable row level security;
+alter table public.purchase_order_items enable row level security;
+alter table public.company_contacts enable row level security;
+
+grant usage on schema public to anonymous, authenticated;
+grant select on public.website_content to anonymous;
+grant select, insert, update, delete on all tables in schema public to authenticated;
+grant usage, select on all sequences in schema public to authenticated;
+grant execute on function public.current_store_role() to authenticated;
+grant execute on function public.is_store_member() to authenticated;
+grant execute on function public.can_manage_finances() to authenticated;
+
+create policy store_members_read_self on public.store_members
+for select to authenticated
+using (user_id = (select auth.user_id())::text or public.current_store_role() = 'owner');
+create policy store_members_owner_manage on public.store_members
+for all to authenticated
+using (public.current_store_role() = 'owner')
+with check (public.current_store_role() = 'owner');
+
+create policy members_manage_medicines on public.medicines
+for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
+create policy members_manage_suppliers on public.suppliers
+for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
+create policy members_manage_stock on public.stock_batches
+for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
+create policy members_manage_shortages on public.shortage_requests
+for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
+create policy members_manage_purchase_orders on public.purchase_orders
+for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
+create policy members_manage_purchase_items on public.purchase_order_items
+for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
+create policy members_manage_contacts on public.company_contacts
+for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
+create policy members_read_homepage on public.website_content
+for select to authenticated using (public.is_store_member());
+create policy members_edit_homepage on public.website_content
+for all to authenticated using (public.is_store_member()) with check (public.is_store_member());
+create policy public_read_homepage on public.website_content
+for select to anonymous using (true);
+
+create policy owners_manage_transactions on public.transactions
+for all to authenticated using (public.can_manage_finances()) with check (public.can_manage_finances());
+create policy owners_manage_sales on public.sales
+for all to authenticated using (public.can_manage_finances()) with check (public.can_manage_finances());
+create policy owners_manage_sale_items on public.sale_items
+for all to authenticated using (public.can_manage_finances()) with check (public.can_manage_finances());
+create policy owners_manage_ledgers on public.ledger_accounts
+for all to authenticated using (public.can_manage_finances()) with check (public.can_manage_finances());
+create policy owners_manage_ledger_entries on public.ledger_entries
+for all to authenticated using (public.can_manage_finances()) with check (public.can_manage_finances());

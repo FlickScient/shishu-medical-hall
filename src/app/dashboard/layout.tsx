@@ -1,11 +1,12 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-export default async function DashboardLayout({children}:{children:React.ReactNode}){
- const supabase=await createClient();
- const {data:{user}}=await supabase.auth.getUser();
- if(!user) redirect("/login");
- const {data:member,error}=await supabase.from("store_members").select("role,display_name").eq("user_id",user.id).maybeSingle();
- if(error || !member) redirect("/access-denied");
- return <>{children}</>;
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const auth = await createClient();
+  const { data: session } = await auth.getSession();
+
+  if (!session?.user) redirect("/login");
+
+  // Data permissions are enforced by PostgreSQL RLS policies on Neon.
+  return <>{children}</>;
 }
