@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+:root{--ink:#102b43;--muted:#718397;--blue:#1769aa;--cyan:#22b8c7;--teal:#18a999;--paper:#f5f9fc;--line:#e5edf3}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+button,a{ -webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
+::selection{background:#bdeef0;color:#10364b}
+.shell{min-height:100vh;background:radial-gradient(ellipse at 85% 0%,rgba(34,184,199,.11),transparent 34%),var(--paper)}
+.gradient-text{background:linear-gradient(110deg,#1769aa,#22b8c7 60%,#18a999);background-clip:text;color:transparent}
+.brand-gradient{background:linear-gradient(125deg,#135aa1 0%,#168fc0 54%,#19ae9e 100%)}
+.glass{background:rgba(255,255,255,.78);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.8);box-shadow:0 18px 60px rgba(20,66,100,.08)}
+.soft-card{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 8px 28px rgba(22,65,96,.045)}
