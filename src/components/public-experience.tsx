@@ -27,28 +27,16 @@ function Header({ shop = "Shishu Medical Hall" }: { shop?: string }) {
 function HeartArtwork({ large = false }: { large?: boolean }) {
   return <div className={large ? "px-heart-art px-heart-large" : "px-heart-art"}>
     <div className="px-heart-grid"/>
-    <motion.div className="px-heart-orbit px-orbit-a" animate={{rotate:360}} transition={{duration:32,repeat:Infinity,ease:"linear"}}/>
-    <motion.div className="px-heart-orbit px-orbit-b" animate={{rotate:-360}} transition={{duration:24,repeat:Infinity,ease:"linear"}}/>
-    <motion.div className="px-heart-glass" animate={{y:[0,-9,0],rotate:[-3,0,-3]}} transition={{duration:5.5,repeat:Infinity,ease:"easeInOut"}}>
-      <svg viewBox="0 0 260 260" role="img" aria-label="Abstract translucent anatomical heart illustration">
-        <defs>
-          <linearGradient id="pxHeartFill" x1="25" y1="10" x2="230" y2="250" gradientUnits="userSpaceOnUse"><stop stopColor="#fff" stopOpacity=".96"/><stop offset=".36" stopColor="#8bdcf0" stopOpacity=".78"/><stop offset=".7" stopColor="#899ce5" stopOpacity=".78"/><stop offset="1" stopColor="#5de0ce" stopOpacity=".88"/></linearGradient>
-          <linearGradient id="pxHeartStroke" x1="35" y1="0" x2="220" y2="245" gradientUnits="userSpaceOnUse"><stop stopColor="#fff"/><stop offset="1" stopColor="#8af5e7"/></linearGradient>
-          <filter id="pxGlow"><feGaussianBlur stdDeviation="7"/></filter>
-        </defs>
-        <path d="M130 229C112 211 31 153 25 96 20 51 47 20 87 22c20 1 34 13 43 31 11-20 27-31 48-31 39 0 66 31 60 74-7 56-90 106-108 133Z" fill="#71d9e4" opacity=".25" filter="url(#pxGlow)"/>
-        <path d="M130 229C112 211 31 153 25 96 20 51 47 20 87 22c20 1 34 13 43 31 11-20 27-31 48-31 39 0 66 31 60 74-7 56-90 106-108 133Z" fill="url(#pxHeartFill)" stroke="url(#pxHeartStroke)" strokeWidth="3"/>
-        <path d="M72 71c-4 34 21 46 40 58 18 11 21 28 18 59M185 72c-20 13-35 32-36 54-1 22 14 39 26 56M130 53c-5 32-4 53 4 71 8 20 7 43-4 75" fill="none" stroke="#fff" strokeOpacity=".72" strokeWidth="4" strokeLinecap="round"/>
-        <path d="M39 108h45l13-21 21 54 21-78 18 45h52" fill="none" stroke="#f7ffff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M84 27c18-2 31 6 40 19" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" opacity=".9"/>
-      </svg>
+    <motion.div className="px-heart-orbit px-orbit-a" animate={{rotate:360}} transition={{duration:42,repeat:Infinity,ease:"linear"}}/>
+    <motion.div className="px-heart-orbit px-orbit-b" animate={{rotate:-360}} transition={{duration:34,repeat:Infinity,ease:"linear"}}/>
+    <motion.div className="px-heart-glass" animate={{y:[0,-7,0],scale:[1,1.018,1]}} transition={{duration:4.8,repeat:Infinity,ease:"easeInOut"}}>
+      <img className="px-anatomical-heart" src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDI0LTAxL3NtYWxsZGVzaWduY29tcGFueTAxX2hlYXJ0X29yZ2FuX2luX3RoZV9zdHlsZV9vZl9wYXN0ZWxfZHJlYW1fYV8wNDUxYmIwMi02N2U2LTQyOWYtYWQwMS1iMTljM2Q0NWMwM2IucG5n.png" alt="Translucent iridescent anatomical heart illustration" loading="lazy" decoding="async"/>
     </motion.div>
     <span className="px-heart-label px-label-one"><i/> CARDIOVASCULAR SYSTEM</span>
     <span className="px-heart-label px-label-two"><Activity size={13}/> LIFE IN MOTION</span>
     <span className="px-heart-index">FIG. 01 / HUMAN BIOLOGY</span>
   </div>;
 }
-
 
 function PulseDock() {
   const [open,setOpen] = useState(false);
@@ -126,6 +114,15 @@ export function HomeExperience({ profile = {} }: { profile?: Profile }) {
       <div className="px-hero-side-note">A LITTLE CLOSER TO THE SCIENCE OF YOU <ArrowDownRight size={15}/></div>
     </section>
     <section className="px-intro-band"><span>01 / A PLACE TO BEGIN</span><p>From the medicines we use to the biology that makes us human — <b>understanding matters.</b></p><span>EST. IN YOUR COMMUNITY</span></section>
+    <section className="px-pathways">
+      <div className="px-pathways-heading"><span className="px-kicker">EXPLORE BY INTEREST</span><h2>Health is connected.<br/><em>So is everything we learn.</em></h2><p>Start with a subject, then follow the science behind it.</p></div>
+      <div className="px-pathway-grid">
+        <Link href="/bio-intelligent#explorer" className="px-pathway-card pathway-heart"><span className="px-pathway-icon"><HeartPulse/></span><small>HUMAN BIOLOGY / 01</small><b>Heart & circulation</b><span>Understand the rhythm behind life <ArrowUpRight size={15}/></span></Link>
+        <Link href="/bio-intelligent#explorer" className="px-pathway-card pathway-dna"><span className="px-pathway-icon"><Dna/></span><small>CELLULAR SCIENCE / 02</small><b>Cells & DNA</b><span>Explore life's smallest instructions <ArrowUpRight size={15}/></span></Link>
+        <Link href="/bio-intelligent#explorer" className="px-pathway-card pathway-medicine"><span className="px-pathway-icon"><FlaskConical/></span><small>PHARMACOLOGY / 03</small><b>How medicines work</b><span>Connect molecules with medicine <ArrowUpRight size={15}/></span></Link>
+        <Link href="/health-library" className="px-pathway-card pathway-safety"><span className="px-pathway-icon"><ShieldCheck/></span><small>HEALTH LITERACY / 04</small><b>Everyday medicine safety</b><span>Learn labels, storage and safe use <ArrowUpRight size={15}/></span></Link>
+      </div>
+    </section>
     <section className="px-discover-section">
       <motion.div className="px-section-heading" initial="hidden" whileInView="show" viewport={{once:true,amount:.3}} variants={stagger}><motion.div variants={reveal}><span className="px-kicker">EXPLORE THE KNOWLEDGE SPACE</span><h2>More than a pharmacy.<br/><em>A place to discover.</em></h2></motion.div><motion.p variants={reveal}>A carefully organised starting point for medicine references, pharmaceutical science and clear, useful health knowledge.</motion.p></motion.div>
       <div className="px-discover-grid">{cards.map((c,i)=><motion.div key={c.n} className={"px-discover-card "+c.tone} initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.65,delay:i*.1,ease}}><div className="px-discover-top"><span>{c.n} / EXPLORE</span><c.icon size={21}/></div><small>{c.kicker}</small><h3>{c.title}</h3><p>{c.body}</p><Link href={c.href}>Explore section <ArrowUpRight size={15}/></Link></motion.div>)}</div>
