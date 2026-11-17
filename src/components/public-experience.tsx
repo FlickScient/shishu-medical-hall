@@ -29,15 +29,7 @@ function HeartArtwork({ large = false }: { large?: boolean }) {
     <div className="px-heart-orbit px-orbit-a" aria-hidden="true"/>
     <div className="px-heart-orbit px-orbit-b" aria-hidden="true"/>
     <svg className="px-heart-svg" viewBox="0 0 200 190" role="img" aria-label="A red heart with a heartbeat line">
-      <defs>
-        <linearGradient id="px-heart-red" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#ff6674"/><stop offset="55%" stopColor="#ed334d"/><stop offset="100%" stopColor="#c91f42"/>
-        </linearGradient>
-        <filter id="px-heart-shadow" x="-35%" y="-35%" width="170%" height="180%">
-          <feDropShadow dx="0" dy="9" stdDeviation="7" floodColor="#b51f43" floodOpacity=".20"/>
-        </filter>
-      </defs>
-      <path className="px-heart-shape" d="M100 169 C87 157 23 111 18 69 C13 29 60 9 91 39 L100 49 L109 39 C140 9 187 29 182 69 C177 111 113 157 100 169Z" fill="url(#px-heart-red)" filter="url(#px-heart-shadow)"/>
+      <path className="px-heart-shape" d="M100 169 C87 157 23 111 18 69 C13 29 60 9 91 39 L100 49 L109 39 C140 9 187 29 182 69 C177 111 113 157 100 169Z" fill="#e83e52"/>
       <path d="M37 62 C39 43 55 34 70 39" fill="none" stroke="#fff" strokeOpacity=".42" strokeWidth="5" strokeLinecap="round"/>
       <path className="px-heart-ecg" d="M27 94 H66 L79 75 L94 116 L111 59 L127 95 H172" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
@@ -172,7 +164,7 @@ export function BioExperience() {
         <aside className="px-chapter-rail"><span className="px-rail-label">CHAPTER INDEX</span>{chapters.map(c=><button key={c.id} onClick={()=>{setActive(c.id);setExpanded(false)}} className={active===c.id?"active":""}><span>{c.no}</span><b>{c.label}</b><ArrowUpRight size={15}/></button>)}<div className="px-rail-note"><Atom size={17}/><span>Four perspectives.<br/>One connected system.</span></div></aside>
         <div className="px-chapter-stage">
           <AnimatePresence mode="wait"><motion.article key={current.id} className={"px-active-chapter "+current.accent} initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-12}} transition={{duration:.35,ease}}>
-            <div className="px-stage-visual"><div className="px-stage-grid"/><motion.div className="px-stage-orbit" animate={{rotate:360}} transition={{duration:28,repeat:Infinity,ease:"linear"}}/><div className="px-stage-icon"><Icon size={90} strokeWidth={1}/></div><span className="px-stage-figure">FIG. {current.no}</span><span className="px-stage-visual-label">{current.sub}</span></div>
+            <div className="px-stage-visual"><div className="px-stage-grid"/><div className="px-stage-orbit" aria-hidden="true"/><div className="px-stage-icon"><Icon size={90} strokeWidth={1}/></div><span className="px-stage-figure">FIG. {current.no}</span><span className="px-stage-visual-label">{current.sub}</span></div>
             <div className="px-stage-copy"><span className="px-kicker">{current.no} / {current.sub}</span><h3>{current.title}</h3><p>{current.intro}</p><div className="px-stage-stat"><b>{current.stat}</b><small>{current.unit}</small></div><div className="px-fact-list">{current.facts.map((fact,i)=><div key={fact}><span>0{i+1}</span>{fact}</div>)}</div><button className="px-deep-dive" onClick={()=>setExpanded(!expanded)}>{expanded?"Close chapter notes":"Explore key ideas"} <ChevronDown size={16}/></button>{expanded&&<motion.div className="px-expanded-note" initial={{opacity:0,height:0}} animate={{opacity:1,height:"auto"}}><p>{current.id==="heart"?"The cardiac cycle alternates between relaxation (diastole) and contraction (systole). Blood enters the atria, passes into the ventricles and is then pumped to the lungs or the rest of the body.":current.id==="cells"?"Cells specialise for different jobs. Their structures, internal compartments and communication systems allow tissues and organs to work together.":current.id==="medicine"?"A medicine's effect depends on its pharmacology, formulation, dose, route and the patient's characteristics. A healthcare professional helps determine appropriate use.":"Drug development combines laboratory science, clinical evidence, quality controls and regulatory oversight. Each stage asks whether a candidate is safe and useful enough to progress."}</p></motion.div>}</div>
           </motion.article></AnimatePresence>
           <div className="px-stage-controls"><span>CHAPTER {current.no} OF 04</span><div><button disabled={active==="heart"} onClick={()=>{setActive(chapters[chapters.findIndex(c=>c.id===active)-1].id);setExpanded(false)}}>← Previous</button><button disabled={active==="research"} onClick={()=>{setActive(chapters[chapters.findIndex(c=>c.id===active)+1].id);setExpanded(false)}}>Next chapter <ArrowRight size={14}/></button></div></div>
