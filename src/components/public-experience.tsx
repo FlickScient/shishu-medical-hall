@@ -25,13 +25,22 @@ function Header({ shop = "Shishu Medical Hall" }: { shop?: string }) {
 }
 
 function HeartArtwork({ large = false }: { large?: boolean }) {
-  return <div className={large ? "px-heart-art px-heart-large" : "px-heart-art"}>
-    <div className="px-heart-grid"/>
-    <motion.div className="px-heart-orbit px-orbit-a" animate={{rotate:360}} transition={{duration:42,repeat:Infinity,ease:"linear"}}/>
-    <motion.div className="px-heart-orbit px-orbit-b" animate={{rotate:-360}} transition={{duration:34,repeat:Infinity,ease:"linear"}}/>
-    <motion.div className="px-heart-glass" animate={{y:[0,-7,0],scale:[1,1.018,1]}} transition={{duration:4.8,repeat:Infinity,ease:"easeInOut"}}>
-      <img className="px-anatomical-heart" src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDI0LTAxL3NtYWxsZGVzaWduY29tcGFueTAxX2hlYXJ0X29yZ2FuX2luX3RoZV9zdHlsZV9vZl9wYXN0ZWxfZHJlYW1fYV8wNDUxYmIwMi02N2U2LTQyOWYtYWQwMS1iMTljM2Q0NWMwM2IucG5n.png" alt="Translucent iridescent anatomical heart illustration" loading="lazy" decoding="async"/>
-    </motion.div>
+  return <div className={large ? "px-heart-art px-heart-large" : "px-heart-art"} aria-label="Animated red heart illustration">
+    <div className="px-heart-orbit px-orbit-a" aria-hidden="true"/>
+    <div className="px-heart-orbit px-orbit-b" aria-hidden="true"/>
+    <svg className="px-heart-svg" viewBox="0 0 200 190" role="img" aria-label="A red heart with a heartbeat line">
+      <defs>
+        <linearGradient id="px-heart-red" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#ff6674"/><stop offset="55%" stopColor="#ed334d"/><stop offset="100%" stopColor="#c91f42"/>
+        </linearGradient>
+        <filter id="px-heart-shadow" x="-35%" y="-35%" width="170%" height="180%">
+          <feDropShadow dx="0" dy="9" stdDeviation="7" floodColor="#b51f43" floodOpacity=".20"/>
+        </filter>
+      </defs>
+      <path className="px-heart-shape" d="M100 169 C87 157 23 111 18 69 C13 29 60 9 91 39 L100 49 L109 39 C140 9 187 29 182 69 C177 111 113 157 100 169Z" fill="url(#px-heart-red)" filter="url(#px-heart-shadow)"/>
+      <path d="M37 62 C39 43 55 34 70 39" fill="none" stroke="#fff" strokeOpacity=".42" strokeWidth="5" strokeLinecap="round"/>
+      <path className="px-heart-ecg" d="M27 94 H66 L79 75 L94 116 L111 59 L127 95 H172" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
     <span className="px-heart-label px-label-one"><i/> CARDIOVASCULAR SYSTEM</span>
     <span className="px-heart-label px-label-two"><Activity size={13}/> LIFE IN MOTION</span>
     <span className="px-heart-index">FIG. 01 / HUMAN BIOLOGY</span>
@@ -71,13 +80,12 @@ function MoleculeObservatory() {
     <div className="px-molecule-console">
       <div className="px-molecule-visual">
         <div className="px-molecule-visual-top"><span>MOLECULAR VIEWER / 3D-INSPIRED SCHEMATIC</span><span>MODEL 0{molecules.findIndex(item=>item.id===active)+1}</span></div>
-        <motion.div className="px-molecule-model" animate={{rotate:turn}} transition={{type:"spring",stiffness:90,damping:16}}>
+        <div className="px-molecule-model" style={{transform:"rotate("+turn+"deg)"}}>
           <svg viewBox="0 0 100 100" role="img" aria-label={molecule.name+" conceptual molecular model"}>
             {molecule.bonds.map(([a,b],i)=><line key={i} x1={molecule.atoms[a].x} y1={molecule.atoms[a].y} x2={molecule.atoms[b].x} y2={molecule.atoms[b].y} stroke="#8bbdca" strokeWidth="2.2" strokeLinecap="round"/>)}
             {molecule.atoms.map((atom,i)=><g key={i}><circle cx={atom.x} cy={atom.y} r="8.5" fill={atom.t==="O"?"#42aeb6":atom.t==="N"?"#858ac7":atom.t==="C"?"#45657d":"#f8ffff"} stroke={atom.t==="H"?"#91bdc9":"#ffffff"} strokeWidth="1.3"/><text x={atom.x} y={atom.y+.1} textAnchor="middle" dominantBaseline="central" fontSize="7" fontWeight="700" fill={atom.t==="H"?"#416b7d":"#ffffff"}>{atom.t}</text></g>)}
           </svg>
-        </motion.div>
-        <div className="px-molecule-controls"><button onClick={()=>setTurn(turn-45)} aria-label="Rotate molecule left">↶</button><button onClick={()=>setTurn(0)}>RESET VIEW</button><button onClick={()=>setTurn(turn+45)} aria-label="Rotate molecule right">↷</button></div>
+        </div><div className="px-molecule-controls"><button onClick={()=>setTurn(turn-45)} aria-label="Rotate molecule left">↶</button><button onClick={()=>setTurn(0)}>RESET VIEW</button><button onClick={()=>setTurn(turn+45)} aria-label="Rotate molecule right">↷</button></div>
         <span className="px-molecule-orbit-label">ATOMIC CONNECTIONS / {molecule.atoms.length} ATOMS</span>
       </div>
       <div className="px-molecule-info"><span className="px-kicker">SELECT A MODEL</span><div className="px-molecule-tabs">{molecules.map(item=><button key={item.id} className={active===item.id?"active":""} onClick={()=>{setActive(item.id);setTurn(0)}}><span>{item.formula}</span><b>{item.name}</b><ArrowUpRight size={14}/></button>)}</div><div className="px-molecule-detail"><span>{molecule.type}</span><h3>{molecule.name} <small>{molecule.formula}</small></h3><p>{molecule.fact}</p></div><div className="px-model-note"><Atom size={15}/> Simplified educational model. Not to scale and not a precise chemical structure.</div></div>
