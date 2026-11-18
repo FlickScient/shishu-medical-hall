@@ -97,6 +97,8 @@ export function HomeExperience({ profile = {}, medicineCount = null }: { profile
   const [openFaq,setOpenFaq] = useState<number|null>(0);
   useEffect(()=>{setTipIndex(Math.floor(Math.random()*healthGuides.length));},[]);
   const shop = profile.shop_name || "Shishu Medical Hall";
+  const healthGuideCount = healthGuides.length;
+  const bioChapterCount = chapters.length;
   const cards = [
     {n:"01",icon:Pill,kicker:"MEDICINE REFERENCE",title:"Know what goes into your medicine.",body:"Explore brand names, generic ingredients, strengths and useful medicine references.",href:"/medicines",tone:"blue"},
     {n:"02",icon:FlaskConical,kicker:"PHARMACEUTICAL SCIENCE",title:"Behind every tablet is a story.",body:"Discover how medicines are researched, developed, manufactured and quality-checked.",href:"/pharma",tone:"mint"},
@@ -181,6 +183,7 @@ export function BioExperience() {
   const activeIndex = chapters.findIndex(c=>c.id===active);
   const Icon = current.icon;
   useEffect(()=>{const requested=window.location.hash.slice(1);if(chapters.some(ch=>ch.id===requested))setActive(requested);},[]);
+  useEffect(()=>{if(window.location.hash==="#"+active)document.getElementById("explorer")?.scrollIntoView({behavior:"smooth",block:"start"});},[active]);
   return <main className="px-site px-bio-site">
     <Header/>
     <section className="px-bio-hero">
