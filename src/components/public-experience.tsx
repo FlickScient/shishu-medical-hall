@@ -91,7 +91,7 @@ function Footer({ profile }: { profile?: Profile }) {
   return <footer className="px-footer"><div className="px-footer-top"><div><Link href="/" className="px-brand"><img src="/logo.jpg" alt=""/><span><b>{profile?.shop_name || "Shishu Medical Hall"}</b><small>{profile?.local_name || "অর্জুন ডাক্তারের দোকান"}</small></span></Link><p>A neighbourhood pharmacy with a space for better understanding of medicines, health and science.</p></div><div className="px-footer-links"><b>Explore</b><Link href="/medicines">Medicine directory</Link><Link href="/pharma">Pharma & science</Link><Link href="/bio-intelligent">Bio Intelligent</Link><Link href="/health-library">Health library</Link></div><div className="px-footer-links"><b>Contact</b><span><MapPin size={14}/>{profile?.address || "Visit our pharmacy"}</span><span><Phone size={14}/>{profile?.phone || "Contact details coming soon"}</span><span><Clock3 size={14}/>Local pharmacy</span></div></div><div className="px-footer-bottom"><span>© {new Date().getFullYear()} {profile?.shop_name || "Shishu Medical Hall"}</span><span>Medicine information is educational and does not replace professional advice.</span></div></footer>;
 }
 
-export function HomeExperience({ profile = {} }: { profile?: Profile }) {
+export function HomeExperience({ profile = {}, medicineCount = null }: { profile?: Profile; medicineCount?: number | null }) {
   const [language,setLanguage] = useState<"en"|"bn">("en");
   const [tipIndex,setTipIndex] = useState(0);
   const [openFaq,setOpenFaq] = useState<number|null>(0);
@@ -120,11 +120,12 @@ export function HomeExperience({ profile = {} }: { profile?: Profile }) {
       <div className="px-hero-side-note">A LITTLE CLOSER TO THE SCIENCE OF YOU <ArrowDownRight size={15}/></div>
     </section>
     <section className="px-intro-band"><span>01 / A PLACE TO BEGIN</span><p>From the medicines we use to the biology that makes us human — <b>understanding matters.</b></p><span>EST. IN YOUR COMMUNITY</span></section>
-    <section className="px-live-strip" aria-label="Learning library facts">
-      <div><span className="px-kicker">THE KNOWLEDGE INDEX</span><b>04</b><small>Health guides</small></div>
-      <div><span className="px-kicker">BIO INTELLIGENT</span><b>04</b><small>Guided chapters</small></div>
-      <div><span className="px-kicker">MEDICINE REFERENCES</span><b>MedEx</b><small>External directory linked · not locally hosted</small></div>
-      <div><span className="px-kicker">ROOTED LOCALLY</span><b>Community</b><small>Neighbourhood pharmacy</small></div>
+    <section className="px-live-strip" aria-label="Live content and medicine counts">
+      <div className="px-live-strip-heading"><span className="px-kicker">THE KNOWLEDGE INDEX</span><p>Real counts from the published guides, Bio Intelligent chapters and local medicine database.</p></div>
+      <div className="px-live-stat"><b>{medicineCount === null ? "—" : medicineCount.toLocaleString("en-BD")}</b><small>Locally indexed medicines</small><em>{medicineCount === 0 ? "No local records yet" : "Local catalogue records"}</em></div>
+      <div className="px-live-stat"><b>{healthGuides.length.toString().padStart(2,"0")}</b><small>Health Library guides</small><em>Published guides</em></div>
+      <div className="px-live-stat"><b>{chapters.length.toString().padStart(2,"0")}</b><small>Bio Intelligent chapters</small><em>Guided chapters</em></div>
+      <p className="px-live-strip-note">MedEx Bangladesh is linked as an external reference directory; its catalogue is not counted as locally hosted medicine data.</p>
     </section>
     <section className="px-today-tip">
       <div className="px-tip-icon"><BookOpen size={22}/></div>
