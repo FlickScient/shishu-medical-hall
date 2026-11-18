@@ -177,7 +177,9 @@ export function BioExperience() {
   const [active,setActive] = useState("heart");
   const [expanded,setExpanded] = useState(false);
   const current = chapters.find(c=>c.id===active)!;
+  const activeIndex = chapters.findIndex(c=>c.id===active);
   const Icon = current.icon;
+  useEffect(()=>{const requested=window.location.hash.slice(1);if(chapters.some(ch=>ch.id===requested))setActive(requested);},[]);
   return <main className="px-site px-bio-site">
     <Header/>
     <section className="px-bio-hero">
@@ -185,12 +187,17 @@ export function BioExperience() {
       <div className="px-bio-hero-art"><HeartArtwork large/><span className="px-hero-art-index">PLATE 001 · HUMAN BIOLOGY</span></div>
     </section>
     <section className="px-bio-intro-strip"><span>THE HUMAN BODY / AN OPEN BOOK</span><p>Every heartbeat, every cell, every medicine has a story. <b>Start exploring yours.</b></p><span>SCROLL TO EXPLORE ↓</span></section>
+    <nav className="px-bio-sticky-nav" aria-label="Bio Intelligent section navigation">
+      <a href="#explorer">Chapters</a><a href="#connections">The bigger picture</a><a href="#disclaimer">Learning note</a>
+      <div className="px-bio-progress"><span style={{width:((activeIndex+1)/chapters.length*100)+"%"}}/></div>
+      <small>CHAPTER {activeIndex+1} OF 4</small>
+    </nav>
     <section className="px-bio-explorer" id="explorer">
       <div className="px-explorer-heading"><div><span className="px-kicker">INTERACTIVE FIELD GUIDE / 01—04</span><h2>Choose a system.<br/><em>Follow the science.</em></h2></div><p>Move between chapters to explore four connected parts of biology and medicine. Each chapter reveals a different layer of the story.</p></div>
       <div className="px-explorer-layout">
         <aside className="px-chapter-rail"><span className="px-rail-label">CHAPTER INDEX</span>{chapters.map(c=><button key={c.id} onClick={()=>{setActive(c.id);setExpanded(false)}} className={active===c.id?"active":""}><span>{c.no}</span><b>{c.label}</b><ArrowUpRight size={15}/></button>)}<div className="px-rail-note"><Atom size={17}/><span>Four perspectives.<br/>One connected system.</span></div></aside>
         <div className="px-chapter-stage">
-          <AnimatePresence mode="wait"><motion.article key={current.id} className={"px-active-chapter "+current.accent} initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-12}} transition={{duration:.35,ease}}>
+          <AnimatePresence mode="wait"><motion.article id={current.id} key={current.id} className={"px-active-chapter "+current.accent} initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-12}} transition={{duration:.35,ease}}>
             <div className="px-stage-visual"><div className="px-stage-grid"/><div className="px-stage-orbit" aria-hidden="true"/><div className="px-stage-icon"><Icon size={90} strokeWidth={1}/></div><span className="px-stage-figure">FIG. {current.no}</span><span className="px-stage-visual-label">{current.sub}</span></div>
             <div className="px-stage-copy"><span className="px-kicker">{current.no} / {current.sub}</span><h3>{current.title}</h3><p>{current.intro}</p><div className="px-stage-stat"><b>{current.stat}</b><small>{current.unit}</small></div><div className="px-fact-list">{current.facts.map((fact,i)=><div key={fact}><span>0{i+1}</span>{fact}</div>)}</div><button className="px-deep-dive" onClick={()=>setExpanded(!expanded)}>{expanded?"Close chapter notes":"Explore key ideas"} <ChevronDown size={16}/></button>{expanded&&<motion.div className="px-expanded-note" initial={{opacity:0,height:0}} animate={{opacity:1,height:"auto"}}><p>{current.id==="heart"?"The cardiac cycle alternates between relaxation (diastole) and contraction (systole). Blood enters the atria, passes into the ventricles and is then pumped to the lungs or the rest of the body.":current.id==="cells"?"Cells specialise for different jobs. Their structures, internal compartments and communication systems allow tissues and organs to work together.":current.id==="medicine"?"A medicine's effect depends on its pharmacology, formulation, dose, route and the patient's characteristics. A healthcare professional helps determine appropriate use.":"Drug development combines laboratory science, clinical evidence, quality controls and regulatory oversight. Each stage asks whether a candidate is safe and useful enough to progress."}</p></motion.div>}</div>
           </motion.article></AnimatePresence>
@@ -198,8 +205,8 @@ export function BioExperience() {
         </div>
       </div>
     </section>
-    <section className="px-bio-connection"><div><span className="px-kicker">THE BIGGER PICTURE</span><h2>Biology explains life.<br/><em>Pharmacology connects care.</em></h2></div><p>Understanding the human body gives us a better foundation for understanding medicines — how they work, why they are developed and why safe use matters.</p><Link href="/pharma">Explore pharmaceutical science <ArrowUpRight size={15}/></Link></section>
-    <section className="px-bio-disclaimer"><ShieldCheck size={20}/><div><b>Learning, not diagnosis.</b><p>This experience is for general education. It does not diagnose, prescribe or replace advice from a registered doctor or pharmacist. Always follow qualified professional guidance for personal health decisions.</p></div></section>
+    <section className="px-bio-connection" id="connections"><div><span className="px-kicker">THE BIGGER PICTURE</span><h2>Biology explains life.<br/><em>Pharmacology connects care.</em></h2></div><p>Understanding the human body gives us a better foundation for understanding medicines — how they work, why they are developed and why safe use matters.</p><Link href="/pharma">Explore pharmaceutical science <ArrowUpRight size={15}/></Link></section>
+    <section className="px-bio-disclaimer" id="disclaimer"><ShieldCheck size={20}/><div><b>Learning, not diagnosis.</b><p>This experience is for general education. It does not diagnose, prescribe or replace advice from a registered doctor or pharmacist. Always follow qualified professional guidance for personal health decisions.</p></div></section>
     <Footer/>
     <PulseDock/>
   </main>;
