@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { healthGuides as guides } from "@/lib/health-guides";
-import { ArrowLeft, BookOpen, ShieldCheck, ClipboardList, HeartPulse, PackageCheck, ThermometerSun, AlertTriangle, ExternalLink } from "lucide-react";
+import { ArrowLeft, ShieldCheck, PackageCheck, AlertTriangle, ExternalLink } from "lucide-react";
 
 export default function HealthLibraryPage() {
  return <main className="subpage-shell"><header className="subpage-header"><Link href="/" className="subpage-brand"><img src="/logo.jpg" alt=""/>Shishu Medical Hall</Link><nav><Link href="/medicines">Medicines</Link><Link href="/pharma">Pharma</Link><Link href="/bio-intelligent">Bio Intelligent</Link><Link href="/dashboard">Store login</Link></nav></header>
