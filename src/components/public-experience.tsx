@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { healthGuides } from "@/lib/health-guides";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity, ArrowDownRight, ArrowRight, ArrowUpRight, Atom, BookOpen, BrainCircuit,
@@ -14,12 +15,12 @@ const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const reveal = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: .7, ease } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: .11 } } };
 
-function Header({ shop = "Shishu Medical Hall" }: { shop?: string }) {
+function Header({ shop = "Shishu Medical Hall", language, onLanguageChange }: { shop?: string; language?: "en" | "bn"; onLanguageChange?: () => void }) {
   const [open, setOpen] = useState(false);
   return <header className="px-header">
     <Link href="/" className="px-brand"><img src="/logo.jpg" alt="" /><span><b>{shop}</b><small>অর্জুন ডাক্তারের দোকান</small></span></Link>
     <nav className="px-nav"><Link href="/medicines">Medicines</Link><Link href="/pharma">Pharma & science</Link><Link href="/bio-intelligent">Bio Intelligent</Link><Link href="/health-library">Health library</Link></nav>
-    <div className="px-head-actions"><Link href="/dashboard" className="px-portal">Store portal <ArrowUpRight size={14}/></Link><button className="px-menu-button" aria-label="Open navigation" onClick={() => setOpen(!open)}>{open ? <X/> : <Menu/>}</button></div>
+    <div className="px-head-actions">{onLanguageChange && <button className="px-language-toggle" onClick={onLanguageChange} aria-label="Switch website language">{language === "bn" ? "EN" : "বাংলা"}</button>}<Link href="/dashboard" className="px-portal">Store portal <ArrowUpRight size={14}/></Link><button className="px-menu-button" aria-label="Open navigation" onClick={() => setOpen(!open)}>{open ? <X/> : <Menu/>}</button></div>
     <AnimatePresence>{open && <motion.nav className="px-mobile-nav" initial={{opacity:0,y:-8}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}}><Link onClick={()=>setOpen(false)} href="/medicines">Medicines</Link><Link onClick={()=>setOpen(false)} href="/pharma">Pharma & science</Link><Link onClick={()=>setOpen(false)} href="/bio-intelligent">Bio Intelligent</Link><Link onClick={()=>setOpen(false)} href="/health-library">Health library</Link><Link onClick={()=>setOpen(false)} href="/dashboard">Store portal</Link></motion.nav>}</AnimatePresence>
   </header>;
 }
@@ -66,6 +67,7 @@ const molecules = [
 function MoleculeObservatory() {
   const [active,setActive] = useState("water");
   const [turn,setTurn] = useState(0);
+  const [atomInfo,setAtomInfo] = useState<number | null>(null);
   const molecule = molecules.find(item=>item.id===active)!;
   return <section className="px-molecule-section">
     <div className="px-molecule-heading"><div><span className="px-kicker">THE MOLECULAR OBSERVATORY / INTERACTIVE</span><h2>Small things.<br/><em>Extraordinary connections.</em></h2></div><p>Explore simple molecular models. Switch molecules and rotate the view to get a feel for how atoms connect.</p></div>
@@ -75,12 +77,12 @@ function MoleculeObservatory() {
         <div className="px-molecule-model" style={{transform:"rotate("+turn+"deg)"}}>
           <svg viewBox="0 0 100 100" role="img" aria-label={molecule.name+" conceptual molecular model"}>
             {molecule.bonds.map(([a,b],i)=><line key={i} x1={molecule.atoms[a].x} y1={molecule.atoms[a].y} x2={molecule.atoms[b].x} y2={molecule.atoms[b].y} stroke="#8bbdca" strokeWidth="2.2" strokeLinecap="round"/>)}
-            {molecule.atoms.map((atom,i)=><g key={i}><circle cx={atom.x} cy={atom.y} r="8.5" fill={atom.t==="O"?"#42aeb6":atom.t==="N"?"#858ac7":atom.t==="C"?"#45657d":"#f8ffff"} stroke={atom.t==="H"?"#91bdc9":"#ffffff"} strokeWidth="1.3"/><text x={atom.x} y={atom.y+.1} textAnchor="middle" dominantBaseline="central" fontSize="7" fontWeight="700" fill={atom.t==="H"?"#416b7d":"#ffffff"}>{atom.t}</text></g>)}
+            {molecule.atoms.map((atom,i)=><g key={i} role="button" tabIndex={0} aria-label={"Explain "+atom.t+" atom"} onClick={()=>setAtomInfo(i)} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setAtomInfo(i)}}} style={{cursor:"pointer"}}><circle cx={atom.x} cy={atom.y} r="8.5" fill={atom.t==="O"?"#42aeb6":atom.t==="N"?"#858ac7":atom.t==="C"?"#45657d":"#f8ffff"} stroke={atom.t==="H"?"#91bdc9":"#ffffff"} strokeWidth="1.3"/><text x={atom.x} y={atom.y+.1} textAnchor="middle" dominantBaseline="central" fontSize="7" fontWeight="700" fill={atom.t==="H"?"#416b7d":"#ffffff"}>{atom.t}</text></g>)}
           </svg>
-        </div><div className="px-molecule-controls"><button onClick={()=>setTurn(turn-45)} aria-label="Rotate molecule left">↶</button><button onClick={()=>setTurn(0)}>RESET VIEW</button><button onClick={()=>setTurn(turn+45)} aria-label="Rotate molecule right">↷</button></div>
+        </div>{atomInfo!==null && <div className="px-atom-tooltip" role="status"><button onClick={()=>setAtomInfo(null)} aria-label="Close atom explanation">×</button><b>{molecule.atoms[atomInfo].t} = {({H:"Hydrogen",O:"Oxygen",N:"Nitrogen",C:"Carbon"} as Record<string,string>)[molecule.atoms[atomInfo].t]}</b><span>{molecule.atoms[atomInfo].t==="O"?"Oxygen typically forms 2 covalent bonds.":molecule.atoms[atomInfo].t==="H"?"Hydrogen typically forms 1 covalent bond.":molecule.atoms[atomInfo].t==="N"?"Nitrogen commonly forms 3 covalent bonds.":"Carbon commonly forms 4 covalent bonds."}</span></div>}<div className="px-molecule-controls"><button onClick={()=>setTurn(turn-45)} aria-label="Rotate molecule left">↶</button><button onClick={()=>setTurn(0)}>RESET VIEW</button><button onClick={()=>setTurn(turn+45)} aria-label="Rotate molecule right">↷</button></div>
         <span className="px-molecule-orbit-label">ATOMIC CONNECTIONS / {molecule.atoms.length} ATOMS</span>
       </div>
-      <div className="px-molecule-info"><span className="px-kicker">SELECT A MODEL</span><div className="px-molecule-tabs">{molecules.map(item=><button key={item.id} className={active===item.id?"active":""} onClick={()=>{setActive(item.id);setTurn(0)}}><span>{item.formula}</span><b>{item.name}</b><ArrowUpRight size={14}/></button>)}</div><div className="px-molecule-detail"><span>{molecule.type}</span><h3>{molecule.name} <small>{molecule.formula}</small></h3><p>{molecule.fact}</p></div><div className="px-model-note"><Atom size={15}/> Simplified educational model. Not to scale and not a precise chemical structure.</div></div>
+      <div className="px-molecule-info"><span className="px-kicker">SELECT A MODEL</span><div className="px-molecule-tabs">{molecules.map(item=><button key={item.id} className={active===item.id?"active":""} onClick={()=>{setActive(item.id);setTurn(0);setAtomInfo(null)}}><span>{item.formula}</span><b>{item.name}</b><ArrowUpRight size={14}/></button>)}</div><div className="px-molecule-detail"><span>{molecule.type}</span><h3>{molecule.name} <small>{molecule.formula}</small></h3><p>{molecule.fact}</p></div><div className="px-model-note"><Atom size={15}/> Simplified educational model. Not to scale and not a precise chemical structure.</div></div>
     </div>
   </section>;
 }
@@ -90,6 +92,10 @@ function Footer({ profile }: { profile?: Profile }) {
 }
 
 export function HomeExperience({ profile = {} }: { profile?: Profile }) {
+  const [language,setLanguage] = useState<"en"|"bn">("en");
+  const [tipIndex,setTipIndex] = useState(0);
+  const [openFaq,setOpenFaq] = useState<number|null>(0);
+  useEffect(()=>{setTipIndex(Math.floor(Math.random()*healthGuides.length));},[]);
   const shop = profile.shop_name || "Shishu Medical Hall";
   const cards = [
     {n:"01",icon:Pill,kicker:"MEDICINE REFERENCE",title:"Know what goes into your medicine.",body:"Explore brand names, generic ingredients, strengths and useful medicine references.",href:"/medicines",tone:"blue"},
@@ -97,14 +103,14 @@ export function HomeExperience({ profile = {} }: { profile?: Profile }) {
     {n:"03",icon:BookOpen,kicker:"HEALTH KNOWLEDGE",title:"Understand health, one idea at a time.",body:"Practical explainers on medicine labels, safe storage and everyday health literacy.",href:"/health-library",tone:"lilac"}
   ];
   return <main className="px-site">
-    <Header shop={shop}/>
+    <Header shop={shop} language={language} onLanguageChange={()=>setLanguage(language==="en"?"bn":"en")}/>
     <section className="px-home-hero">
       <div className="px-hero-copy">
         <motion.div initial="hidden" animate="show" variants={stagger}>
-          <motion.div variants={reveal} className="px-eyebrow"><i/> YOUR LOCAL PHARMACY · A WORLD OF KNOWLEDGE</motion.div>
-          <motion.h1 variants={reveal}>Care you know.<br/><em>Knowledge that grows.</em></motion.h1>
-          <motion.p variants={reveal}>Welcome to <b>{shop}</b> — your familiar neighbourhood pharmacy, with a thoughtful place to explore medicines, the human body and the science behind healthcare.</motion.p>
-          <motion.div variants={reveal} className="px-hero-buttons"><Link className="px-button-primary" href="/medicines">Explore medicines <ArrowUpRight size={16}/></Link><Link className="px-button-text" href="/bio-intelligent">Discover Bio Intelligent <ArrowRight size={15}/></Link></motion.div>
+          <motion.div variants={reveal} className="px-eyebrow"><i/> {language==="bn"?"আপনার পরিচিত ফার্মেসি · জ্ঞানের নতুন দিগন্ত":"YOUR LOCAL PHARMACY · A WORLD OF KNOWLEDGE"}</motion.div>
+          <motion.h1 variants={reveal}>{language==="bn"?<>যত্নের পরিচয়।<br/><em>জ্ঞানে এগিয়ে চলি।</em></>:<>Care you know.<br/><em>Knowledge that grows.</em></>}</motion.h1>
+          <motion.p variants={reveal}>{language==="bn"?<><b>{shop}</b>-এ স্বাগতম — ওষুধ, মানবদেহ এবং স্বাস্থ্যবিজ্ঞানের বিষয়গুলো সহজভাবে জানার একটি পরিচিত ঠিকানা।</>:<>Welcome to <b>{shop}</b> — your familiar neighbourhood pharmacy, with a thoughtful place to explore medicines, the human body and the science behind healthcare.</>}</motion.p>
+          <motion.div variants={reveal} className="px-hero-buttons"><Link className="px-button-primary" href="/medicines">{language==="bn"?"ওষুধ সম্পর্কে জানুন":"Explore medicines"} <ArrowUpRight size={16}/></Link><Link className="px-button-text" href="/bio-intelligent">{language==="bn"?"বায়ো ইন্টেলিজেন্ট দেখুন":"Discover Bio Intelligent"} <ArrowRight size={15}/></Link></motion.div>
           <motion.div variants={reveal} className="px-hero-proof"><span><ShieldCheck size={15}/> Community pharmacy</span><i/><span><Sparkles size={15}/> Learn with curiosity</span></motion.div>
         </motion.div>
       </div>
@@ -114,6 +120,17 @@ export function HomeExperience({ profile = {} }: { profile?: Profile }) {
       <div className="px-hero-side-note">A LITTLE CLOSER TO THE SCIENCE OF YOU <ArrowDownRight size={15}/></div>
     </section>
     <section className="px-intro-band"><span>01 / A PLACE TO BEGIN</span><p>From the medicines we use to the biology that makes us human — <b>understanding matters.</b></p><span>EST. IN YOUR COMMUNITY</span></section>
+    <section className="px-live-strip" aria-label="Learning library facts">
+      <div><span className="px-kicker">THE KNOWLEDGE INDEX</span><b>04</b><small>Health guides</small></div>
+      <div><span className="px-kicker">BIO INTELLIGENT</span><b>04</b><small>Guided chapters</small></div>
+      <div><span className="px-kicker">MEDICINE REFERENCES</span><b>MedEx</b><small>External directory linked · not locally hosted</small></div>
+      <div><span className="px-kicker">ROOTED LOCALLY</span><b>Community</b><small>Neighbourhood pharmacy</small></div>
+    </section>
+    <section className="px-today-tip">
+      <div className="px-tip-icon"><BookOpen size={22}/></div>
+      <div className="px-tip-copy"><span className="px-kicker">TODAY'S HEALTH TIP / HEALTH LIBRARY</span><h2>{healthGuides[tipIndex].title}</h2><p>{healthGuides[tipIndex].intro}</p><small>{healthGuides[tipIndex].items[0]}</small><Link href={"/health-library#"+healthGuides[tipIndex].id}>Read the guide <ArrowUpRight size={14}/></Link></div>
+      <button className="px-tip-next" onClick={()=>setTipIndex((tipIndex+1)%healthGuides.length)} aria-label="Show another health tip">Another tip <ArrowRight size={15}/></button>
+    </section>
     <section className="px-pathways">
       <div className="px-pathways-heading"><span className="px-kicker">EXPLORE BY INTEREST</span><h2>Health is connected.<br/><em>So is everything we learn.</em></h2><p>Start with a subject, then follow the science behind it.</p></div>
       <div className="px-pathway-grid">
@@ -132,7 +149,17 @@ export function HomeExperience({ profile = {} }: { profile?: Profile }) {
       <motion.div className="px-bio-art-wrap" initial={{opacity:0,x:-25}} whileInView={{opacity:1,x:0}} viewport={{once:true,amount:.25}} transition={{duration:.8,ease}}><HeartArtwork/><div className="px-art-side-caption">BIO / 001<br/>THE HUMAN BODY</div></motion.div>
       <motion.div className="px-bio-feature-copy" initial={{opacity:0,x:25}} whileInView={{opacity:1,x:0}} viewport={{once:true,amount:.25}} transition={{duration:.8,ease}}><span className="px-kicker">THE FEATURED EXPERIENCE</span><h2>Meet your body.<br/><em>Understand its wonder.</em></h2><p>Bio Intelligent is a visual learning space where biology meets medicine. Explore the heart, cells, DNA, the way medicines work and the research that moves healthcare forward.</p><div className="px-feature-tags"><span><HeartPulse size={14}/> Human systems</span><span><Dna size={14}/> Cells & DNA</span><span><Microscope size={14}/> Research</span></div><Link href="/bio-intelligent" className="px-button-primary">Enter Bio Intelligent <ArrowUpRight size={16}/></Link></motion.div>
     </section>
+    <section className="px-chapter-preview">
+      <div className="px-chapter-preview-heading"><div><span className="px-kicker">BIO INTELLIGENT / FOUR CHAPTERS</span><h2>A little preview.<br/><em>A deeper world inside.</em></h2></div><Link href="/bio-intelligent">Explore all chapters <ArrowUpRight size={15}/></Link></div>
+      <div className="px-chapter-preview-track">{chapters.map(ch=>{const ChapterIcon=ch.icon;return <Link href={"/bio-intelligent#"+ch.id} className={"px-chapter-thumb "+ch.accent} key={ch.id}><span className="px-chapter-thumb-art"><ChapterIcon size={38} strokeWidth={1.25}/><small>FIG. {ch.no}</small></span><span className="px-kicker">CHAPTER {ch.no}</span><b>{ch.label}</b><small>{ch.sub}</small><ArrowUpRight size={15}/></Link>})}</div>
+    </section>
     <section className="px-principles"><div className="px-principles-title"><span className="px-kicker">OUR APPROACH</span><h2>Familiar care.<br/><em>Thoughtful knowledge.</em></h2></div><div className="px-principle"><span>01</span><div><b>Rooted in the community</b><p>A familiar local pharmacy, built around everyday needs and trust.</p></div></div><div className="px-principle"><span>02</span><div><b>Information with context</b><p>Clear learning resources that help make complex topics easier to understand.</p></div></div><div className="px-principle"><span>03</span><div><b>Curiosity without confusion</b><p>Explore science in a structured way, without replacing professional advice.</p></div></div></section>
+    <section className="px-faq-section">
+      <div className="px-faq-heading"><span className="px-kicker">GOOD TO KNOW</span><h2>Questions, answered.<br/><em>Care without confusion.</em></h2><p>A quick note about what this pharmacy website is — and what it isn't.</p></div>
+      <div className="px-faq-list">
+        {[{q:"Is this an online pharmacy?",a:"No. Shishu Medical Hall is a neighbourhood pharmacy website with educational resources and a private store-management portal. It is not an online medicine marketplace."},{q:"Can I order medicine here?",a:"No online ordering or checkout is offered on this website. Please visit the pharmacy and speak with the pharmacist about medicine availability and appropriate guidance."},{q:"Where does the medicine information come from?",a:"The medicine explorer links to MedEx Bangladesh directories. Medicine records are not currently imported or hosted in this website."},{q:"Can I use the health guides as medical advice?",a:"No. The guides are general education only. They do not diagnose or prescribe. Follow the product label and consult a registered doctor or pharmacist for personal advice."}].map((item,i)=><article className={"px-faq-item "+(openFaq===i?"open":"")} key={item.q}><button onClick={()=>setOpenFaq(openFaq===i?null:i)} aria-expanded={openFaq===i}><span>0{i+1}</span><b>{item.q}</b><ChevronDown size={17}/></button>{openFaq===i&&<p>{item.a}</p>}</article>)}
+      </div>
+    </section>
     <section className="px-contact-cta"><div><span className="px-kicker">SHISHU MEDICAL HALL</span><h2>Your neighbourhood pharmacy.<br/><em>Always a little more to learn.</em></h2></div><div><p>{profile.tagline_en || "A familiar address for everyday healthcare."}</p><Link href="/dashboard">Store management <ArrowUpRight size={15}/></Link></div></section>
     <Footer profile={profile}/>
     <PulseDock/>
