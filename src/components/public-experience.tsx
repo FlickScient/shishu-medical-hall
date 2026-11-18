@@ -124,9 +124,9 @@ export function HomeExperience({ profile = {}, medicineCount = null }: { profile
     <section className="px-intro-band"><span>01 / A PLACE TO BEGIN</span><p>From the medicines we use to the biology that makes us human — <b>understanding matters.</b></p><span>EST. IN YOUR COMMUNITY</span></section>
     <section className="px-live-strip" aria-label="Live content and medicine counts">
       <div className="px-live-strip-heading"><span className="px-kicker">THE KNOWLEDGE INDEX</span><p>Real counts from the published guides, Bio Intelligent chapters and local medicine database.</p></div>
-      <div className="px-live-stat"><b>{medicineCount === null ? "—" : medicineCount.toLocaleString("en-BD")}</b><small>Locally indexed medicines</small><em>{medicineCount === 0 ? "No local records yet" : "Local catalogue records"}</em></div>
-      <div className="px-live-stat"><b>{healthGuides.length.toString().padStart(2,"0")}</b><small>Health Library guides</small><em>Published guides</em></div>
-      <div className="px-live-stat"><b>{chapters.length.toString().padStart(2,"0")}</b><small>Bio Intelligent chapters</small><em>Guided chapters</em></div>
+      <div className="px-live-stat"><b>{medicineCount === null ? "—" : medicineCount.toLocaleString("en-BD")}</b><small>Locally indexed medicines</small><em>{medicineCount === null ? "Count unavailable" : medicineCount === 0 ? "No local records yet" : "Local catalogue records"}</em></div>
+      <div className="px-live-stat"><b>{healthGuideCount.toString().padStart(2,"0")}</b><small>Health Library guides</small><em>Published guides</em></div>
+      <div className="px-live-stat"><b>{bioChapterCount.toString().padStart(2,"0")}</b><small>Bio Intelligent chapters</small><em>Guided chapters</em></div>
       <p className="px-live-strip-note">MedEx Bangladesh is linked as an external reference directory; its catalogue is not counted as locally hosted medicine data.</p>
     </section>
     <section className="px-today-tip">
