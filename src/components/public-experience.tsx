@@ -242,6 +242,12 @@ const organModelSources: Record<string,{label:string;url:string;license:string}>
 function modelViewerUrl(modelUrl:string,embedded=true) {
   return "https://www.innerscene.com/tools/3d-viewer?url="+encodeURIComponent(modelUrl)+(embedded?"&embedded=1":"");
 }
+const chapterModelSources: Record<string,{label:string;url:string}> = {
+  heart:{label:"HuBMAP Human Reference Atlas · CC BY 4.0",url:"https://humanatlas.io/3d-reference-library"},
+  cells:{label:"RCSB Protein Data Bank · 1BNA",url:"https://www.rcsb.org/structure/1BNA"},
+  medicine:{label:"PubChem · Caffeine 3D record",url:"https://pubchem.ncbi.nlm.nih.gov/compound/Caffeine"},
+  research:{label:"RCSB Protein Data Bank · 1HHO",url:"https://www.rcsb.org/structure/1HHO"}
+};
 const chapterModelUrls: Record<string,string> = {
   heart:organModelUrls.heart,
   cells:"https://files.rcsb.org/download/1BNA.pdb",
@@ -288,6 +294,7 @@ export function BioExperience() {
   const current = chapters.find(c=>c.id===active)!;
   const activeIndex = chapters.findIndex(c=>c.id===active);
   const chapterViewerSrc=modelViewerUrl(chapterModelUrls[current.id],true);
+  const chapterSource=chapterModelSources[current.id];
   useEffect(()=>{const requested=window.location.hash.slice(1);if(chapters.some(ch=>ch.id===requested))setActive(requested);},[]);
   useEffect(()=>{if(window.location.hash==="#"+active)document.getElementById("explorer")?.scrollIntoView({behavior:"smooth",block:"start"});},[active]);
   return <main className="px-site px-bio-site">
@@ -309,7 +316,7 @@ export function BioExperience() {
         <aside className="px-chapter-rail"><span className="px-rail-label">CHAPTER INDEX</span>{chapters.map(c=><button key={c.id} onClick={()=>{setActive(c.id);setExpanded(false)}} className={active===c.id?"active":""}><span>{c.no}</span><b>{c.label}</b><ArrowUpRight size={15}/></button>)}<div className="px-rail-note"><Atom size={17}/><span>Four perspectives.<br/>One connected system.</span></div></aside>
         <div className="px-chapter-stage">
           <AnimatePresence mode="wait"><motion.article id={current.id} key={current.id} className={"px-active-chapter "+current.accent} initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-12}} transition={{duration:.35,ease}}>
-            <div className="px-stage-visual px-stage-model"><iframe src={chapterViewerSrc} title={current.label+" interactive 3D science model"} loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen/><span className="px-stage-figure">FIG. {current.no}</span><span className="px-stage-visual-label">{current.sub}</span></div>
+            <div className="px-stage-visual px-stage-model"><iframe src={chapterViewerSrc} title={current.label+" interactive 3D science model"} loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen/><span className="px-stage-figure">FIG. {current.no}</span><span className="px-stage-visual-label">{current.sub}</span><a className="px-stage-model-credit" href={chapterSource.url} target="_blank" rel="noreferrer">{chapterSource.label}</a></div>
             <div className="px-stage-copy"><span className="px-kicker">{current.no} / {current.sub}</span><h3>{current.title}</h3><p>{current.intro}</p><div className="px-stage-stat"><b>{current.stat}</b><small>{current.unit}</small></div><div className="px-fact-list">{current.facts.map((fact,i)=><div key={fact}><span>0{i+1}</span>{fact}</div>)}</div><button className="px-deep-dive" onClick={()=>setExpanded(!expanded)}>{expanded?"Close chapter notes":"Explore key ideas"} <ChevronDown size={16}/></button>{expanded&&<motion.div className="px-expanded-note" initial={{opacity:0,height:0}} animate={{opacity:1,height:"auto"}}><p>{current.id==="heart"?"The cardiac cycle alternates between relaxation (diastole) and contraction (systole). Blood enters the atria, passes into the ventricles and is then pumped to the lungs or the rest of the body.":current.id==="cells"?"Cells specialise for different jobs. Their structures, internal compartments and communication systems allow tissues and organs to work together.":current.id==="medicine"?"A medicine's effect depends on its pharmacology, formulation, dose, route and the patient's characteristics. A healthcare professional helps determine appropriate use.":"Drug development combines laboratory science, clinical evidence, quality controls and regulatory oversight. Each stage asks whether a candidate is safe and useful enough to progress."}</p></motion.div>}</div>
           </motion.article></AnimatePresence>
           <div className="px-stage-controls"><span>CHAPTER {current.no} OF 04</span><div><button disabled={active==="heart"} onClick={()=>{setActive(chapters[chapters.findIndex(c=>c.id===active)-1].id);setExpanded(false)}}>← Previous</button><button disabled={active==="research"} onClick={()=>{setActive(chapters[chapters.findIndex(c=>c.id===active)+1].id);setExpanded(false)}}>Next chapter <ArrowRight size={14}/></button></div></div>
