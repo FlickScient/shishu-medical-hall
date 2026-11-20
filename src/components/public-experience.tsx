@@ -214,69 +214,46 @@ const organFlow: Record<string, [string,string,string]> = {
  bladder:["Kidneys","Urine storage","Release"]
 };
 
+const organModelPages: Record<string,string> = {
+  brain:"https://www.innerscene.com/tools/library/3d-parts/brain-10d8f88f",
+  heart:"https://www.innerscene.com/tools/library/3d-parts/heart-e9f72b0e",
+  lungs:"https://www.innerscene.com/tools/library/3d-parts/lungs-with-trachea-respiratory-system-1d019b26",
+  liver:"https://www.innerscene.com/tools/library/3d-parts/liver-ae1a8cc0",
+  stomach:"https://www.innerscene.com/tools/library/3d-parts/torso-with-removable-organs-1fe1b70a",
+  kidneys:"https://www.innerscene.com/tools/library/3d-parts/urinary-system-with-kidneys-dda985bd",
+  intestines:"https://www.innerscene.com/tools/library/3d-parts/intestines-26224e6a",
+  pancreas:"https://www.innerscene.com/tools/library/3d-parts/torso-with-removable-organs-1fe1b70a",
+  spleen:"https://www.innerscene.com/tools/library/3d-parts/torso-with-removable-organs-1fe1b70a",
+  bladder:"https://www.innerscene.com/tools/library/3d-parts/urinary-system-with-kidneys-dda985bd"
+};
+
 function OrganAtlas() {
   const [selected,setSelected]=useState("heart");
-  const [showDetail,setShowDetail]=useState(false);
   const organ=organAtlas.find(item=>item.id===selected)!;
+  const modelUrl=organModelPages[selected];
   return <section className="organ-atlas" id="organs">
-    <div className="organ-atlas-heading"><div><span className="px-kicker">THE HUMAN BODY / INTERACTIVE ANATOMY</span><h2>Ten windows.<br/><em>One living system.</em></h2></div><p>Select an organ on the body map or use the organ index. Each selection opens a visual anatomy card with its role, key structures and connected body systems.</p></div>
-    <div className="organ-atlas-console">
-      <div className="organ-body-stage">
-        <div className="organ-stage-meta"><span>ANATOMICAL SCAN / FRONT VIEW</span><span>FIG. 01 — 10</span></div>
-        <div className="organ-body-orbit orbit-a"/><div className="organ-body-orbit orbit-b"/>
-        <svg className="organ-body-silhouette" viewBox="0 0 300 620" role="img" aria-label="Interactive front-view map of major human organs">
-          <defs>
-            <linearGradient id="body-shell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#dbe9e7"/><stop offset=".48" stopColor="#9bbdbd"/><stop offset="1" stopColor="#557c8a"/></linearGradient>
-            <linearGradient id="organ-core" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#f4b1a0"/><stop offset=".55" stopColor="#d66d76"/><stop offset="1" stopColor="#87485f"/></linearGradient>
-            <filter id="body-depth"><feGaussianBlur stdDeviation="7"/></filter>
-          </defs>
-          <ellipse cx="150" cy="595" rx="73" ry="12" fill="#183b4b" opacity=".12" filter="url(#body-depth)"/>
-          <path d="M150 23 C122 23 105 44 107 72 C109 95 123 111 150 112 C177 111 191 95 193 72 C195 44 178 23 150 23Z" fill="url(#body-shell)" opacity=".48" stroke="#77a1a4" strokeWidth="2"/><path d="M123 60 C116 42 134 33 145 43 C151 32 170 37 175 50 C185 57 178 75 164 77 C155 89 138 82 135 74 C124 75 117 68 123 60Z" fill="#8db8bc" opacity=".78" stroke="#c3e4d9" strokeWidth="1.5"/><path d="M130 49 Q139 41 144 53 T158 50 T173 57 M129 63 Q140 57 145 68 T160 65 T172 68" fill="none" stroke="#d6ebe1" strokeWidth="2" opacity=".75"/>
-          <path d="M107 125 C82 129 63 148 58 180 L38 279 C35 296 44 304 53 299 C61 296 63 281 68 264 L88 199 L91 317 C92 348 101 378 106 409 L93 555 C91 576 104 583 113 568 L145 424 L155 424 L187 568 C196 583 209 576 207 555 L194 409 C199 378 208 348 209 317 L212 199 L232 264 C237 281 239 296 247 299 C256 304 265 296 262 279 L242 180 C237 148 218 129 193 125 C179 119 166 116 150 116 C134 116 121 119 107 125Z" fill="url(#body-shell)" opacity=".22" stroke="#86aeb0" strokeWidth="2"/>
-          <path d="M150 115 L150 415" stroke="#a9ceca" strokeWidth="1.2" strokeDasharray="3 7" opacity=".8"/>
-          <path d="M150 126 C126 131 111 152 114 184 C117 210 131 222 147 221 L147 171 C148 154 149 138 150 126Z" fill="#7cb2ba" opacity=".32"/>
-          <path d="M150 126 C174 131 189 152 186 184 C183 210 169 222 153 221 L153 171 C152 154 151 138 150 126Z" fill="#7cb2ba" opacity=".32"/>
-          <path d="M127 150 C111 140 97 153 101 180 C104 204 119 218 139 213 C147 195 142 166 127 150Z" fill="#b8757c" opacity=".9" stroke="#e9b6aa" strokeWidth="2"/><path d="M173 150 C189 140 203 153 199 180 C196 204 181 218 161 213 C153 195 158 166 173 150Z" fill="#b8757c" opacity=".9" stroke="#e9b6aa" strokeWidth="2"/><path d="M150 128 L150 196 M150 170 L131 184 M150 170 L169 184" stroke="#e7c2ae" strokeWidth="3" fill="none" strokeLinecap="round"/>
-          <path d="M150 231 C132 216 111 229 116 251 C120 271 138 291 150 300 C162 291 180 271 184 251 C189 229 168 216 150 231Z" fill="url(#organ-core)" stroke="#f0c0ad" strokeWidth="2"/>
-          <path d="M150 305 C126 295 112 315 120 339 C129 363 144 373 150 376 C156 373 171 363 180 339 C188 315 174 295 150 305Z" fill="#bd8b67" opacity=".9"/>
-          <path d="M105 360 C89 355 87 381 98 394 C109 405 122 392 120 377 C118 366 113 362 105 360Z" fill="#a86e72" stroke="#e8b2a4" strokeWidth="2"/><path d="M195 360 C211 355 213 381 202 394 C191 405 178 392 180 377 C182 366 187 362 195 360Z" fill="#a86e72" stroke="#e8b2a4" strokeWidth="2"/><path d="M120 387 C128 372 172 372 180 387 C191 410 176 434 150 438 C124 434 109 410 120 387Z" fill="#d69b78" opacity=".9"/>
-          <path d="M125 450 C105 441 107 468 124 480 C137 489 141 476 150 471 C159 476 163 489 176 480 C193 468 195 441 175 450 C164 455 160 462 150 461 C140 462 136 455 125 450Z" fill="#a6c1a5" opacity=".9"/><path d="M150 500 C131 500 125 518 135 531 C143 541 157 541 165 531 C175 518 169 500 150 500Z" fill="#8cb8ba" stroke="#c5e4dc" strokeWidth="2"/>
-        </svg>
-        {organAtlas.map(item=><button key={item.id} className={"organ-hotspot "+(selected===item.id?"selected":"")} style={{left:item.position.left,top:item.position.top}} onClick={()=>{setSelected(item.id);setShowDetail(false)}} aria-label={"Explore "+item.name} aria-pressed={selected===item.id}><span>{item.id==="heart"?"♥":item.id==="brain"?"✳":item.id==="lungs"?"Ⅱ":item.id==="liver"?"◒":item.id==="stomach"?"◉":item.id==="kidneys"?"◈":item.id==="pancreas"?"⌁":item.id==="spleen"?"◆":item.id==="bladder"?"◯":"⌘"}</span></button>)}
-        <div className="organ-map-caption"><span>HUMAN ANATOMY</span><b>SELECT AN ORGAN</b></div>
-      </div>
-      <div className="organ-atlas-detail">
-        <div className="organ-detail-top"><span>{organ.system}</span><small>{organ.tag}</small></div>
-        <div className={"organ-render organ-"+organ.id}>
-          <div className="organ-render-orbit"/><div className="organ-render-orbit second"/>
-          <svg viewBox="0 0 100 100" role="img" aria-label={organ.name+" anatomical illustration"}>
-            <defs><linearGradient id="organ-render-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#ffc0ae"/><stop offset=".48" stopColor="#d97880"/><stop offset="1" stopColor="#8b4565"/></linearGradient><filter id="organ-render-shadow"><feGaussianBlur stdDeviation="2.8"/></filter></defs>
-            <path d={organ.path} transform="translate(0 2)" fill="#1c3d51" opacity=".15" filter="url(#organ-render-shadow)"/>
-            <path d={organ.path} fill="url(#organ-render-fill)" stroke="#f5c6b6" strokeWidth="1.2"/>
-            {organ.id==="brain"&&<g fill="none" stroke="#ffe2d2" strokeWidth="2" opacity=".8"><path d="M27 30 Q38 18 42 34 T58 29 T74 34 M26 43 Q39 33 44 48 T60 44 T74 47 M39 57 Q49 48 55 60 T67 57"/></g>}
-            {organ.id==="heart"&&<g fill="none" stroke="#ffe2d2" strokeWidth="2.5" strokeLinecap="round"><path d="M50 18 L50 2 M50 20 L35 7 M50 20 L66 5 M50 43 L50 80"/></g>}
-            {organ.id==="lungs"&&<g fill="none" stroke="#ffe2d2" strokeWidth="2.3" strokeLinecap="round"><path d="M50 8 L50 35 L35 48 M50 35 L65 48 M35 48 L27 66 M35 48 L41 70 M65 48 L59 70 M65 48 L73 66"/></g>}
-            {organ.id==="liver"&&<g fill="none" stroke="#ffe2d2" strokeWidth="2" strokeLinecap="round"><path d="M15 43 Q42 24 80 35 M50 30 L47 66 M33 47 L28 61"/></g>}
-            {organ.id==="stomach"&&<g fill="none" stroke="#ffe2d2" strokeWidth="2" strokeLinecap="round"><path d="M42 25 Q60 32 47 46 T54 68 M60 37 Q72 48 58 58"/></g>}
-            {organ.id==="kidneys"&&<g fill="none" stroke="#ffe2d2" strokeWidth="2.5" strokeLinecap="round"><path d="M27 24 Q44 45 34 69 M73 24 Q56 45 66 69 M34 49 L50 55 L66 49"/></g>}
-            {organ.id==="intestines"&&<g fill="none" stroke="#ffe2d2" strokeWidth="2" strokeLinecap="round"><path d="M26 28 Q48 16 72 28 Q83 42 65 45 Q35 42 31 55 Q31 75 66 70 M38 31 Q35 45 51 47 Q69 49 61 61 Q50 70 39 61"/></g>}
-            {organ.id==="pancreas"&&<g fill="none" stroke="#ffe2d2" strokeWidth="2.2" strokeLinecap="round"><path d="M18 50 Q35 30 49 43 T82 37 M27 48 L32 57 M47 43 L49 56 M68 39 L73 49"/></g>}
-            {organ.id==="spleen"&&<g fill="none" stroke="#ffe2d2" strokeWidth="2.2" strokeLinecap="round"><path d="M48 18 Q26 37 37 64 M58 20 Q76 39 60 70"/></g>}
-            {organ.id==="bladder"&&<g fill="none" stroke="#ffe2d2" strokeWidth="2.2" strokeLinecap="round"><path d="M50 3 L50 22 M32 43 Q50 58 68 43 M50 62 L50 90"/></g>}
-            {organ.id!=="brain"&&organ.id!=="heart"&&organ.id!=="lungs"&&organ.id!=="liver"&&organ.id!=="stomach"&&organ.id!=="kidneys"&&organ.id!=="pancreas"&&organ.id!=="spleen"&&organ.id!=="bladder"&&<path d="M50 18 C38 30 36 47 50 77" fill="none" stroke="#ffe0cf" strokeWidth="2" opacity=".65" strokeLinecap="round"/>}
-          </svg>
-          <span className="organ-render-label">BIO / {String(organAtlas.findIndex(item=>item.id===selected)+1).padStart(2,"0")}</span>
+    <div className="organ-atlas-heading"><div><span className="px-kicker">THE HUMAN BODY / INTERACTIVE ANATOMY</span><h2>Inside the human body.<br/><em>Explore it in 3D.</em></h2></div><p>Choose an organ to open its anatomical model. Rotate and zoom the model to explore its form, then follow the visual pathway and evidence notes beside it.</p></div>
+    <div className="organ-atlas-console organ-atlas-console-3d">
+      <div className="organ-model-column">
+        <div className="organ-model-toolbar"><span>LIVE 3D MODEL / {organ.name.toUpperCase()}</span><a href={modelUrl} target="_blank" rel="noreferrer">OPEN FULL VIEW <ArrowUpRight size={12}/></a></div>
+        <div className="organ-model-frame">
+          <iframe key={selected} src={modelUrl} title={organ.name+" interactive 3D anatomical model"} loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/>
+          <div className="organ-model-hint"><span className="organ-live-dot"/> INTERACTIVE 3D REFERENCE <span>Use the model's controls to rotate / zoom</span></div>
         </div>
-        <span className="px-kicker">ORGAN PROFILE / {organ.name.toUpperCase()}</span>
-        <h3>{organ.name}</h3><p className="organ-role">{organ.role}</p>
+        <div className="organ-switcher organ-switcher-3d"><span>SELECT AN ORGAN / 10 STRUCTURES</span><div>{organAtlas.map(item=><button key={item.id} onClick={()=>setSelected(item.id)} className={selected===item.id?"active":""} aria-pressed={selected===item.id}>{item.name}</button>)}</div></div>
+      </div>
+      <aside className="organ-atlas-detail organ-atlas-detail-3d">
+        <div className="organ-detail-top"><span>{organ.system}</span><small>{organ.tag}</small></div>
+        <span className="organ-detail-index">ANATOMY FILE / {String(organAtlas.findIndex(item=>item.id===selected)+1).padStart(2,"0")}</span>
+        <h3>{organ.name}</h3>
+        <p className="organ-role">{organ.role}</p>
         <div className="organ-facts">{organ.facts.map(([value,label])=><div key={label}><b>{value}</b><small>{label}</small></div>)}</div>
         <div className="organ-flow"><span>PROCESS MAP / HOW IT WORKS</span><div>{organFlow[selected].map((step,index)=><div className="organ-flow-step" key={step}><b>{step}</b>{index<2&&<ArrowRight size={13}/>}</div>)}</div></div>
-        <button className="organ-detail-toggle" onClick={()=>setShowDetail(v=>!v)}>{showDetail?"Hide anatomy notes":"Open anatomy notes"} <ArrowUpRight size={15}/></button>
-        {showDetail&&<div className="organ-deep-note"><b>HOW IT WORKS</b><p>{organ.detail}</p></div>}
-        <div className="organ-switcher"><span>EXPLORE ANOTHER ORGAN</span><div>{organAtlas.map(item=><button key={item.id} onClick={()=>{setSelected(item.id);setShowDetail(false)}} className={selected===item.id?"active":""}>{item.name}</button>)}</div></div>
-      </div>
+        <div className="organ-deep-note"><b>HOW IT WORKS</b><p>{organ.detail}</p></div>
+        <div className="organ-model-credit">3D model source: Innerscene · CC0 model library. Educational reference, not diagnostic imagery.</div>
+      </aside>
     </div>
-    <div className="organ-atlas-foot"><span>ANATOMY / EDUCATIONAL MODEL</span><span>Illustrative anatomy · not to scale</span></div>
+    <div className="organ-atlas-foot"><span>ANATOMY / INTERACTIVE MODEL LIBRARY</span><span>Rotate and zoom the 3D reference · Educational use</span></div>
   </section>;
 }
 
@@ -285,14 +262,13 @@ export function BioExperience() {
   const [expanded,setExpanded] = useState(false);
   const current = chapters.find(c=>c.id===active)!;
   const activeIndex = chapters.findIndex(c=>c.id===active);
-  const Icon = current.icon;
   useEffect(()=>{const requested=window.location.hash.slice(1);if(chapters.some(ch=>ch.id===requested))setActive(requested);},[]);
   useEffect(()=>{if(window.location.hash==="#"+active)document.getElementById("explorer")?.scrollIntoView({behavior:"smooth",block:"start"});},[active]);
   return <main className="px-site px-bio-site">
     <Header/>
     <section className="px-bio-hero">
       <div className="px-bio-hero-copy"><Link href="/" className="px-back-link">← BACK TO SHISHU MEDICAL HALL</Link><span className="px-kicker">BIO INTELLIGENT / A VISUAL LEARNING PROJECT</span><h1>Life is extraordinary.<br/><em>Look a little closer.</em></h1><p>Step inside the science of being human. Explore the systems that keep us alive, the cells that build us and the discoveries behind modern medicine.</p><div className="px-bio-hero-meta"><span><ShieldCheck size={14}/> Evidence-aware learning</span><span><BookOpen size={14}/> Four guided chapters</span></div></div>
-      <div className="px-bio-hero-art"><HeartArtwork large/><span className="px-hero-art-index">PLATE 001 · HUMAN BIOLOGY</span></div>
+      <div className="px-bio-hero-art px-bio-hero-model"><iframe src={organModelPages.heart} title="Interactive 3D human heart model" loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen/><span className="px-hero-art-index">PLATE 001 · HUMAN BIOLOGY / 3D MODEL</span></div>
     </section>
     <section className="px-bio-intro-strip"><span>THE HUMAN BODY / AN OPEN BOOK</span><p>Every heartbeat, every cell, every medicine has a story. <b>Start exploring yours.</b></p><span>SCROLL TO EXPLORE ↓</span></section>
     <nav className="px-bio-sticky-nav" aria-label="Bio Intelligent section navigation">
@@ -307,7 +283,7 @@ export function BioExperience() {
         <aside className="px-chapter-rail"><span className="px-rail-label">CHAPTER INDEX</span>{chapters.map(c=><button key={c.id} onClick={()=>{setActive(c.id);setExpanded(false)}} className={active===c.id?"active":""}><span>{c.no}</span><b>{c.label}</b><ArrowUpRight size={15}/></button>)}<div className="px-rail-note"><Atom size={17}/><span>Four perspectives.<br/>One connected system.</span></div></aside>
         <div className="px-chapter-stage">
           <AnimatePresence mode="wait"><motion.article id={current.id} key={current.id} className={"px-active-chapter "+current.accent} initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-12}} transition={{duration:.35,ease}}>
-            <div className="px-stage-visual"><div className="px-stage-grid"/><div className="px-stage-orbit" aria-hidden="true"/><div className="px-stage-icon"><Icon size={90} strokeWidth={1}/></div><span className="px-stage-figure">FIG. {current.no}</span><span className="px-stage-visual-label">{current.sub}</span></div>
+            <div className="px-stage-visual px-stage-model"><iframe src={current.id==="heart"?organModelPages.heart:current.id==="cells"?"https://www.innerscene.com/tools/library/3d-parts/brain-10d8f88f":current.id==="medicine"?organModelPages.liver:organModelPages.lungs} title={current.label+" interactive 3D science model"} loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen/><span className="px-stage-figure">FIG. {current.no}</span><span className="px-stage-visual-label">{current.sub}</span></div>
             <div className="px-stage-copy"><span className="px-kicker">{current.no} / {current.sub}</span><h3>{current.title}</h3><p>{current.intro}</p><div className="px-stage-stat"><b>{current.stat}</b><small>{current.unit}</small></div><div className="px-fact-list">{current.facts.map((fact,i)=><div key={fact}><span>0{i+1}</span>{fact}</div>)}</div><button className="px-deep-dive" onClick={()=>setExpanded(!expanded)}>{expanded?"Close chapter notes":"Explore key ideas"} <ChevronDown size={16}/></button>{expanded&&<motion.div className="px-expanded-note" initial={{opacity:0,height:0}} animate={{opacity:1,height:"auto"}}><p>{current.id==="heart"?"The cardiac cycle alternates between relaxation (diastole) and contraction (systole). Blood enters the atria, passes into the ventricles and is then pumped to the lungs or the rest of the body.":current.id==="cells"?"Cells specialise for different jobs. Their structures, internal compartments and communication systems allow tissues and organs to work together.":current.id==="medicine"?"A medicine's effect depends on its pharmacology, formulation, dose, route and the patient's characteristics. A healthcare professional helps determine appropriate use.":"Drug development combines laboratory science, clinical evidence, quality controls and regulatory oversight. Each stage asks whether a candidate is safe and useful enough to progress."}</p></motion.div>}</div>
           </motion.article></AnimatePresence>
           <div className="px-stage-controls"><span>CHAPTER {current.no} OF 04</span><div><button disabled={active==="heart"} onClick={()=>{setActive(chapters[chapters.findIndex(c=>c.id===active)-1].id);setExpanded(false)}}>← Previous</button><button disabled={active==="research"} onClick={()=>{setActive(chapters[chapters.findIndex(c=>c.id===active)+1].id);setExpanded(false)}}>Next chapter <ArrowRight size={14}/></button></div></div>
