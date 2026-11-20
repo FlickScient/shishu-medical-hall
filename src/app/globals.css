@@ -753,3 +753,22 @@ body{font-family:Inter,"Noto Sans Bengali",ui-sans-serif,system-ui,-apple-system
  .px-bio-site .px-bio-hero h1{font-size:48px}
 }
 @media(prefers-reduced-motion:reduce){.organ-render svg{animation:none}.hero-art-ring{transform:none}}
+
+.directory-intro{max-width:1190px;margin:0 auto;padding:0 clamp(20px,5vw,76px) 24px}
+.directory-intro .section-kicker{color:#5d8c80}
+.directory-intro h2{font:500 clamp(29px,3.4vw,40px)/1.05 Georgia,serif;color:#17394a;letter-spacing:-.04em;margin:12px 0 8px}
+.directory-intro p{max-width:570px;color:#71817b;font-size:11px;line-height:1.8;margin:0}
+.directory-card{padding-left:31px}
+.directory-number,.pharma-number{position:absolute;right:25px;top:24px;color:#9aafa5;font:italic 22px Georgia,serif}
+.directory-card .directory-icon{margin-top:5px}
+.pharma-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.pharma-card{min-height:290px;padding:25px 22px}
+.pharma-type{font-size:7px;letter-spacing:.16em;color:#7d9990;margin:10px 0 16px}
+.pharma-card .directory-icon{margin-top:0}
+.pharma-card h2{font-size:20px}
+.hero-meta-line{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px;color:#a5c4b9;font-size:7px;letter-spacing:.15em}
+.health-source-line{display:flex;align-items:center;gap:10px;margin-top:24px;padding:12px 14px;border:1px solid #c4ddd22c;background:#ffffff0d;color:#c3d4ce;font-size:9px;line-height:1.5;max-width:420px}
+.health-source-line svg{flex:none;color:#9acdbd}
+.health-guide ul{padding-left:16px}
+@media(max-width:850px){.pharma-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.pharma-grid{grid-template-columns:1fr}.directory-intro{padding-bottom:18px}.pharma-card{min-height:0}}
