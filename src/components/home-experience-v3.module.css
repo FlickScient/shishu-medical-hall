@@ -35,3 +35,5 @@
 @keyframes specimen-scan{0%{top:17%;opacity:0}12%{opacity:1}88%{opacity:1}100%{top:83%;opacity:0}}
 @media(max-width:850px){.scanToggle{top:18px;right:16px;padding:8px 10px;font-size:7px}.specimenOverlay{inset:12% 4% 18%}.specimenTag{padding:6px 8px;font-size:6px}.tagA{left:0;top:24%}.tagB{right:0;top:49%}.tagC{left:4%;bottom:13%}}
 @media(prefers-reduced-motion:reduce){.specimenScan{animation:none!important}.specimenOrbit,.specimenOrbitInner{transform:translate(-50%,-50%)}}
+
+@media(max-width:850px){.plate{top:64px;right:16px}.scanToggle{top:18px;right:16px}}
