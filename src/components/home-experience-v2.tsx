@@ -16,16 +16,16 @@ type Profile = {
 };
 
 const chapters = [
-  { id: "heart", no: "01", title: "The heart", category: "CARDIOVASCULAR BIOLOGY", description: "The pump, the chambers and the rhythm behind every beat.", icon: HeartPulse, color: "rose", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Human_heart.jpg?width=900" },
-  { id: "cells", no: "02", title: "Cells & DNA", category: "CELLULAR BIOLOGY", description: "The microscopic structures and instructions that make life possible.", icon: Dna, color: "violet", image: "https://commons.wikimedia.org/wiki/Special:FilePath/3D_DNA.png?width=900" },
-  { id: "medicine", no: "03", title: "Medicines", category: "PHARMACOLOGY", description: "How active ingredients interact with living systems.", icon: FlaskConical, color: "blue", image: "" },
-  { id: "research", no: "04", title: "Discovery", category: "DRUG DEVELOPMENT", description: "The evidence and research behind modern treatment.", icon: Microscope, color: "green", image: "" }
+  { id: "heart", no: "01", title: "The heart", category: "CARDIOVASCULAR BIOLOGY", description: "The pump, the chambers and the rhythm behind every beat.", icon: HeartPulse, color: "rose", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Human_heart.jpg?width=900", alt: "Three-dimensional anatomical human heart model" },
+  { id: "cells", no: "02", title: "Cells & DNA", category: "CELLULAR BIOLOGY", description: "The microscopic structures and instructions that make life possible.", icon: Dna, color: "violet", image: "https://commons.wikimedia.org/wiki/Special:FilePath/3D_DNA.png?width=900", alt: "Three-dimensional DNA double helix render" },
+  { id: "medicine", no: "03", title: "Medicines", category: "PHARMACOLOGY", description: "How active ingredients interact with living systems.", icon: FlaskConical, color: "blue", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Pills.JPG?width=900", alt: "Photograph of pharmaceutical capsules" },
+  { id: "research", no: "04", title: "Discovery", category: "DRUG DEVELOPMENT", description: "The evidence and research behind modern treatment.", icon: Microscope, color: "green", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Observing_Bacteria_with_a_Microscope.jpg?width=900", alt: "Laboratory worker studying a sample through a digital microscope" }
 ];
 
 const molecules = [
-  { id: "water", name: "Water", formula: "H₂O", type: "POLAR MOLECULE", fact: "Water's polarity helps it dissolve many substances and makes it essential for transport, temperature regulation and cellular processes.", atoms: [{x:50,y:50,z:0,t:"O"},{x:25,y:25,z:16,t:"H"},{x:75,y:25,z:-16,t:"H"}], bonds: [[0,1],[0,2]] },
-  { id: "ammonia", name: "Ammonia", formula: "NH₃", type: "NITROGEN COMPOUND", fact: "Ammonia is a small nitrogen-containing molecule. Nitrogen is also essential to amino acids and nucleic acids.", atoms: [{x:50,y:48,z:0,t:"N"},{x:22,y:24,z:14,t:"H"},{x:78,y:24,z:-14,t:"H"},{x:50,y:83,z:4,t:"H"}], bonds: [[0,1],[0,2],[0,3]] },
-  { id: "methane", name: "Methane", formula: "CH₄", type: "SIMPLE ORGANIC MOLECULE", fact: "Methane is the simplest alkane: one carbon atom bonded to four hydrogen atoms. Its tetrahedral geometry is a useful introduction to covalent bonding.", atoms: [{x:50,y:50,z:0,t:"C"},{x:50,y:12,z:20,t:"H"},{x:87,y:50,z:-12,t:"H"},{x:50,y:88,z:-20,t:"H"},{x:13,y:50,z:12,t:"H"}], bonds: [[0,1],[0,2],[0,3],[0,4]] }
+  { id: "water", name: "Water", formula: "H₂O", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Water_Molecule_3D.jpg", type: "POLAR MOLECULE", fact: "Water's polarity helps it dissolve many substances and makes it essential for transport, temperature regulation and cellular processes.", atoms: [{x:50,y:50,z:0,t:"O"},{x:25,y:25,z:16,t:"H"},{x:75,y:25,z:-16,t:"H"}], bonds: [[0,1],[0,2]] },
+  { id: "ammonia", name: "Ammonia", formula: "NH₃", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Ammonia-3D-balls-B.png", type: "NITROGEN COMPOUND", fact: "Ammonia is a small nitrogen-containing molecule. Nitrogen is also essential to amino acids and nucleic acids.", atoms: [{x:50,y:48,z:0,t:"N"},{x:22,y:24,z:14,t:"H"},{x:78,y:24,z:-14,t:"H"},{x:50,y:83,z:4,t:"H"}], bonds: [[0,1],[0,2],[0,3]] },
+  { id: "methane", name: "Methane", formula: "CH₄", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Methane-3D-molecular-model-engraved-render-CAS-74-82-8.png", type: "SIMPLE ORGANIC MOLECULE", fact: "Methane is the simplest alkane: one carbon atom bonded to four hydrogen atoms. Its tetrahedral geometry is a useful introduction to covalent bonding.", atoms: [{x:50,y:50,z:0,t:"C"},{x:50,y:12,z:20,t:"H"},{x:87,y:50,z:-12,t:"H"},{x:50,y:88,z:-20,t:"H"},{x:13,y:50,z:12,t:"H"}], bonds: [[0,1],[0,2],[0,3],[0,4]] }
 ];
 
 function SiteHeader({ shop, language, onLanguage }: { shop: string; language: "en" | "bn"; onLanguage: () => void }) {
@@ -49,34 +49,25 @@ function SiteHeader({ shop, language, onLanguage }: { shop: string; language: "e
   </header>;
 }
 
+"use client";
+
 function MoleculeStudio() {
   const [active, setActive] = useState("methane");
-  const [rotation, setRotation] = useState({x: -12, y: 24});
-  const [selected, setSelected] = useState<number | null>(null);
+  const [rotation, setRotation] = useState(0);
   const molecule = molecules.find(item => item.id === active) ?? molecules[2];
-  const atomName = (symbol: string) => ({H:"Hydrogen",O:"Oxygen",N:"Nitrogen",C:"Carbon"} as Record<string,string>)[symbol] ?? symbol;
   return <section className="s2-molecule-section" id="molecular-observatory">
-    <div className="s2-section-head"><div><span className="s2-kicker">INTERACTIVE SCIENCE / 002</span><h2>See how atoms<br/><em>hold together.</em></h2></div><p>Choose a molecule, turn the model and select an atom to learn what it contributes to the structure.</p></div>
-    <div className="s2-molecule-studio">
-      <div className="s2-molecule-stage">
-        <div className="s2-stage-meta"><span>MOLECULAR STUDIO</span><span>MODEL / 0{molecules.findIndex(m=>m.id===active)+1}</span></div>
-        <div className="s2-orbit s2-orbit-one"/><div className="s2-orbit s2-orbit-two"/>
-        <div className="s2-molecule-object" style={{transform:`rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`}}>
-          <svg viewBox="0 0 100 100" aria-label={molecule.name + " molecular model"}>
-            <defs><radialGradient id="s2-h"><stop offset="0" stopColor="#fff"/><stop offset=".7" stopColor="#d8e7ec"/><stop offset="1" stopColor="#8faab7"/></radialGradient><radialGradient id="s2-c"><stop offset="0" stopColor="#8396a3"/><stop offset="1" stopColor="#233d51"/></radialGradient><radialGradient id="s2-o"><stop offset="0" stopColor="#ffb0a5"/><stop offset="1" stopColor="#b94750"/></radialGradient><radialGradient id="s2-n"><stop offset="0" stopColor="#b7b8ff"/><stop offset="1" stopColor="#5558a7"/></radialGradient></defs>
-            {molecule.bonds.map(([a,b],i)=><g key={i}><line x1={molecule.atoms[a].x} y1={molecule.atoms[a].y} x2={molecule.atoms[b].x} y2={molecule.atoms[b].y} stroke="#9eb9c4" strokeWidth="5" strokeLinecap="round"/><line x1={molecule.atoms[a].x} y1={molecule.atoms[a].y-1} x2={molecule.atoms[b].x} y2={molecule.atoms[b].y-1} stroke="#e9f4f6" strokeWidth="1.3" strokeLinecap="round"/></g>)}
-            {molecule.atoms.map((atom,i)=><g key={i} role="button" tabIndex={0} aria-label={`Explain ${atomName(atom.t)} atom`} onClick={()=>setSelected(i)} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setSelected(i)}}} style={{cursor:"pointer"}}><circle cx={atom.x} cy={atom.y} r={atom.t==="H"?8.2:10.5} fill={`url(#s2-${atom.t.toLowerCase()})`} stroke="#ffffff" strokeWidth="1.2"/><text x={atom.x} y={atom.y+.4} textAnchor="middle" dominantBaseline="central" fontSize="7" fontWeight="800" fill={atom.t==="H"?"#496274":"#fff"}>{atom.t}</text></g>)}
-          </svg>
-        </div>
-        {selected !== null && <div className="s2-atom-note"><button onClick={()=>setSelected(null)} aria-label="Close atom details">×</button><b>{atomName(molecule.atoms[selected].t)} / {molecule.atoms[selected].t}</b><span>{molecule.atoms[selected].t==="H"?"Hydrogen usually forms one covalent bond.":molecule.atoms[selected].t==="O"?"Oxygen commonly forms two covalent bonds.":molecule.atoms[selected].t==="N"?"Nitrogen commonly forms three covalent bonds.":"Carbon commonly forms four covalent bonds."}</span></div>}
-        <div className="s2-model-controls"><button aria-label="Rotate left" onClick={()=>setRotation(r=>({...r,y:r.y-35}))}><RotateCcw size={16}/></button><button onClick={()=>{setRotation({x:-12,y:24});setSelected(null)}}>RESET VIEW</button><button aria-label="Rotate right" onClick={()=>setRotation(r=>({...r,y:r.y+35}))}><RotateCw size={16}/></button></div>
-        <span className="s2-stage-caption">CONCEPTUAL STRUCTURE / TAP AN ATOM</span>
+    <div className="s2-section-head"><div><span className="s2-kicker">INTERACTIVE SCIENCE / 002</span><h2>See the structure.<br/><em>Understand the connection.</em></h2></div><p>Explore actual three-dimensional molecular renders. Choose a molecule and turn its model to examine its form.</p></div>
+    <div className="s2-molecule-studio s2-molecule-studio-photo">
+      <div className="s2-molecule-stage s2-molecule-stage-photo">
+        <div className="s2-stage-meta"><span>MOLECULAR STUDIO / 3D RENDER</span><span>MODEL / 0{molecules.findIndex(m=>m.id===active)+1}</span></div>
+        <div className="s2-molecule-photo-wrap" style={{transform:"rotateY("+rotation+"deg)"}}><img src={molecule.image} alt={"Three-dimensional molecular render of "+molecule.name+" ("+molecule.formula+")"} loading="lazy"/></div>
+        <div className="s2-model-controls"><button aria-label="Rotate left" onClick={()=>setRotation(r=>r-30)}><RotateCcw size={16}/></button><button onClick={()=>setRotation(0)}>RESET VIEW</button><button aria-label="Rotate right" onClick={()=>setRotation(r=>r+30)}><RotateCw size={16}/></button></div>
+        <span className="s2-stage-caption">SCIENTIFIC RENDER / PRESENTATION MODEL</span>
       </div>
       <div className="s2-molecule-details"><span className="s2-kicker">CHOOSE A MOLECULE</span>
-        <div className="s2-molecule-select">{molecules.map(item=><button key={item.id} className={active===item.id?"active":""} onClick={()=>{setActive(item.id);setRotation({x:-12,y:24});setSelected(null)}}><span>{item.formula}</span><b>{item.name}</b><ArrowUpRight size={14}/></button>)}</div>
+        <div className="s2-molecule-select">{molecules.map(item=><button key={item.id} className={active===item.id?"active":""} onClick={()=>{setActive(item.id);setRotation(0)}}><span>{item.formula}</span><b>{item.name}</b><ArrowUpRight size={14}/></button>)}</div>
         <div className="s2-molecule-description"><span>{molecule.type}</span><h3>{molecule.name} <small>{molecule.formula}</small></h3><p>{molecule.fact}</p></div>
-        <div className="s2-molecule-legend"><span><i className="atom-carbon"/> Carbon</span><span><i className="atom-hydrogen"/> Hydrogen</span><span><i className="atom-oxygen"/> Oxygen</span><span><i className="atom-nitrogen"/> Nitrogen</span></div>
-        <small className="s2-disclaimer">Simplified educational model. Geometry and proportions are illustrative, not a precision molecular simulation.</small>
+        <small className="s2-disclaimer">Educational molecular renders. Atom and bond sizes are presentation choices and are not to scale.</small>
       </div>
     </div>
   </section>;
@@ -99,9 +90,9 @@ export function HomeExperienceV2({ profile = {}, medicineCount = null }: { profi
   const shop = profile.shop_name || "Shishu Medical Hall";
   const tip = healthGuides.length ? healthGuides[tipIndex % healthGuides.length] : null;
   const cards = [
-    {no:"01",label:"MEDICINE REFERENCE",title:"Know the medicine. Understand the details.",body:"Look up brand names, generic ingredients, strengths and medicine references.",href:"/medicines",icon:Pill,tone:"medicine"},
-    {no:"02",label:"PHARMACEUTICAL SCIENCE",title:"From research bench to medicine pack.",body:"Explore how medicines are researched, formulated, manufactured and quality-checked.",href:"/pharma",icon:FlaskConical,tone:"science"},
-    {no:"03",label:"HEALTH KNOWLEDGE",title:"Everyday health, explained clearly.",body:"Practical guides to medicine labels, safe storage and health literacy.",href:"/health-library",icon:BookOpen,tone:"knowledge"}
+    {no:"01",label:"MEDICINE REFERENCE",title:"Know the medicine. Understand the details.",body:"Look up brand names, generic ingredients, strengths and medicine references.",href:"/medicines",icon:Pill,tone:"medicine",image:"https://commons.wikimedia.org/wiki/Special:FilePath/Pills.JPG?width=900",alt:"Close-up photograph of medicine pills"},
+    {no:"02",label:"PHARMACEUTICAL SCIENCE",title:"From research bench to medicine pack.",body:"Explore how medicines are researched, formulated, manufactured and quality-checked.",href:"/pharma",icon:FlaskConical,tone:"science",image:"https://commons.wikimedia.org/wiki/Special:FilePath/A_pharmaceutical_laboratory_with_books_and_equipment_on_a_lo_Wellcome_V0029788.jpg?width=900",alt:"Pharmaceutical laboratory equipment"},
+    {no:"03",label:"HEALTH KNOWLEDGE",title:"Everyday health, explained clearly.",body:"Practical guides to medicine labels, safe storage and health literacy.",href:"/health-library",icon:BookOpen,tone:"knowledge",image:"https://commons.wikimedia.org/wiki/Special:FilePath/Laboratory_Microscope.jpg?width=900",alt:"Students studying through a laboratory microscope"}
   ];
   const faqs = [
     {q:"Is this an online pharmacy?",a:"No. Shishu Medical Hall is a local pharmacy website with medicine references and educational resources. It is not an online medicine marketplace."},
@@ -138,15 +129,15 @@ export function HomeExperienceV2({ profile = {}, medicineCount = null }: { profi
 
     <section className="s2-discover">
       <div className="s2-section-head"><div><span className="s2-kicker">EXPLORE THE KNOWLEDGE SPACE</span><h2>Four ways to look<br/><em>closer at health.</em></h2></div><p>Start with a medicine reference, explore the science behind it or build a clearer understanding of everyday health.</p></div>
-      <div className="s2-discover-list">{cards.map((card,i)=>{const Icon=card.icon;return <motion.article className={"s2-discover-card "+card.tone} key={card.no} initial={{opacity:0,y:22}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.5,delay:i*.08}}><div className="s2-card-art"><span>0{Number(card.no)} / FIELD NOTE</span><Icon size={48} strokeWidth={1.2}/></div><div className="s2-card-copy"><span className="s2-kicker">{card.label}</span><h3>{card.title}</h3><p>{card.body}</p><Link href={card.href}>Explore section <ArrowUpRight size={16}/></Link></div></motion.article>})}
-        <motion.article className="s2-discover-card bio" initial={{opacity:0,y:22}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.5,delay:.24}}><div className="s2-card-art s2-dna-art"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/3D_DNA.png?width=700" alt="Three-dimensional DNA double helix visualization" loading="lazy"/></div><div className="s2-card-copy"><span className="s2-kicker">VISUAL BIOLOGY / FOUR CHAPTERS</span><h3>Step inside the human body.</h3><p>Explore the heart, cells and DNA, pharmacology and the research behind new treatments.</p><Link href="/bio-intelligent">Discover Bio Intelligent <ArrowUpRight size={16}/></Link></div></motion.article>
+      <div className="s2-discover-list">{cards.map((card,i)=>{const Icon=card.icon;return <motion.article className={"s2-discover-card "+card.tone} key={card.no} initial={{opacity:0,y:22}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.5,delay:i*.08}}><div className="s2-card-art s2-card-photo"><img src={card.image} alt={card.alt} loading="lazy"/><span>0{Number(card.no)} / FIELD NOTE</span></div><div className="s2-card-copy"><span className="s2-kicker">{card.label}</span><h3>{card.title}</h3><p>{card.body}</p><Link href={card.href}>Explore section <ArrowUpRight size={16}/></Link></div></motion.article>})}
+        <motion.article className="s2-discover-card bio" initial={{opacity:0,y:22}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.5,delay:.24}}><div className="s2-card-art s2-dna-art"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/3D_DNA.png?width=900" alt="Three-dimensional DNA double helix visualization" loading="lazy"/><span>04 / VISUAL BIOLOGY</span></div><div className="s2-card-copy"><span className="s2-kicker">VISUAL BIOLOGY / FOUR CHAPTERS</span><h3>Step inside the human body.</h3><p>Explore the heart, cells and DNA, pharmacology and the research behind new treatments.</p><Link href="/bio-intelligent">Discover Bio Intelligent <ArrowUpRight size={16}/></Link></div></motion.article>
       </div>
     </section>
 
     <MoleculeStudio/>
 
     <section className="s2-chapters"><div className="s2-section-head"><div><span className="s2-kicker">BIO INTELLIGENT / CHAPTER GUIDE</span><h2>Start with one system.<br/><em>Discover the connections.</em></h2></div><Link href="/bio-intelligent">Explore all chapters <ArrowUpRight size={16}/></Link></div>
-      <div className="s2-chapter-grid">{chapters.map(ch=>{const Icon=ch.icon;return <Link href={"/bio-intelligent#"+ch.id} className={"s2-chapter "+ch.color} key={ch.id}><span className="s2-chapter-no">FIG. {ch.no}</span><div className="s2-chapter-icon">{ch.image?<img src={ch.image} alt="" loading="lazy"/>:<Icon size={42} strokeWidth={1.25}/>}</div><span className="s2-kicker">{ch.category}</span><b>{ch.title}</b><p>{ch.description}</p><ArrowUpRight className="s2-chapter-arrow" size={17}/></Link>})}</div>
+      <div className="s2-chapter-grid">{chapters.map(ch=>{const Icon=ch.icon;return <Link href={"/bio-intelligent#"+ch.id} className={"s2-chapter "+ch.color} key={ch.id}><span className="s2-chapter-no">FIG. {ch.no}</span><div className="s2-chapter-icon"><img src={ch.image} alt={ch.alt} loading="lazy"/></div><span className="s2-kicker">{ch.category}</span><b>{ch.title}</b><p>{ch.description}</p><ArrowUpRight className="s2-chapter-arrow" size={17}/></Link>})}</div>
     </section>
 
     <section className="s2-faq"><div className="s2-faq-intro"><span className="s2-kicker">GOOD TO KNOW</span><h2>Clear answers.<br/><em>No confusion.</em></h2><p>A quick guide to what this website offers — and what it does not.</p></div><div className="s2-faq-list">{faqs.map((faq,i)=><article className={openFaq===i?"open":""} key={faq.q}><button onClick={()=>setOpenFaq(v=>v===i?null:i)} aria-expanded={openFaq===i}><span>0{i+1}</span><b>{faq.q}</b><ChevronDown size={18}/></button>{openFaq===i&&<p>{faq.a}</p>}</article>)}</div></section>
