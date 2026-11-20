@@ -671,3 +671,85 @@ body{font-family:Inter,"Noto Sans Bengali",ui-sans-serif,system-ui,-apple-system
 @media(max-width:850px){.organ-atlas-heading{display:block}.organ-atlas-heading>p{margin-top:15px}.organ-atlas-console{grid-template-columns:1fr}.organ-body-stage{min-height:540px}.organ-body-silhouette{height:475px}.organ-atlas-detail{min-height:620px;padding:28px 26px}}
 @media(max-width:520px){.organ-atlas{padding:35px 13px 55px}.organ-atlas-heading{padding:0 5px}.organ-atlas-heading h2{font-size:37px}.organ-atlas-console{min-height:0}.organ-body-stage{min-height:470px}.organ-body-silhouette{height:425px;max-width:82%}.organ-body-orbit{width:330px;height:330px}.organ-body-orbit.orbit-b{width:260px;height:260px}.organ-hotspot{width:30px;height:30px;margin:-15px 0 0 -15px}.organ-atlas-detail{padding:25px 20px;min-height:610px}.organ-render{height:190px}.organ-atlas-detail h3{font-size:37px}.organ-facts{gap:6px}.organ-facts>div{padding:10px 7px}.organ-facts b{font-size:17px}.organ-facts small{font-size:7px}.organ-atlas-foot{font-size:6px}}
 @media(prefers-reduced-motion:reduce){.organ-render svg{animation:none}}
+
+/* Page-wide editorial system for the discovery pages */
+.subpage-shell{background:#f2f0e8;color:#142e42}
+.subpage-header{max-width:none;padding-inline:clamp(18px,5vw,76px);height:74px;background:#f2f0e8}
+.subpage-brand{font-size:12px;letter-spacing:-.02em}.subpage-header nav{gap:clamp(12px,2.3vw,28px)}
+.subpage-header nav a{transition:color .2s}.subpage-header nav a:hover{color:#148c87}
+.subpage-hero-grid{max-width:1320px;min-height:510px;margin:0 auto 55px;padding:60px clamp(24px,6vw,88px);display:grid;grid-template-columns:1fr .92fr;align-items:center;gap:55px;background:#102b3d;color:#f2f0e8;overflow:hidden;position:relative}
+.subpage-hero-grid:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 78% 45%,#346b6b40,transparent 38%),linear-gradient(120deg,transparent 52%,#b3d7ca0a)}
+.subpage-hero-grid>*{position:relative;z-index:1}
+.subpage-hero-grid .back-link{color:#a5c2bf;margin-bottom:40px}
+.subpage-hero-grid .section-kicker{color:#8fc5b6;letter-spacing:.19em}
+.subpage-hero-grid h1{font:500 clamp(42px,5vw,68px)/.99 Georgia,serif;letter-spacing:-.055em;color:#f4f0e7;margin:25px 0}
+.subpage-hero-grid h1 span{background:none;color:#a9cfc1;font-style:italic}
+.subpage-hero-grid>p{color:#bdc9c8;font-size:13px;line-height:1.9;max-width:460px}
+.subpage-hero-art{height:365px;position:relative;overflow:hidden;background:#1b3b4a;isolation:isolate}
+.subpage-hero-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.72) contrast(1.08);z-index:-2}
+.subpage-hero-art:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#0b1f2ce8,transparent 58%),linear-gradient(90deg,#102b3d35,transparent 60%);z-index:-1}
+.subpage-hero-art>span,.subpage-hero-art>b{position:absolute;left:22px;color:#e8f0e9;font-size:8px;letter-spacing:.16em}
+.subpage-hero-art>span{top:22px}.subpage-hero-art>b{bottom:23px;font-weight:700}
+.hero-art-ring{position:absolute;width:260px;height:260px;right:9%;top:14%;border:1px solid #c7eee45c;border-radius:50%;transform:rotateX(67deg) rotateZ(-25deg)}
+.hero-art-ring.ring-two{width:190px;height:190px;right:18%;top:24%;border-style:dashed;transform:rotateY(65deg) rotateZ(20deg)}
+.subpage-hero-grid .source-note{background:#ffffff0d;border-color:#c4ddd22c;color:#c5d4ce;border-radius:0}
+.subpage-hero-grid .source-note a{color:#b2e3d4}
+.directory-grid,.pharma-grid{max-width:1190px;padding:0 clamp(20px,5vw,76px) 62px;gap:0}
+.directory-card,.pharma-card{position:relative;min-height:255px;padding:26px 27px;border:0;border-top:1px solid #cfd5cc;border-radius:0;background:transparent;box-shadow:none}
+.directory-card:not(:last-child),.pharma-card:not(:last-child){border-right:1px solid #d5d9d1}
+.directory-card:hover,.pharma-card:hover{transform:translateY(-3px);box-shadow:none;background:#e9e9df}
+.directory-card .directory-icon,.pharma-card .directory-icon{width:45px;height:45px;border-radius:50%;background:#dce8dd;color:#2b7772}
+.directory-card>small{margin-top:20px;color:#5c8d80}
+.directory-card h2,.pharma-card h2{font:500 24px Georgia,serif;color:#19394a;letter-spacing:-.03em}
+.directory-card>strong{font-size:10px;color:#67877e}
+.directory-card p,.pharma-card p{font-size:11px;line-height:1.85;color:#687b79;max-width:300px}
+.directory-link,.pharma-card>a{color:#176e6c}
+.medicine-disclaimer,.pharma-callout{max-width:1110px;margin:0 auto 45px;padding:22px 24px;border-radius:0;border:1px solid #d3d9ce;background:#e8e9df;color:#477d78}
+.medicine-disclaimer strong,.pharma-callout h2{font-size:13px;color:#1b4952}
+.medicine-disclaimer p,.pharma-callout p{font-size:11px;color:#6b7c78}
+.health-hero{margin-bottom:25px}
+.health-hero-art img{filter:saturate(.75) contrast(1.05)}
+.health-sticky-nav{max-width:1110px;margin:0 auto 32px;border-radius:0;border:1px solid #d6ddd4;background:#f7f5ee;box-shadow:none}
+.health-sticky-nav a{border-radius:0;background:#e7ebe2;color:#456c68}
+.health-guide-grid{max-width:1190px;padding:8px clamp(20px,5vw,76px) 45px;gap:0 28px}
+.health-guide{position:relative;min-height:270px;padding:26px 25px 30px;border:0;border-top:1px solid #cfd7ce;border-radius:0;background:transparent;scroll-margin-top:110px}
+.health-guide:after{content:"";position:absolute;right:20px;top:22px;width:100px;height:100px;border:1px solid #c8d6ca;border-radius:50%;opacity:.55;pointer-events:none}
+.health-guide:nth-child(2n):after{width:70px;height:70px;right:35px;top:35px;border-style:dashed}
+.health-guide-head{position:relative;z-index:1}.health-guide-head .directory-icon{width:42px;height:42px;border-radius:50%;background:#dce8dd;color:#2b7772}
+.health-guide-head>span:last-child{color:#7c9990}
+.health-guide h2{position:relative;z-index:1;font:500 25px Georgia,serif;color:#18394a;margin:21px 0 10px;letter-spacing:-.03em}
+.health-guide>p{position:relative;z-index:1;max-width:440px;font-size:11px;line-height:1.85;color:#667a76}
+.health-guide ul{position:relative;z-index:1;padding-left:17px;color:#637872;font-size:10px;line-height:1.9}
+.health-warning{max-width:1110px;border-radius:0;background:#f2e9d8;border-color:#e5d6bd}
+.health-references{max-width:1110px;border-radius:0;background:#e8e9df;border-color:#d4dbd1}
+.subpage-footer{max-width:1110px}
+.px-bio-site .px-bio-hero{max-width:none;min-height:560px;margin:0;padding:70px clamp(22px,7vw,100px);grid-template-columns:1fr .95fr;gap:6vw;background:#102b3d;color:#f3f1e9;position:relative;overflow:hidden}
+.px-bio-site .px-bio-hero:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 75% 50%,#356c704d,transparent 42%),linear-gradient(110deg,#102b3d 42%,#183c4b)}
+.px-bio-site .px-bio-hero-copy,.px-bio-site .px-bio-hero-art{position:relative;z-index:1}
+.px-bio-site .px-bio-hero-copy .px-back-link{color:#a6c7bf}
+.px-bio-site .px-bio-hero-copy .px-kicker{color:#8fc6b6}
+.px-bio-site .px-bio-hero h1{color:#f5f0e5;font:500 clamp(48px,5.4vw,76px)/.99 Georgia,serif;letter-spacing:-.06em}
+.px-bio-site .px-bio-hero h1 em{color:#a9d0c1;font-style:italic}
+.px-bio-site .px-bio-hero-copy>p{color:#bfceca;max-width:490px;font-size:13px;line-height:1.9}
+.px-bio-site .px-bio-hero-meta{color:#a5c1ba}
+.px-bio-site .px-bio-hero-art{min-height:390px;background:radial-gradient(ellipse,#294f5a 0%,#102b3d 67%);border:1px solid #b5d6ca26}
+.px-bio-site .px-bio-hero-art .px-heart-grid{opacity:.22}
+.px-bio-site .px-bio-hero-art .px-heart-label{background:#102b3dcc;border-color:#c8e4db4d;color:#d4e9df}
+.px-bio-site .px-bio-hero-art .px-heart-index{color:#a5c7bd}
+.px-bio-site .px-bio-sticky-nav{max-width:1120px;border-radius:0;border-top:0;margin-top:0;background:#f3f1e9}
+@media(max-width:760px){
+ .subpage-header nav{max-width:65%;overflow-x:auto;white-space:nowrap;padding:6px 0;scrollbar-width:none}
+ .subpage-hero-grid{grid-template-columns:1fr;gap:28px;min-height:0;padding:40px 21px;margin-bottom:35px}
+ .subpage-hero-grid .back-link{margin-bottom:24px}
+ .subpage-hero-grid h1{font-size:46px;margin:20px 0}
+ .subpage-hero-art{height:280px}
+ .directory-grid,.pharma-grid{grid-template-columns:1fr;padding:0 20px 38px}
+ .directory-card,.pharma-card{min-height:0;padding:22px 5px;border-right:0!important}
+ .health-guide-grid{grid-template-columns:1fr;padding:0 20px 32px}
+ .health-guide{min-height:0;padding:23px 5px}
+ .health-references{margin:0 16px 25px}
+ .px-bio-site .px-bio-hero{grid-template-columns:1fr;padding:42px 20px 35px;gap:12px;min-height:0}
+ .px-bio-site .px-bio-hero-art{min-height:300px}
+ .px-bio-site .px-bio-hero h1{font-size:48px}
+}
+@media(prefers-reduced-motion:reduce){.organ-render svg{animation:none}.hero-art-ring{transform:none}}
