@@ -1,4 +1,4 @@
-import { HomeExperience } from "@/components/public-experience";
+import { HomeExperienceV2 } from "@/components/home-experience-v2";
 
 type HomeProfile = { shop_name?: string; local_name?: string; tagline_bn?: string; tagline_en?: string; phone?: string; address?: string; doctor_name?: string; proprietor_name?: string };
 
@@ -32,5 +32,5 @@ export default async function HomePage() {
       // Optional public count: do not let it affect homepage availability.
     }
   }
-  return <HomeExperience profile={profile} medicineCount={medicineCount} />;
+  return <HomeExperienceV2 profile={profile} medicineCount={medicineCount} />;
 }
