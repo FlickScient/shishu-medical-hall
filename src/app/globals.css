@@ -622,3 +622,52 @@ body{font-family:Inter,"Noto Sans Bengali",ui-sans-serif,system-ui,-apple-system
   .px-heart-shape{animation:none!important}
   .px-discover-card,.px-chapter-thumb,.px-tip-next{transition:none!important}
 }
+
+/* Interactive organ atlas — layered anatomical study */
+.organ-atlas{max-width:1240px;margin:0 auto;padding:52px clamp(18px,4vw,54px) 82px}
+.organ-atlas-heading{display:flex;justify-content:space-between;align-items:end;gap:35px;margin-bottom:30px}
+.organ-atlas-heading h2{font-size:clamp(34px,4vw,51px);line-height:1.02;letter-spacing:-.06em;margin:13px 0 0;color:#17384e}
+.organ-atlas-heading h2 em{font-family:Georgia,serif;color:#168f94;font-weight:400}
+.organ-atlas-heading>p{max-width:390px;color:#718795;font-size:12px;line-height:1.85;margin:0 0 4px}
+.organ-atlas-console{display:grid;grid-template-columns:1fr 1fr;min-height:670px;background:#102b3d;overflow:hidden;box-shadow:0 24px 65px #102b3d1c}
+.organ-body-stage{position:relative;min-height:670px;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 46%,#294e5c 0%,#18394b 43%,#102b3d 78%)}
+.organ-body-stage:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#c2e1df0a 1px,transparent 1px),linear-gradient(90deg,#c2e1df0a 1px,transparent 1px);background-size:34px 34px;mask-image:radial-gradient(ellipse,#000 10%,transparent 78%)}
+.organ-stage-meta{position:absolute;left:25px;right:25px;top:24px;display:flex;justify-content:space-between;color:#9ab7b9;font-size:8px;letter-spacing:.16em;font-weight:800}
+.organ-body-orbit{position:absolute;width:470px;height:470px;border:1px solid #9ac7c22b;border-radius:50%;transform:rotateX(67deg) rotateZ(-15deg)}
+.organ-body-orbit.orbit-b{width:360px;height:360px;border-style:dashed;transform:rotateY(68deg) rotateZ(24deg)}
+.organ-body-silhouette{position:absolute;height:min(82%,590px);width:auto;max-width:75%;filter:drop-shadow(0 18px 24px #061b2b70)}
+.organ-hotspot{position:absolute;z-index:3;width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid #d7f3e8a8;border-radius:50%;background:#163c4fdb;color:#d9fff4;display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 6px #8ee5d51a,0 7px 20px #061a2b55;transition:transform .25s,background .25s,box-shadow .25s}
+.organ-hotspot span{font-size:14px;line-height:1}
+.organ-hotspot:hover,.organ-hotspot.selected{transform:scale(1.22);background:#c7f0df;color:#173c4d;box-shadow:0 0 0 8px #9ce6d62b,0 0 30px #a1f4e8a8}
+.organ-map-caption{position:absolute;bottom:25px;left:25px;right:25px;display:flex;justify-content:space-between;color:#8caeb1;font-size:8px;letter-spacing:.15em}
+.organ-map-caption b{color:#d5ece7}
+.organ-atlas-detail{position:relative;padding:34px clamp(24px,4vw,54px);background:#f1f2ec;color:#18384c;display:flex;flex-direction:column;overflow:hidden}
+.organ-detail-top{display:flex;justify-content:space-between;gap:12px;color:#54817e;font-size:8px;letter-spacing:.15em;font-weight:850}
+.organ-detail-top small{color:#94a19a}
+.organ-render{height:225px;position:relative;display:grid;place-items:center;overflow:hidden;margin:10px 0 18px;background:radial-gradient(ellipse,#e0e7dc 0%,#f1f2ec 70%);perspective:700px}
+.organ-render:before{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:#d4e3db;filter:blur(25px)}
+.organ-render-orbit{position:absolute;width:175px;height:175px;border:1px solid #77aaa45c;border-radius:50%;transform:rotateX(68deg) rotateZ(-20deg)}
+.organ-render-orbit.second{width:140px;height:140px;border-style:dashed;transform:rotateY(68deg) rotateZ(25deg)}
+.organ-render svg{position:relative;width:150px;height:150px;overflow:visible;filter:drop-shadow(0 20px 17px #274f4b35);animation:organ-float 5s ease-in-out infinite;transform:rotateY(-12deg) rotateX(8deg)}
+.organ-render-label{position:absolute;bottom:8px;right:12px;font-size:7px;letter-spacing:.16em;color:#839b92}
+.organ-atlas-detail>.px-kicker{font-size:8px}
+.organ-atlas-detail h3{font:500 42px/1 Georgia,serif;letter-spacing:-.04em;margin:10px 0 9px;color:#18384c}
+.organ-role{margin:0;max-width:480px;color:#667a7d;font-size:12px;line-height:1.75}
+.organ-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:21px 0 14px}
+.organ-facts>div{min-height:70px;padding:12px 10px;background:#e5e9df;border:1px solid #d8e0d6;display:flex;flex-direction:column;justify-content:center;gap:5px}
+.organ-facts b{font:500 20px Georgia,serif;color:#226d6a}
+.organ-facts small{font-size:8px;line-height:1.35;color:#758780}
+.organ-detail-toggle{align-self:flex-start;display:flex;align-items:center;gap:9px;padding:11px 0;border:0;border-bottom:1px solid #9eb9ae;background:none;color:#244f59;font-size:10px;font-weight:800;cursor:pointer}
+.organ-deep-note{margin-top:12px;padding:15px 17px;background:#e4e9df;border-left:2px solid #2e9188}
+.organ-deep-note>b{font-size:8px;letter-spacing:.14em;color:#4d8078}
+.organ-deep-note p{margin:7px 0 0;color:#607579;font-size:10px;line-height:1.8}
+.organ-switcher{margin-top:auto;padding-top:24px}
+.organ-switcher>span{display:block;margin-bottom:10px;color:#82938a;font-size:7px;letter-spacing:.16em;font-weight:850}
+.organ-switcher>div{display:flex;flex-wrap:wrap;gap:6px}
+.organ-switcher button{padding:8px 10px;border:1px solid #d4ddd4;background:transparent;color:#617571;font-size:8px;cursor:pointer}
+.organ-switcher button.active{background:#183b4c;border-color:#183b4c;color:#e7f3e9}
+.organ-atlas-foot{display:flex;justify-content:space-between;padding-top:12px;color:#91a3a0;font-size:7px;letter-spacing:.12em}
+@keyframes organ-float{0%,100%{transform:translateY(0) rotateY(-12deg) rotateX(8deg)}50%{transform:translateY(-7px) rotateY(10deg) rotateX(3deg)}}
+@media(max-width:850px){.organ-atlas-heading{display:block}.organ-atlas-heading>p{margin-top:15px}.organ-atlas-console{grid-template-columns:1fr}.organ-body-stage{min-height:540px}.organ-body-silhouette{height:475px}.organ-atlas-detail{min-height:620px;padding:28px 26px}}
+@media(max-width:520px){.organ-atlas{padding:35px 13px 55px}.organ-atlas-heading{padding:0 5px}.organ-atlas-heading h2{font-size:37px}.organ-atlas-console{min-height:0}.organ-body-stage{min-height:470px}.organ-body-silhouette{height:425px;max-width:82%}.organ-body-orbit{width:330px;height:330px}.organ-body-orbit.orbit-b{width:260px;height:260px}.organ-hotspot{width:30px;height:30px;margin:-15px 0 0 -15px}.organ-atlas-detail{padding:25px 20px;min-height:610px}.organ-render{height:190px}.organ-atlas-detail h3{font-size:37px}.organ-facts{gap:6px}.organ-facts>div{padding:10px 7px}.organ-facts b{font-size:17px}.organ-facts small{font-size:7px}.organ-atlas-foot{font-size:6px}}
+@media(prefers-reduced-motion:reduce){.organ-render svg{animation:none}}
