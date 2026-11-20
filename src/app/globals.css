@@ -897,3 +897,8 @@ body{font-family:Inter,"Noto Sans Bengali",ui-sans-serif,system-ui,-apple-system
 .auth-switch-three{grid-template-columns:repeat(3,minmax(0,1fr))}
 .auth-switch-three button{font-size:9px;padding-inline:5px}
 @media(max-width:380px){.auth-switch-three button{font-size:8px}}
+
+.organ-model-credit a{color:#507d75;text-decoration:underline;text-underline-offset:2px}
+.organ-model-credit a:hover{color:#17394b}
+.organ-model-hint span:last-child{letter-spacing:.02em}
+.px-bio-hero-model iframe,.px-stage-model iframe{display:block}
