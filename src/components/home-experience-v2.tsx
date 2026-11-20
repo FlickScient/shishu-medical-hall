@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Activity, ArrowRight, ArrowUpRight, Atom, BookOpen, Brain, Dna,
+  ArrowRight, ArrowUpRight, BookOpen, Dna,
   FlaskConical, HeartPulse, Menu, Microscope, Pill, ShieldCheck, X,
   MapPin, Phone, Clock3, ChevronDown, RotateCcw, RotateCw
 } from "lucide-react";
