@@ -30,6 +30,7 @@ export function HomeExperienceV3({profile={},medicineCount=null}:{profile?:Profi
   const [language,setLanguage]=useState<"en"|"bn">("en");
   const [tipIndex,setTipIndex]=useState(0);
   const [faq,setFaq]=useState<number|null>(0);
+  const [scanActive,setScanActive]=useState(false);
   const shop=profile.shop_name||"Shishu Medical Hall";
   const guides=useMemo(()=>healthGuides.filter((g:any)=>g?.title),[]);
   const tip=guides.length?guides[tipIndex%guides.length]:null;
@@ -41,7 +42,7 @@ export function HomeExperienceV3({profile={},medicineCount=null}:{profile?:Profi
   return <main className={styles.site}>
     <Header shop={shop} language={language} toggle={()=>setLanguage(v=>v==="en"?"bn":"en")}/>
     <section className={styles.hero}>
-      <div className={styles.heroImage}><img src={image.heart} alt="Anatomical study of the human heart"/><div className={styles.heroShade}/><div className={styles.plate}><span>ANATOMY ARCHIVE</span><b>PLATE 01</b></div><div className={styles.heroCaption}><span>01 — HUMAN CARDIOVASCULAR SYSTEM</span><b>The heart, in focus.</b></div></div>
+      <div className={styles.heroImage+" "+(scanActive?styles.scanActive:"")}><img src={image.heart} alt="Anatomical study of the human heart"/><div className={styles.heroShade}/><div className={styles.specimenOverlay} aria-hidden="true"><div className={styles.specimenOrbit}/><div className={styles.specimenOrbitInner}/><div className={styles.specimenScan}/><span className={styles.specimenTag+" "+styles.tagA}>AORTA <b>01</b></span><span className={styles.specimenTag+" "+styles.tagB}>ATRIA <b>02</b></span><span className={styles.specimenTag+" "+styles.tagC}>VENTRICLES <b>03</b></span></div><button className={styles.scanToggle} onClick={()=>setScanActive(v=>!v)} aria-pressed={scanActive}>{scanActive?"Close anatomy scan":"Activate anatomy scan"} <Activity size={14}/></button><div className={styles.plate}><span>ANATOMY ARCHIVE</span><b>PLATE 01</b></div><div className={styles.heroCaption}><span>01 — HUMAN CARDIOVASCULAR SYSTEM</span><b>{scanActive?"Anatomy scan active.":"The heart, in focus."}</b></div></div>
       <div className={styles.heroCopy}><span className={styles.kicker}>SHISHU MEDICAL HALL <i/></span><h1>{language==="bn"?<>পরিচিত ফার্মেসি।<br/><em>স্বাস্থ্যকে জানুন।</em></>:<>Health is<br/><em>worth knowing.</em></>}</h1><p>A neighbourhood pharmacy and a place to explore medicines, the human body and the science behind modern healthcare.</p><div className={styles.heroLinks}><Link href="/medicines">Explore medicines <ArrowUpRight size={16}/></Link><Link href="/bio-intelligent">Enter Bio Intelligent <ArrowRight size={16}/></Link></div><div className={styles.heroFoot}><span>LOCAL PHARMACY</span><span>MEDICINE REFERENCES</span><span>HEALTH EDUCATION</span></div></div>
       <a className={styles.scroll} href="#explore"><span>SCROLL TO EXPLORE</span><ArrowDownRight size={17}/></a>
     </section>
