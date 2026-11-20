@@ -214,30 +214,55 @@ const organFlow: Record<string, [string,string,string]> = {
  bladder:["Kidneys","Urine storage","Release"]
 };
 
-const organModelPages: Record<string,string> = {
-  brain:"https://www.innerscene.com/tools/library/3d-parts/brain-10d8f88f",
-  heart:"https://www.innerscene.com/tools/library/3d-parts/heart-e9f72b0e",
-  lungs:"https://www.innerscene.com/tools/library/3d-parts/lungs-with-trachea-respiratory-system-1d019b26",
-  liver:"https://www.innerscene.com/tools/library/3d-parts/liver-ae1a8cc0",
-  stomach:"https://www.innerscene.com/tools/library/3d-parts/torso-with-removable-organs-1fe1b70a",
-  kidneys:"https://www.innerscene.com/tools/library/3d-parts/urinary-system-with-kidneys-dda985bd",
-  intestines:"https://www.innerscene.com/tools/library/3d-parts/intestines-26224e6a",
-  pancreas:"https://www.innerscene.com/tools/library/3d-parts/torso-with-removable-organs-1fe1b70a",
-  spleen:"https://www.innerscene.com/tools/library/3d-parts/torso-with-removable-organs-1fe1b70a",
-  bladder:"https://www.innerscene.com/tools/library/3d-parts/urinary-system-with-kidneys-dda985bd"
+const bodyModelUrl="https://cdn.humanatlas.io/digital-objects/ref-organ/skin-female/v1.5/assets/3d-vh-f-skin.glb";
+const organModelUrls: Record<string,string> = {
+  brain:"https://cdn.humanatlas.io/digital-objects/ref-organ/brain-female/v1.4/assets/3d-allen-f-brain.glb",
+  heart:"https://cdn.humanatlas.io/digital-objects/ref-organ/heart-female/v1.3/assets/3d-vh-f-heart.glb",
+  lungs:"https://cdn.humanatlas.io/digital-objects/ref-organ/lung-female/v1.4/assets/3d-vh-f-lung.glb",
+  liver:"https://cdn.humanatlas.io/digital-objects/ref-organ/liver-female/v1.2/assets/3d-vh-f-liver.glb",
+  stomach:"https://media.githubusercontent.com/media/wania-Bakhat/BioLens/main/public/models/sketchfab-models/digestive_system.glb",
+  kidneys:"https://cdn.humanatlas.io/digital-objects/ref-organ/kidney-female-left/v1.3/assets/3d-vh-f-kidney-l.glb",
+  intestines:"https://cdn.humanatlas.io/digital-objects/ref-organ/small-intestine-female/v1.2/assets/3d-vh-f-small-intestine.glb",
+  pancreas:"https://cdn.humanatlas.io/digital-objects/ref-organ/pancreas-female/v1.3/assets/3d-vh-f-pancreas.glb",
+  spleen:"https://cdn.humanatlas.io/digital-objects/ref-organ/spleen-female/v1.3/assets/3d-vh-f-spleen.glb",
+  bladder:"https://cdn.humanatlas.io/digital-objects/ref-organ/urinary-bladder-female/v1.2/assets/3d-vh-f-urinary-bladder.glb"
+};
+const organModelSources: Record<string,{label:string;url:string;license:string}> = {
+  brain:{label:"HuBMAP Human Reference Atlas",url:"https://humanatlas.io/3d-reference-library",license:"CC BY 4.0"},
+  heart:{label:"HuBMAP Human Reference Atlas",url:"https://humanatlas.io/3d-reference-library",license:"CC BY 4.0"},
+  lungs:{label:"HuBMAP Human Reference Atlas",url:"https://humanatlas.io/3d-reference-library",license:"CC BY 4.0"},
+  liver:{label:"HuBMAP Human Reference Atlas",url:"https://humanatlas.io/3d-reference-library",license:"CC BY 4.0"},
+  stomach:{label:"Sketchfab · Digestive system model",url:"https://skfb.ly/6XB7N",license:"CC BY 4.0"},
+  kidneys:{label:"HuBMAP Human Reference Atlas",url:"https://humanatlas.io/3d-reference-library",license:"CC BY 4.0"},
+  intestines:{label:"HuBMAP Human Reference Atlas",url:"https://humanatlas.io/3d-reference-library",license:"CC BY 4.0"},
+  pancreas:{label:"HuBMAP Human Reference Atlas",url:"https://humanatlas.io/3d-reference-library",license:"CC BY 4.0"},
+  spleen:{label:"HuBMAP Human Reference Atlas",url:"https://humanatlas.io/3d-reference-library",license:"CC BY 4.0"},
+  bladder:{label:"HuBMAP Human Reference Atlas",url:"https://humanatlas.io/3d-reference-library",license:"CC BY 4.0"}
+};
+function modelViewerUrl(modelUrl:string,embedded=true) {
+  return "https://www.innerscene.com/tools/3d-viewer?url="+encodeURIComponent(modelUrl)+(embedded?"&embedded=1":"");
+}
+const chapterModelUrls: Record<string,string> = {
+  heart:organModelUrls.heart,
+  cells:"https://files.rcsb.org/download/1BNA.pdb",
+  medicine:"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/caffeine/record/SDF?record_type=3d",
+  research:"https://files.rcsb.org/download/1HHO.pdb"
 };
 
 function OrganAtlas() {
   const [selected,setSelected]=useState("heart");
   const organ=organAtlas.find(item=>item.id===selected)!;
-  const modelUrl=organModelPages[selected];
+  const modelUrl=organModelUrls[selected];
+  const viewerSrc=modelViewerUrl(modelUrl,true);
+  const fullViewUrl=modelViewerUrl(modelUrl,false);
+  const modelSource=organModelSources[selected];
   return <section className="organ-atlas" id="organs">
     <div className="organ-atlas-heading"><div><span className="px-kicker">THE HUMAN BODY / INTERACTIVE ANATOMY</span><h2>Inside the human body.<br/><em>Explore it in 3D.</em></h2></div><p>Choose an organ to open its anatomical model. Rotate and zoom the model to explore its form, then follow the visual pathway and evidence notes beside it.</p></div>
     <div className="organ-atlas-console organ-atlas-console-3d">
       <div className="organ-model-column">
-        <div className="organ-model-toolbar"><span>LIVE 3D MODEL / {organ.name.toUpperCase()}</span><a href={modelUrl} target="_blank" rel="noreferrer">OPEN FULL VIEW <ArrowUpRight size={12}/></a></div>
+        <div className="organ-model-toolbar"><span>LIVE 3D MODEL / {organ.name.toUpperCase()}</span><a href={fullViewUrl} target="_blank" rel="noreferrer">OPEN FULL VIEW <ArrowUpRight size={12}/></a></div>
         <div className="organ-model-frame">
-          <iframe key={selected} src={modelUrl} title={organ.name+" interactive 3D anatomical model"} loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/>
+          <iframe key={selected} src={viewerSrc} title={organ.name+" interactive 3D anatomical model"} loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/>
           <div className="organ-model-hint"><span className="organ-live-dot"/> INTERACTIVE 3D REFERENCE <span>Use the model's controls to rotate / zoom</span></div>
         </div>
         <div className="organ-switcher organ-switcher-3d"><span>SELECT AN ORGAN / 10 STRUCTURES</span><div>{organAtlas.map(item=><button key={item.id} onClick={()=>setSelected(item.id)} className={selected===item.id?"active":""} aria-pressed={selected===item.id}>{item.name}</button>)}</div></div>
@@ -250,7 +275,7 @@ function OrganAtlas() {
         <div className="organ-facts">{organ.facts.map(([value,label])=><div key={label}><b>{value}</b><small>{label}</small></div>)}</div>
         <div className="organ-flow"><span>PROCESS MAP / HOW IT WORKS</span><div>{organFlow[selected].map((step,index)=><div className="organ-flow-step" key={step}><b>{step}</b>{index<2&&<ArrowRight size={13}/>}</div>)}</div></div>
         <div className="organ-deep-note"><b>HOW IT WORKS</b><p>{organ.detail}</p></div>
-        <div className="organ-model-credit">3D model source: Innerscene · CC0 model library. Educational reference, not diagnostic imagery.</div>
+        <div className="organ-model-credit">Model source: <a href={modelSource.url} target="_blank" rel="noreferrer">{modelSource.label}</a> · {modelSource.license}. Educational reference, not diagnostic imagery.</div>
       </aside>
     </div>
     <div className="organ-atlas-foot"><span>ANATOMY / INTERACTIVE MODEL LIBRARY</span><span>Rotate and zoom the 3D reference · Educational use</span></div>
@@ -262,13 +287,14 @@ export function BioExperience() {
   const [expanded,setExpanded] = useState(false);
   const current = chapters.find(c=>c.id===active)!;
   const activeIndex = chapters.findIndex(c=>c.id===active);
+  const chapterViewerSrc=modelViewerUrl(chapterModelUrls[current.id],true);
   useEffect(()=>{const requested=window.location.hash.slice(1);if(chapters.some(ch=>ch.id===requested))setActive(requested);},[]);
   useEffect(()=>{if(window.location.hash==="#"+active)document.getElementById("explorer")?.scrollIntoView({behavior:"smooth",block:"start"});},[active]);
   return <main className="px-site px-bio-site">
     <Header/>
     <section className="px-bio-hero">
       <div className="px-bio-hero-copy"><Link href="/" className="px-back-link">← BACK TO SHISHU MEDICAL HALL</Link><span className="px-kicker">BIO INTELLIGENT / A VISUAL LEARNING PROJECT</span><h1>Life is extraordinary.<br/><em>Look a little closer.</em></h1><p>Step inside the science of being human. Explore the systems that keep us alive, the cells that build us and the discoveries behind modern medicine.</p><div className="px-bio-hero-meta"><span><ShieldCheck size={14}/> Evidence-aware learning</span><span><BookOpen size={14}/> Four guided chapters</span></div></div>
-      <div className="px-bio-hero-art px-bio-hero-model"><iframe src={organModelPages.heart} title="Interactive 3D human heart model" loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen/><span className="px-hero-art-index">PLATE 001 · HUMAN BIOLOGY / 3D MODEL</span></div>
+      <div className="px-bio-hero-art px-bio-hero-model"><iframe src={modelViewerUrl(bodyModelUrl,true)} title="Interactive 3D human body model" loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen/><span className="px-hero-art-index">PLATE 001 · HUMAN BODY / 3D MODEL</span></div>
     </section>
     <section className="px-bio-intro-strip"><span>THE HUMAN BODY / AN OPEN BOOK</span><p>Every heartbeat, every cell, every medicine has a story. <b>Start exploring yours.</b></p><span>SCROLL TO EXPLORE ↓</span></section>
     <nav className="px-bio-sticky-nav" aria-label="Bio Intelligent section navigation">
@@ -283,7 +309,7 @@ export function BioExperience() {
         <aside className="px-chapter-rail"><span className="px-rail-label">CHAPTER INDEX</span>{chapters.map(c=><button key={c.id} onClick={()=>{setActive(c.id);setExpanded(false)}} className={active===c.id?"active":""}><span>{c.no}</span><b>{c.label}</b><ArrowUpRight size={15}/></button>)}<div className="px-rail-note"><Atom size={17}/><span>Four perspectives.<br/>One connected system.</span></div></aside>
         <div className="px-chapter-stage">
           <AnimatePresence mode="wait"><motion.article id={current.id} key={current.id} className={"px-active-chapter "+current.accent} initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-12}} transition={{duration:.35,ease}}>
-            <div className="px-stage-visual px-stage-model"><iframe src={current.id==="heart"?organModelPages.heart:current.id==="cells"?"https://www.innerscene.com/tools/library/3d-parts/brain-10d8f88f":current.id==="medicine"?organModelPages.liver:organModelPages.lungs} title={current.label+" interactive 3D science model"} loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen/><span className="px-stage-figure">FIG. {current.no}</span><span className="px-stage-visual-label">{current.sub}</span></div>
+            <div className="px-stage-visual px-stage-model"><iframe src={chapterViewerSrc} title={current.label+" interactive 3D science model"} loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen/><span className="px-stage-figure">FIG. {current.no}</span><span className="px-stage-visual-label">{current.sub}</span></div>
             <div className="px-stage-copy"><span className="px-kicker">{current.no} / {current.sub}</span><h3>{current.title}</h3><p>{current.intro}</p><div className="px-stage-stat"><b>{current.stat}</b><small>{current.unit}</small></div><div className="px-fact-list">{current.facts.map((fact,i)=><div key={fact}><span>0{i+1}</span>{fact}</div>)}</div><button className="px-deep-dive" onClick={()=>setExpanded(!expanded)}>{expanded?"Close chapter notes":"Explore key ideas"} <ChevronDown size={16}/></button>{expanded&&<motion.div className="px-expanded-note" initial={{opacity:0,height:0}} animate={{opacity:1,height:"auto"}}><p>{current.id==="heart"?"The cardiac cycle alternates between relaxation (diastole) and contraction (systole). Blood enters the atria, passes into the ventricles and is then pumped to the lungs or the rest of the body.":current.id==="cells"?"Cells specialise for different jobs. Their structures, internal compartments and communication systems allow tissues and organs to work together.":current.id==="medicine"?"A medicine's effect depends on its pharmacology, formulation, dose, route and the patient's characteristics. A healthcare professional helps determine appropriate use.":"Drug development combines laboratory science, clinical evidence, quality controls and regulatory oversight. Each stage asks whether a candidate is safe and useful enough to progress."}</p></motion.div>}</div>
           </motion.article></AnimatePresence>
           <div className="px-stage-controls"><span>CHAPTER {current.no} OF 04</span><div><button disabled={active==="heart"} onClick={()=>{setActive(chapters[chapters.findIndex(c=>c.id===active)-1].id);setExpanded(false)}}>← Previous</button><button disabled={active==="research"} onClick={()=>{setActive(chapters[chapters.findIndex(c=>c.id===active)+1].id);setExpanded(false)}}>Next chapter <ArrowRight size={14}/></button></div></div>
