@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Activity, ArrowDownLeft, ArrowUpRight, Boxes, CalendarDays, ChevronRight,
@@ -28,6 +29,7 @@ const modules: Module[] = [
 const money = (value: number) => "৳ " + value.toLocaleString("en-BD", { maximumFractionDigits: 2 });
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [role, setRole] = useState<Role>("editor");
   const [figures, setFigures] = useState({ income: 0, expense: 0, sales: 0, lowStock: 0 });
   const [loading, setLoading] = useState(true);
@@ -53,7 +55,10 @@ export default function DashboardPage() {
       try {
         const db = createClient();
         const { data: { session } } = await db.auth.getSession();
-        if (!session?.user?.id) throw new Error("Please sign in again.");
+        if (!session?.user?.id) {
+          router.replace("/login?next=%2Fdashboard");
+          return;
+        }
         const { data: member, error: memberError } = await db.from("store_members")
           .select("role").eq("user_id", session.user.id).maybeSingle();
         if (memberError) throw memberError;
@@ -91,7 +96,7 @@ export default function DashboardPage() {
     }
     void load();
     return () => { active = false; };
-  }, []);
+  }, [router]);
 
   const visibleModules = useMemo(
     () => modules.filter(item => (!item.finance || canSeeFinances) && (!item.ownerOnly || role === "owner")),
