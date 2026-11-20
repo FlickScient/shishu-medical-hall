@@ -2,62 +2,141 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, LoaderCircle, LockKeyhole } from "lucide-react";
+import { ArrowLeft, CheckCircle2, LoaderCircle, LockKeyhole, MailCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
+type Mode = "signin" | "signup" | "verify";
+
 export default function InvitePage() {
   const router = useRouter();
-  const [token, setToken] = useState("");
-  const [mode, setMode] = useState<"signin" | "signup">("signup");
+  const [inviteToken, setInviteToken] = useState("");
+  const [mode, setMode] = useState<Mode>("signup");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
-  useEffect(() => { const value = new URLSearchParams(window.location.search).get("token") || ""; setToken(value); if (!value) setError("This invitation link is missing its token."); }, []);
+  useEffect(() => {
+    const value = new URLSearchParams(window.location.search).get("token") || "";
+    setInviteToken(value);
+    if (!value) setError("This invitation link is missing its token. Ask the store owner for a fresh invitation.");
+  }, []);
 
-  async function accept() {
-    const db = createClient();
-    const { data, error } = await db.rpc("accept_store_invitation", { p_token: token });
-    if (error) throw error;
-    setMessage("Invitation accepted. Your store access is ready.");
-    setTimeout(() => router.replace("/dashboard"), 700);
-    return data;
+  function switchMode(next: Mode) {
+    setMode(next);
+    setError("");
+    setMessage("");
   }
 
-  async function submit(event: FormEvent) {
+  async function acceptInvitation() {
+    const db = createClient();
+    const { error: acceptError } = await db.rpc("accept_store_invitation", { p_token: inviteToken });
+    if (acceptError) throw acceptError;
+    setMessage("Invitation accepted. Opening your store workspace…");
+    router.replace("/dashboard");
+    router.refresh();
+  }
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!token) return;
-    setBusy(true); setError(""); setMessage("");
+    if (!inviteToken) return;
+    setBusy(true);
+    setError("");
+    setMessage("");
     try {
       const db = createClient();
+      const normalizedEmail = email.trim().toLowerCase();
+
       if (mode === "signup") {
-        const { data, error } = await db.auth.signUp({ email, password, options: { data: { name } } });
-        if (error) throw error;
+        const { data, error: signUpError } = await db.auth.signUp({
+          email: normalizedEmail,
+          password,
+          options: { data: { name: name.trim() } },
+        });
+        if (signUpError) throw signUpError;
         if (!data.session) {
-          setMessage("Account created. Verify the email, then open this same invitation link and sign in to finish joining.");
-          setMode("signin");
+          setMode("verify");
+          setMessage("Your account was created. Enter the six-digit verification code sent to this email to finish joining the store.");
           return;
         }
+      } else if (mode === "verify") {
+        const { data, error: verifyError } = await db.auth.verifyOtp({
+          email: normalizedEmail,
+          token: otp.trim(),
+          type: "signup",
+        });
+        if (verifyError) throw verifyError;
+        if (!data.session) {
+          const { error: signInError } = await db.auth.signInWithPassword({ email: normalizedEmail, password });
+          if (signInError) throw signInError;
+        }
       } else {
-        const { error } = await db.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        const { error: signInError } = await db.auth.signInWithPassword({
+          email: normalizedEmail,
+          password,
+        });
+        if (signInError) throw signInError;
       }
-      await accept();
+
+      await acceptInvitation();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not accept this invitation.");
+      setError(e instanceof Error ? e.message : "Could not complete this invitation.");
     } finally {
       setBusy(false);
     }
   }
 
-  return <main className="shell flex min-h-screen items-center justify-center px-5 py-12"><div className="w-full max-w-md"><Link href="/" className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-slate-500"><ArrowLeft size={16}/> Public website</Link><div className="soft-card p-7 sm:p-9"><div className="brand-gradient flex h-14 w-14 items-center justify-center rounded-2xl text-white"><LockKeyhole size={24}/></div><div className="mt-7 text-xs font-bold tracking-[.18em] text-teal-700">PRIVATE STORE INVITATION</div><h1 className="mt-2 text-3xl font-black">{mode === "signup" ? "Join the store team." : "Welcome back."}</h1><p className="mt-2 text-sm leading-6 text-slate-500">Create or sign in to the email address this invitation was sent to. The invitation is checked against your verified account email.</p>
-    <div className="mt-6 flex rounded-xl bg-slate-100 p-1"><button type="button" onClick={() => setMode("signup")} className={`flex-1 rounded-lg px-3 py-2 text-xs font-bold ${mode === "signup" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"}`}>Create account</button><button type="button" onClick={() => setMode("signin")} className={`flex-1 rounded-lg px-3 py-2 text-xs font-bold ${mode === "signin" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"}`}>Sign in</button></div>
-    <form onSubmit={submit} className="mt-6 space-y-4">{mode === "signup" && <label className="block text-xs font-bold text-slate-500">YOUR NAME<input required value={name} onChange={e => setName(e.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-3 text-sm" placeholder="Full name"/></label>}<label className="block text-xs font-bold text-slate-500">INVITED EMAIL<input required type="email" value={email} onChange={e => setEmail(e.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-3 text-sm" placeholder="you@example.com"/></label><label className="block text-xs font-bold text-slate-500">PASSWORD<input required type="password" minLength={8} value={password} onChange={e => setPassword(e.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-3 text-sm" placeholder="At least 8 characters"/></label><button disabled={busy || !token} className="brand-gradient w-full rounded-xl px-4 py-4 text-sm font-bold text-white disabled:opacity-60">{busy ? <LoaderCircle className="mr-2 inline animate-spin" size={16}/> : <CheckCircle2 className="mr-2 inline" size={16}/>} {mode === "signup" ? "Create account & join" : "Sign in & accept invitation"}</button></form>
-    {message && <p role="status" className="mt-4 rounded-xl bg-emerald-50 p-3 text-xs leading-5 text-emerald-800">{message}</p>}{error && <p role="alert" className="mt-4 break-words text-xs leading-5 text-rose-700">{error}</p>}
-    <p className="mt-6 text-[11px] leading-5 text-slate-400">Invitation links are single-use, expire after 7 days, and only work for the email address invited by the store owner.</p>
-  </div></div></main>;
+  async function resendCode() {
+    setBusy(true);
+    setError("");
+    setMessage("");
+    try {
+      const db = createClient();
+      const { error: resendError } = await db.auth.resend({
+        type: "signup",
+        email: email.trim().toLowerCase(),
+      });
+      if (resendError) throw resendError;
+      setMessage("A fresh verification code has been sent. Check your inbox and spam folder.");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not resend the verification code.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <main className="auth-shell">
+      <div className="auth-layout">
+        <Link href="/" className="auth-back"><ArrowLeft size={15}/> Public website</Link>
+        <section className="auth-card">
+          <div className="auth-mark"><LockKeyhole size={23}/></div>
+          <span className="auth-eyebrow">SHISHU MEDICAL HALL / PRIVATE ACCESS</span>
+          <h1>{mode === "signup" ? "Your workspace awaits." : mode === "verify" ? "Verify your email." : "Welcome back."}</h1>
+          <p className="auth-lede">{mode === "verify" ? "Enter the code sent to your invited email. Once verified, your invitation will be accepted automatically." : "Only the email address invited by the store owner can join this workspace."}</p>
+
+          {mode !== "verify" && <div className="auth-switch">
+            <button type="button" className={mode === "signup" ? "active" : ""} onClick={() => switchMode("signup")}>Create account</button>
+            <button type="button" className={mode === "signin" ? "active" : ""} onClick={() => switchMode("signin")}>Sign in</button>
+          </div>}
+
+          <form onSubmit={submit} className="auth-form">
+            {mode === "signup" && <label>Your name<input required value={name} onChange={e=>setName(e.target.value)} autoComplete="name" placeholder="Full name"/></label>}
+            <label>Invited email<input required type="email" value={email} onChange={e=>setEmail(e.target.value)} autoComplete="email" placeholder="you@example.com"/></label>
+            {mode !== "verify" && <label>Password<input required type="password" minLength={8} value={password} onChange={e=>setPassword(e.target.value)} autoComplete={mode==="signup"?"new-password":"current-password"} placeholder="At least 8 characters"/></label>}
+            {mode === "verify" && <label>Six-digit verification code<input required inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={otp} onChange={e=>setOtp(e.target.value.replace(/\D/g,"").slice(0,6))} placeholder="123456" className="auth-otp"/></label>}
+            <button className="auth-submit" disabled={busy || !inviteToken}>{busy?<LoaderCircle size={16} className="animate-spin"/>:mode==="verify"?<MailCheck size={16}/>:<CheckCircle2 size={16}/>} {busy?"Please wait…":mode==="signup"?"Create account & join":mode==="verify"?"Verify & accept invitation":"Sign in & accept invitation"}</button>
+          </form>
+          {mode === "verify" && <div className="auth-inline-actions"><button type="button" disabled={busy} onClick={resendCode}>Resend code</button><button type="button" disabled={busy} onClick={()=>switchMode("signin")}>Already verified? Sign in</button></div>}
+          {message && <p role="status" className="auth-message">{message}</p>}
+          {error && <p role="alert" className="auth-error">{error}</p>}
+          <div className="auth-footnote">Invitation links are single-use and expire after seven days. Your account must use the email address that received the invitation.</div>
+        </section>
+      </div>
+    </main>
+  );
 }
