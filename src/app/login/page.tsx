@@ -3,24 +3,62 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, LockKeyhole, LoaderCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, LoaderCircle, LockKeyhole, ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-export default function LoginPage(){
- const router=useRouter();
- const [email,setEmail]=useState("");
- const [password,setPassword]=useState("");
- const [busy,setBusy]=useState(false);
- const [error,setError]=useState("");
- async function submit(e:FormEvent<HTMLFormElement>){
-  e.preventDefault();setBusy(true);setError("");
-  try{
-   const supabase=createClient();
-   const {error}=await supabase.auth.signInWithPassword({email,password});
-   if(error) throw error;
-   router.replace("/dashboard");router.refresh();
-  }catch(err){setError(err instanceof Error?err.message:"Unable to sign in.");}
-  finally{setBusy(false);}
- }
- return <main className="shell flex min-h-screen items-center justify-center px-5 py-12"><div className="w-full max-w-md"><Link href="/" className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-slate-500"><ArrowLeft size={16}/> Back to website</Link><div className="soft-card p-7 sm:p-9"><div className="brand-gradient flex h-14 w-14 items-center justify-center rounded-2xl text-white"><LockKeyhole size={25}/></div><div className="mt-7 text-xs font-bold tracking-[.18em] text-teal-700">PRIVATE STORE WORKSPACE</div><h1 className="mt-2 text-3xl font-black">Welcome back.</h1><p className="mt-2 text-sm leading-6 text-slate-500">Sign in to manage Shishu Medical Hall.</p><form onSubmit={submit} className="mt-8 space-y-5"><div><label className="mb-2 block text-xs font-bold text-slate-500">EMAIL ADDRESS</label><input required type="email" autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-cyan-400" placeholder="you@example.com"/></div><div><label className="mb-2 block text-xs font-bold text-slate-500">PASSWORD</label><input required type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-cyan-400" placeholder="Your password"/></div><button disabled={busy} className="brand-gradient w-full rounded-xl px-4 py-4 text-sm font-bold text-white disabled:opacity-60">{busy?<LoaderCircle className="mr-2 inline animate-spin" size={16}/>:""}Sign in</button>{error&&<p role="alert" className="break-words text-xs leading-5 text-rose-700">{error}</p>}</form><p className="mt-6 text-xs leading-5 text-slate-400">Access is invitation-only. New team members need a private invitation link. First-time setup: <a className="font-semibold text-cyan-800 underline" href="/setup">initialize the first Owner account</a>.</p></div></div></main>;
+export default function LoginPage() {
+  const router = useRouter();
+  const [email,setEmail] = useState("");
+  const [password,setPassword] = useState("");
+  const [busy,setBusy] = useState(false);
+  const [error,setError] = useState("");
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setBusy(true);
+    setError("");
+    try {
+      const db = createClient();
+      const { error: signInError } = await db.auth.signInWithPassword({
+        email: email.trim().toLowerCase(),
+        password,
+      });
+      if (signInError) throw signInError;
+      const requested = new URLSearchParams(window.location.search).get("next");
+      const destination = requested && requested.startsWith("/dashboard") && !requested.startsWith("//")
+        ? requested
+        : "/dashboard";
+      router.replace(destination);
+      router.refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unable to sign in. Check your email and password.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <main className="auth-shell">
+      <div className="auth-layout">
+        <Link href="/" className="auth-back"><ArrowLeft size={15}/> Back to website</Link>
+        <section className="auth-card">
+          <div className="auth-mark"><LockKeyhole size={23}/></div>
+          <span className="auth-eyebrow">SHISHU MEDICAL HALL / STORE PORTAL</span>
+          <h1>Good to have you back.</h1>
+          <p className="auth-lede">Sign in to your private store workspace. Your business records stay behind this secure account.</p>
+          <form onSubmit={submit} className="auth-form">
+            <label>Email address<input required type="email" autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></label>
+            <label>Password<input required type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Your password"/></label>
+            <button className="auth-submit" disabled={busy}>{busy?<LoaderCircle size={16} className="animate-spin"/>:<ArrowRight size={16}/>} {busy?"Signing in…":"Sign in to workspace"}</button>
+          </form>
+          {error && <p role="alert" className="auth-error">{error}</p>}
+          <div className="auth-first-owner">
+            <ShieldCheck size={18}/>
+            <div><b>Setting up the store for the first time?</b><p>Create the first Owner account with the private one-time setup code.</p><Link href="/setup">Open first-time owner setup <ArrowRight size={13}/></Link></div>
+          </div>
+          <div className="auth-footnote">Team members must use the private invitation link sent by the store owner. There is no public registration.</div>
+        </section>
+      </div>
+    </main>
+  );
 }
