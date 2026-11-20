@@ -894,3 +894,6 @@ body{font-family:Inter,"Noto Sans Bengali",ui-sans-serif,system-ui,-apple-system
 .auth-footnote{margin-top:22px;padding-top:17px;border-top:1px solid #dce2d8;color:#8a9990;font-size:9px;line-height:1.75}
 @media(max-width:480px){.auth-shell{padding:24px 13px}.auth-card{padding:25px 20px}.auth-back{margin-bottom:16px}.auth-first-owner{padding:13px}.auth-inline-actions{flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.auth-back,.auth-form input,.auth-submit{transition:none}}
+.auth-switch-three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.auth-switch-three button{font-size:9px;padding-inline:5px}
+@media(max-width:380px){.auth-switch-three button{font-size:8px}}
