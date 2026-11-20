@@ -1,0 +1,40 @@
+.auth-shell{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:72px 22px 42px;background:radial-gradient(ellipse at 10% 10%,#2a62721c,transparent 32%),radial-gradient(ellipse at 95% 90%,#318c8518,transparent 34%),#e9efec;color:#14374b}
+.auth-layout{width:min(100%,1050px);display:grid;grid-template-columns:.88fr 1.12fr;align-items:stretch;gap:0;position:relative;filter:drop-shadow(0 25px 65px #0d2d401c)}
+.auth-layout:before{content:"SHISHU MEDICAL HALL\A\A STORE COMMAND CENTER\A\A Keep the business moving.\A A secure workspace for daily sales, stock, purchases and accounts.";white-space:pre-line;display:flex;flex-direction:column;justify-content:center;padding:clamp(30px,5vw,62px);min-height:690px;background:radial-gradient(ellipse at 70% 25%,#2d6473 0%,transparent 46%),linear-gradient(145deg,#0b263d,#153f53 62%,#1b565c);color:#f2f6f0;font:400 clamp(23px,3vw,36px)/1.3 Georgia,serif;letter-spacing:-.035em}
+.auth-back{position:absolute;z-index:2;left:clamp(30px,5vw,62px);top:28px;display:inline-flex;align-items:center;gap:9px;color:#b9d7cd;font-size:9px;font-weight:800;letter-spacing:.1em;transition:color .2s}
+.auth-back:hover{color:#fff}
+.auth-card{grid-column:2;position:relative;overflow:hidden;min-height:690px;padding:clamp(30px,5vw,58px);background:#fbfcf8;border:1px solid #fff;box-shadow:none;backdrop-filter:none}
+.auth-card:before{left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,#0d334a,#1b9c99,#a6d2bd)}
+.auth-mark{width:48px;height:48px;display:grid;place-items:center;background:#e0eee7;color:#176b6d;margin:5px 0 26px}
+.auth-eyebrow{color:#328b83;font-size:8px;font-weight:850;letter-spacing:.18em}
+.auth-card h1{margin:14px 0 10px;color:#14374b;font:500 clamp(33px,4.2vw,47px)/1.02 Georgia,serif;letter-spacing:-.05em}
+.auth-lede{max-width:400px;color:#71838a;font-size:11px;line-height:1.85}
+.auth-switch{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin:24px 0 0;background:#eaf0eb}
+.auth-switch button{padding:11px 10px;background:transparent;color:#6b8284;font-size:9px;font-weight:850;cursor:pointer}
+.auth-switch button.active{background:#12394d;color:#f4f6f0;box-shadow:0 5px 14px #0d2d401c}
+.auth-switch-three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.auth-switch-three button{font-size:8px;padding-inline:4px}
+.auth-form{display:grid;gap:16px;margin-top:25px}
+.auth-form label{display:grid;gap:8px;color:#59747a;font-size:8px;font-weight:850;letter-spacing:.12em;text-transform:uppercase}
+.auth-form input{width:100%;height:47px;border:1px solid #d9e3dd;border-radius:0;background:#fff;padding:0 13px;color:#163a4d;font-size:12px;letter-spacing:normal;text-transform:none;outline:none;transition:border-color .2s,box-shadow .2s}
+.auth-form input:focus{border-color:#398e88;box-shadow:0 0 0 3px #39958a1a}
+.auth-form input::placeholder{color:#a1b0aa}
+.auth-form .auth-otp{text-align:center;font-size:20px;font-weight:850;letter-spacing:.38em}
+.auth-submit{display:flex;align-items:center;justify-content:center;gap:10px;min-height:49px;margin-top:5px;background:#12394d;color:#f4f6f0;font-size:9px;font-weight:850;letter-spacing:.08em;cursor:pointer;transition:background .2s,transform .2s}
+.auth-submit:hover:not(:disabled){background:#1a6871;transform:translateY(-1px)}
+.auth-submit:disabled{opacity:.55;cursor:not-allowed}
+.auth-error,.auth-message{margin-top:16px;padding:12px 13px;font-size:10px;line-height:1.7;overflow-wrap:anywhere}
+.auth-error{background:#f8eae5;color:#98483e;border-left:3px solid #b85f52}
+.auth-message{background:#e7f1e9;color:#3c715e;border-left:3px solid #6d9a80}
+.auth-first-owner{display:flex;gap:12px;margin-top:22px;padding:15px;background:#eaf1eb;color:#5b7775;border:1px solid #dce8df}
+.auth-first-owner>svg{flex:none;margin-top:1px;color:#338b83}
+.auth-first-owner b{display:block;color:#183f50;font-size:9px}
+.auth-first-owner p{margin:6px 0 8px;color:#70837f;font-size:9px;line-height:1.6}
+.auth-first-owner a,.auth-inline-actions button{display:inline-flex;align-items:center;gap:6px;color:#1d7777;font-size:9px;font-weight:850}
+.auth-inline-actions{display:flex;justify-content:space-between;gap:12px;margin-top:15px;flex-wrap:wrap}
+.auth-inline-actions button{border:0;background:transparent;padding:0;cursor:pointer}
+.auth-inline-actions button:disabled{opacity:.5;cursor:not-allowed}
+.auth-footnote{margin-top:19px;padding-top:15px;border-top:1px solid #e0e8e1;color:#899995;font-size:8px;line-height:1.75}
+@media(max-width:760px){.auth-shell{padding:26px 14px}.auth-layout{width:min(100%,520px);grid-template-columns:1fr;filter:none}.auth-layout:before{min-height:155px;padding:26px 24px 20px;font-size:23px;line-height:1.2;content:"SHISHU MEDICAL HALL\A STORE COMMAND CENTER\A\A Secure access to your store workspace."}.auth-back{position:static;grid-row:1;padding:0 0 15px;color:#286f71}.auth-card{grid-column:1;min-height:0;padding:27px 22px 24px}.auth-mark{margin:0 0 20px}.auth-card h1{font-size:37px}.auth-first-owner{padding:12px}.auth-inline-actions{flex-direction:column;align-items:flex-start}}
+@media(max-width:390px){.auth-card{padding:23px 18px}.auth-switch-three button{font-size:7px}.auth-submit{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.auth-back,.auth-form input,.auth-submit{transition:none}}
