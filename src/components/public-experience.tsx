@@ -26,17 +26,35 @@ function Header({ shop = "Shishu Medical Hall", language, onLanguageChange }: { 
 }
 
 function HeartArtwork({ large = false }: { large?: boolean }) {
-  return <div className={large ? "px-heart-art px-heart-large" : "px-heart-art"} aria-label="Animated red heart illustration">
+  return <div className={large ? "px-heart-art px-heart-large" : "px-heart-art"} aria-label="Scientific illustration of the human heart">
+    <div className="px-heart-grid" aria-hidden="true"/>
     <div className="px-heart-orbit px-orbit-a" aria-hidden="true"/>
     <div className="px-heart-orbit px-orbit-b" aria-hidden="true"/>
-    <svg className="px-heart-svg" viewBox="0 0 200 190" role="img" aria-label="A red heart with a heartbeat line">
-      <path className="px-heart-shape" d="M100 169 C87 157 23 111 18 69 C13 29 60 9 91 39 L100 49 L109 39 C140 9 187 29 182 69 C177 111 113 157 100 169Z" fill="#e83e52"/>
-      <path d="M37 62 C39 43 55 34 70 39" fill="none" stroke="#fff" strokeOpacity=".42" strokeWidth="5" strokeLinecap="round"/>
-      <path className="px-heart-ecg" d="M27 94 H66 L79 75 L94 116 L111 59 L127 95 H172" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
+    <svg className="px-heart-svg px-anatomical-heart" viewBox="0 0 320 330" role="img" aria-label="Stylised anatomical heart with vessels and an ECG trace">
+      <defs>
+        <linearGradient id="heartBody" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#f48a91"/><stop offset=".48" stopColor="#cf5369"/><stop offset="1" stopColor="#873b60"/></linearGradient>
+        <linearGradient id="heartVessel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#f2a1a0"/><stop offset="1" stopColor="#b84d68"/></linearGradient>
+        <linearGradient id="heartBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#8bc5d5"/><stop offset="1" stopColor="#397e9e"/></linearGradient>
+        <filter id="heartShadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur stdDeviation="9"/></filter>
+      </defs>
+      <ellipse cx="162" cy="279" rx="79" ry="18" fill="#426e8b" opacity=".16" filter="url(#heartShadow)"/>
+      <g className="px-heart-vessels" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M151 105 C139 69 132 36 147 17 C158 2 184 9 184 29 L184 91" fill="none" stroke="url(#heartVessel)" strokeWidth="28"/>
+        <path d="M177 93 C183 51 211 35 232 45 C251 54 248 78 231 90 L205 113" fill="none" stroke="url(#heartVessel)" strokeWidth="20"/>
+        <path d="M123 116 C102 88 83 77 67 86 C51 96 59 121 80 132 L111 151" fill="none" stroke="url(#heartBlue)" strokeWidth="23"/>
+        <path d="M191 113 C214 91 239 93 251 109 C262 124 246 144 224 147 L203 154" fill="none" stroke="url(#heartBlue)" strokeWidth="16"/>
+        <path d="M150 106 C143 76 143 56 151 38" fill="none" stroke="#ffd0c7" strokeWidth="5" opacity=".55"/>
+      </g>
+      <path className="px-heart-shape" d="M158 111 C135 82 99 94 91 127 C80 173 116 225 160 273 C201 232 246 180 236 137 C229 103 191 88 158 111Z" fill="url(#heartBody)" stroke="#a94b64" strokeWidth="3"/>
+      <path d="M158 119 C143 151 144 199 160 269 C178 222 185 171 176 121" fill="none" stroke="#f9b0aa" strokeWidth="5" opacity=".65"/>
+      <path d="M111 135 C123 119 143 119 154 133 M190 126 C210 122 224 137 222 155" fill="none" stroke="#ffd4cd" strokeWidth="5" opacity=".65" strokeLinecap="round"/>
+      <path d="M160 155 C147 176 135 192 123 206 M178 158 C190 177 205 193 218 207" fill="none" stroke="#8f3e5a" strokeWidth="7" opacity=".58" strokeLinecap="round"/>
+      <path d="M35 173 H103 L120 154 L137 198 L156 129 L176 174 H284" className="px-heart-ecg" fill="none" stroke="#fff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" opacity=".92"/>
+      <path d="M158 273 L151 292 M158 273 L169 291" stroke="#a94b64" strokeWidth="5" strokeLinecap="round"/>
     </svg>
     <span className="px-heart-label px-label-one"><i/> CARDIOVASCULAR SYSTEM</span>
-    <span className="px-heart-label px-label-two"><Activity size={13}/> LIFE IN MOTION</span>
-    <span className="px-heart-index">FIG. 01 / HUMAN BIOLOGY</span>
+    <span className="px-heart-label px-label-two"><Activity size={13}/> HEART / 01</span>
+    <span className="px-heart-index">ANATOMY STUDY / HUMAN BIOLOGY</span>
   </div>;
 }
 
@@ -95,9 +113,10 @@ export function HomeExperience({ profile = {}, medicineCount = null }: { profile
   const [language,setLanguage] = useState<"en"|"bn">("en");
   const [tipIndex,setTipIndex] = useState(0);
   const [openFaq,setOpenFaq] = useState<number|null>(0);
-  useEffect(()=>{setTipIndex(Math.floor(Math.random()*healthGuides.length));},[]);
+  useEffect(()=>{if(healthGuides.length>1)setTipIndex(Math.floor(Math.random()*healthGuides.length));},[]);
   const shop = profile.shop_name || "Shishu Medical Hall";
   const healthGuideCount = healthGuides.length;
+  const healthTip = healthGuides.length ? healthGuides[tipIndex % healthGuides.length] : null;
   const bioChapterCount = chapters.length;
   const cards = [
     {n:"01",icon:Pill,kicker:"MEDICINE REFERENCE",title:"Know what goes into your medicine.",body:"Explore brand names, generic ingredients, strengths and useful medicine references.",href:"/medicines",tone:"blue"},
@@ -109,11 +128,11 @@ export function HomeExperience({ profile = {}, medicineCount = null }: { profile
     <section className="px-home-hero">
       <div className="px-hero-copy">
         <motion.div initial="hidden" animate="show" variants={stagger}>
-          <motion.div variants={reveal} className="px-eyebrow"><i/> {language==="bn"?"আপনার পরিচিত ফার্মেসি · জ্ঞানের নতুন দিগন্ত":"YOUR LOCAL PHARMACY · A WORLD OF KNOWLEDGE"}</motion.div>
-          <motion.h1 variants={reveal}>{language==="bn"?<>যত্নের পরিচয়।<br/><em>জ্ঞানে এগিয়ে চলি।</em></>:<>Care you know.<br/><em>Knowledge that grows.</em></>}</motion.h1>
-          <motion.p variants={reveal}>{language==="bn"?<><b>{shop}</b>-এ স্বাগতম — ওষুধ, মানবদেহ এবং স্বাস্থ্যবিজ্ঞানের বিষয়গুলো সহজভাবে জানার একটি পরিচিত ঠিকানা।</>:<>Welcome to <b>{shop}</b> — your familiar neighbourhood pharmacy, with a thoughtful place to explore medicines, the human body and the science behind healthcare.</>}</motion.p>
+          <motion.div variants={reveal} className="px-eyebrow"><i/> {language==="bn"?"আপনার পরিচিত ফার্মেসি · জ্ঞানের নতুন দিগন্ত":"YOUR LOCAL PHARMACY · MEDICINE & HEALTH INFORMATION"}</motion.div>
+          <motion.h1 variants={reveal}>{language==="bn"?<>যত্নের পরিচয়।<br/><em>জ্ঞানে এগিয়ে চলি।</em></>:<>A familiar pharmacy.<br/><em>A clearer view of health.</em></>}</motion.h1>
+          <motion.p variants={reveal}>{language==="bn"?<><b>{shop}</b>-এ স্বাগতম — ওষুধ, মানবদেহ এবং স্বাস্থ্যবিজ্ঞানের বিষয়গুলো সহজভাবে জানার একটি পরিচিত ঠিকানা।</>:<><b>{shop}</b> is here for everyday pharmacy needs. This site helps you look up medicines and understand the science behind health.</>}</motion.p>
           <motion.div variants={reveal} className="px-hero-buttons"><Link className="px-button-primary" href="/medicines">{language==="bn"?"ওষুধ সম্পর্কে জানুন":"Explore medicines"} <ArrowUpRight size={16}/></Link><Link className="px-button-text" href="/bio-intelligent">{language==="bn"?"বায়ো ইন্টেলিজেন্ট দেখুন":"Discover Bio Intelligent"} <ArrowRight size={15}/></Link></motion.div>
-          <motion.div variants={reveal} className="px-hero-proof"><span><ShieldCheck size={15}/> Community pharmacy</span><i/><span><Sparkles size={15}/> Learn with curiosity</span></motion.div>
+          <motion.div variants={reveal} className="px-hero-proof"><span><ShieldCheck size={15}/> Local pharmacy</span><i/><span><BookOpen size={15}/> Clear information</span></motion.div>
         </motion.div>
       </div>
       <motion.div className="px-hero-visual" initial={{opacity:0,scale:.94}} animate={{opacity:1,scale:1}} transition={{duration:1,ease}}>
@@ -121,7 +140,7 @@ export function HomeExperience({ profile = {}, medicineCount = null }: { profile
       </motion.div>
       <div className="px-hero-side-note">A LITTLE CLOSER TO THE SCIENCE OF YOU <ArrowDownRight size={15}/></div>
     </section>
-    <section className="px-intro-band"><span>01 / A PLACE TO BEGIN</span><p>From the medicines we use to the biology that makes us human — <b>understanding matters.</b></p><span>EST. IN YOUR COMMUNITY</span></section>
+    
     <section className="px-live-strip" aria-label="Live content and medicine counts">
       <div className="px-live-strip-heading"><span className="px-kicker">THE KNOWLEDGE INDEX</span><p>Real counts from the published guides, Bio Intelligent chapters and local medicine database.</p></div>
       <div className="px-live-stat"><b>{medicineCount === null ? "—" : medicineCount.toLocaleString("en-BD")}</b><small>Locally indexed medicines</small><em>{medicineCount === null ? "Count unavailable" : medicineCount === 0 ? "No local records yet" : "Local catalogue records"}</em></div>
@@ -129,20 +148,11 @@ export function HomeExperience({ profile = {}, medicineCount = null }: { profile
       <div className="px-live-stat"><b>{bioChapterCount.toString().padStart(2,"0")}</b><small>Bio Intelligent chapters</small><em>Guided chapters</em></div>
       <p className="px-live-strip-note">MedEx Bangladesh is linked as an external reference directory; its catalogue is not counted as locally hosted medicine data.</p>
     </section>
-    <section className="px-today-tip">
+    {healthTip && <section className="px-today-tip">
       <div className="px-tip-icon"><BookOpen size={22}/></div>
-      <div className="px-tip-copy"><span className="px-kicker">TODAY'S HEALTH TIP / HEALTH LIBRARY</span><h2>{healthGuides[tipIndex].title}</h2><p>{healthGuides[tipIndex].intro}</p><small>{healthGuides[tipIndex].items[0]}</small><Link href={"/health-library#"+healthGuides[tipIndex].id}>Read the guide <ArrowUpRight size={14}/></Link></div>
-      <button className="px-tip-next" onClick={()=>setTipIndex((tipIndex+1)%healthGuides.length)} aria-label="Show another health tip">Another tip <ArrowRight size={15}/></button>
-    </section>
-    <section className="px-pathways">
-      <div className="px-pathways-heading"><span className="px-kicker">EXPLORE BY INTEREST</span><h2>Health is connected.<br/><em>So is everything we learn.</em></h2><p>Start with a subject, then follow the science behind it.</p></div>
-      <div className="px-pathway-grid">
-        <Link href="/bio-intelligent#explorer" className="px-pathway-card pathway-heart"><span className="px-pathway-icon"><HeartPulse/></span><small>HUMAN BIOLOGY / 01</small><b>Heart & circulation</b><span>Understand the rhythm behind life <ArrowUpRight size={15}/></span></Link>
-        <Link href="/bio-intelligent#explorer" className="px-pathway-card pathway-dna"><span className="px-pathway-icon"><Dna/></span><small>CELLULAR SCIENCE / 02</small><b>Cells & DNA</b><span>Explore life's smallest instructions <ArrowUpRight size={15}/></span></Link>
-        <Link href="/bio-intelligent#explorer" className="px-pathway-card pathway-medicine"><span className="px-pathway-icon"><FlaskConical/></span><small>PHARMACOLOGY / 03</small><b>How medicines work</b><span>Connect molecules with medicine <ArrowUpRight size={15}/></span></Link>
-        <Link href="/health-library" className="px-pathway-card pathway-safety"><span className="px-pathway-icon"><ShieldCheck/></span><small>HEALTH LITERACY / 04</small><b>Everyday medicine safety</b><span>Learn labels, storage and safe use <ArrowUpRight size={15}/></span></Link>
-      </div>
-    </section>
+      <div className="px-tip-copy"><span className="px-kicker">FROM THE HEALTH LIBRARY</span><h2>{healthTip.title}</h2><p>{healthTip.intro}</p><small>{healthTip.items?.[0] || "Explore the full guide for more context."}</small><Link href={"/health-library#"+healthTip.id}>Read the guide <ArrowUpRight size={14}/></Link></div>
+      <button className="px-tip-next" onClick={()=>setTipIndex((tipIndex+1)%healthGuides.length)} aria-label="Show another health tip" disabled={healthGuides.length<2}>Another tip <ArrowRight size={15}/></button>
+    </section>}
     <section className="px-discover-section">
       <motion.div className="px-section-heading" initial="hidden" whileInView="show" viewport={{once:true,amount:.3}} variants={stagger}><motion.div variants={reveal}><span className="px-kicker">EXPLORE THE KNOWLEDGE SPACE</span><h2>More than a pharmacy.<br/><em>A place to discover.</em></h2></motion.div><motion.p variants={reveal}>A carefully organised starting point for medicine references, pharmaceutical science and clear, useful health knowledge.</motion.p></motion.div>
       <div className="px-discover-grid">{cards.map((c,i)=><motion.div key={c.n} className={"px-discover-card "+c.tone} initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.65,delay:i*.1,ease}}><div className="px-discover-top"><span>{c.n} / EXPLORE</span><c.icon size={21}/></div><small>{c.kicker}</small><h3>{c.title}</h3><p>{c.body}</p><Link href={c.href}>Explore section <ArrowUpRight size={15}/></Link></motion.div>)}</div>
