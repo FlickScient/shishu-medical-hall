@@ -29,3 +29,46 @@
 @media(max-width:720px){.s2-header{height:68px;padding:0 15px;gap:10px}.s2-brand{gap:8px}.s2-brand img{width:35px;height:35px}.s2-brand b{font-size:11px}.s2-brand small{font-size:8px}.s2-nav{display:none}.s2-actions{gap:7px}.s2-language{height:37px;padding:0 11px;font-size:10px}.s2-portal{padding:11px 12px;font-size:9px;gap:5px}.s2-menu{display:grid;height:37px;width:38px}.s2-hero{padding:38px 16px 35px;grid-template-columns:1fr;gap:28px}.s2-hero h1{font-size:clamp(39px,10vw,53px);margin:18px 0 15px}.s2-hero-copy>p{font-size:12px;line-height:1.8}.s2-hero-actions{margin-top:20px;gap:15px}.s2-primary{padding:13px 15px;font-size:10px}.s2-secondary{font-size:10px}.s2-trust{margin-top:22px;gap:14px;font-size:9px}.s2-hero-image{height:370px}.s2-image-top{left:13px;right:13px;top:14px;font-size:6px}.s2-image-bottom{left:16px;bottom:18px}.s2-image-bottom b{font-size:27px}.s2-image-bottom span{font-size:9px}.s2-image-index{right:14px;bottom:24px;font-size:6px}.s2-index{padding:22px 16px;grid-template-columns:1fr 1fr;gap:18px 8px}.s2-index-intro{grid-column:1/-1;padding-bottom:12px;border-bottom:1px solid #e1e9e6}.s2-index-intro p{max-width:none}.s2-index>div:not(:first-child){padding:0 0 0 12px;border-left:1px solid #e0e8e8}.s2-index>div>b{font-size:25px}.s2-index>div>span{font-size:9px}.s2-index>div>small{font-size:8px}.s2-tip{margin:28px auto 54px;padding:0 15px;grid-template-columns:40px 1fr;gap:10px}.s2-tip-mark{width:38px;height:38px}.s2-tip-content{padding:14px}.s2-tip-content h2{font-size:16px}.s2-tip-content p{font-size:10px}.s2-tip>button{grid-column:2;justify-self:start;padding:9px 11px;font-size:9px}.s2-discover,.s2-chapters,.s2-molecule-section,.s2-faq{padding-left:16px;padding-right:16px}.s2-section-head{display:block;margin-bottom:18px}.s2-section-head h2{font-size:33px}.s2-section-head>p{margin-top:12px;font-size:10px}.s2-discover{padding-bottom:58px}.s2-discover-list{grid-template-columns:1fr;gap:11px}.s2-discover-card{min-height:190px;grid-template-columns:112px 1fr}.s2-card-art{min-height:190px}.s2-card-art>svg{width:47px;height:47px}.s2-card-art>span{left:9px;top:11px;font-size:6px}.s2-card-copy{padding:16px 14px}.s2-card-copy .s2-kicker{font-size:7px}.s2-card-copy h3{font-size:17px;margin:8px 0}.s2-card-copy p{font-size:9px;line-height:1.65}.s2-card-copy>a{font-size:9px;padding-top:12px}.s2-molecule-section{padding-bottom:60px}.s2-molecule-studio{grid-template-columns:1fr}.s2-molecule-stage{min-height:330px}.s2-orbit{width:245px;height:245px}.s2-orbit-two{width:190px;height:190px}.s2-molecule-object{width:210px}.s2-stage-meta{left:13px;right:13px;top:14px;font-size:6px}.s2-stage-caption{font-size:6px;right:10px}.s2-molecule-details{padding:21px 16px}.s2-molecule-select{margin:12px 0 19px;gap:5px}.s2-molecule-select button{padding:9px 7px}.s2-molecule-select button>b{font-size:8px}.s2-molecule-description h3{font-size:24px}.s2-molecule-description p{font-size:10px}.s2-chapters{padding-bottom:65px}.s2-chapters .s2-section-head>a{margin-top:14px}.s2-chapter-grid{grid-template-columns:1fr 1fr;gap:9px}.s2-chapter{min-height:255px;padding:11px}.s2-chapter-icon{height:112px;margin:-11px -11px 13px}.s2-chapter-no{top:11px;left:11px;font-size:7px}.s2-chapter>b{font-size:14px}.s2-chapter p{font-size:8px}.s2-chapter .s2-kicker{font-size:6px}.s2-faq{grid-template-columns:1fr;gap:15px;padding-bottom:60px}.s2-faq-intro h2{font-size:33px}.s2-faq-list article>button{padding:15px 0;grid-template-columns:25px 1fr 18px;gap:8px}.s2-faq-list article>button>b{font-size:10px}.s2-faq-list article>p{font-size:9px;margin:0 20px 15px 33px}.s2-footer{padding:35px 16px 18px}.s2-footer-main{grid-template-columns:1fr 1fr;gap:27px 20px}.s2-footer-main>div:first-child{grid-column:1/-1}.s2-footer-links{gap:10px}.s2-footer-links>a,.s2-footer-links>span{font-size:9px}.s2-footer-bottom{margin-top:25px;flex-direction:column;gap:8px;font-size:8px}.s2-image-credit{font-size:7px}}
 @media(max-width:390px){.s2-portal{font-size:0;padding:11px}.s2-portal svg{width:17px;height:17px}.s2-hero-image{height:330px}.s2-discover-card{grid-template-columns:95px 1fr}.s2-chapter{min-height:245px}}
 @media(prefers-reduced-motion:reduce){.s2-site *{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* Photo-led visual layer: actual medical and scientific imagery, never icon substitutes */
+.s2-card-photo,.s2-dna-art{position:relative;isolation:isolate;background:#122b3b!important}
+.s2-card-photo img,.s2-dna-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.94;mix-blend-mode:normal}
+.s2-card-photo:after,.s2-dna-art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,25,38,.08),rgba(8,25,38,.62));z-index:0}
+.s2-card-photo>span,.s2-dna-art>span{z-index:1;position:absolute;top:17px;left:17px;color:#fff!important;text-shadow:0 1px 8px #081b2b99;font-size:8px;letter-spacing:.14em;font-weight:850}
+.s2-discover-card{grid-template-columns:.9fr 1.1fr;min-height:275px;border-color:#d9e1df;background:#fff;box-shadow:0 12px 34px rgba(16,42,56,.045)}
+.s2-card-art{min-height:275px}
+.s2-card-copy{padding:27px 28px}
+.s2-card-copy h3{font-size:clamp(18px,1.7vw,24px);line-height:1.12}
+.s2-chapter{padding:0 0 20px;overflow:hidden;background:#fff;border:1px solid #dce5e3;box-shadow:0 10px 28px rgba(15,45,57,.045)}
+.s2-chapter-icon{height:190px;margin:0 0 18px;position:relative;overflow:hidden;background:#132d3d!important;border-radius:0!important;display:block!important}
+.s2-chapter-icon img{display:block;width:100%;height:100%;object-fit:cover;opacity:.96;transition:transform .7s cubic-bezier(.2,.75,.25,1)}
+.s2-chapter:hover .s2-chapter-icon img{transform:scale(1.045)}
+.s2-chapter-no,.s2-chapter>.s2-kicker,.s2-chapter>b,.s2-chapter>p{margin-left:18px;margin-right:18px}
+.s2-chapter>.s2-kicker{display:block}
+.s2-chapter>b{display:block;font-size:20px;margin-top:9px}
+.s2-chapter>p{font-size:11px;line-height:1.7}
+.s2-molecule-studio-photo{grid-template-columns:1.08fr .92fr}
+.s2-molecule-stage-photo{background:radial-gradient(ellipse at 50% 45%,#d9e7e7 0%,#dce7e5 36%,#122d3d 100%);min-height:480px}
+.s2-molecule-stage-photo:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(8,26,39,.08),transparent 42%,rgba(8,26,39,.24));pointer-events:none}
+.s2-molecule-photo-wrap{position:relative;z-index:1;width:min(70%,360px);height:320px;display:grid;place-items:center;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d;filter:drop-shadow(0 24px 26px rgba(6,27,42,.2))}
+.s2-molecule-photo-wrap img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;mix-blend-mode:multiply}
+.s2-molecule-stage-photo .s2-stage-meta{color:#f1f7f6}
+.s2-molecule-stage-photo .s2-stage-caption{color:#d5e1df}
+.s2-molecule-stage-photo .s2-model-controls button{background:rgba(255,255,255,.92);border-color:#c6d7d4}
+.s2-molecule-stage-photo .s2-model-controls{bottom:27px}
+.s2-molecule-details{background:#fff}
+.s2-image-credit{max-width:1200px;margin:0 auto;padding:0 28px 22px;color:#89999d;font-size:9px;line-height:1.7}
+@media(max-width:760px){
+ .s2-discover-list{grid-template-columns:1fr}
+ .s2-discover-card{grid-template-columns:.78fr 1.22fr;min-height:230px}
+ .s2-card-art{min-height:230px}
+ .s2-card-copy{padding:19px 17px}
+ .s2-card-copy h3{font-size:18px}
+ .s2-chapter-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .s2-chapter-icon{height:145px}
+ .s2-molecule-studio-photo{grid-template-columns:1fr}
+ .s2-molecule-stage-photo{min-height:360px}
+ .s2-molecule-photo-wrap{width:min(70%,280px);height:235px}
+}
+@media(prefers-reduced-motion:reduce){.s2-chapter-icon img,.s2-molecule-photo-wrap{transition:none}}
