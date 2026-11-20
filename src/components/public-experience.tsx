@@ -201,6 +201,19 @@ const organAtlas = [
   {id:"bladder",name:"Bladder",system:"URINARY SYSTEM",tag:"URINE STORAGE",position:{left:"50%",top:"86%"},role:"A hollow muscular organ that stores urine from the kidneys until it is released during urination.",facts:[["Stretchable","muscular wall"],["Urine","temporary storage"],["Signals","help control emptying"]],path:"M50 12 C32 12 19 27 22 47 C24 64 36 78 50 84 C64 78 76 64 78 47 C81 27 68 12 50 12Z",detail:"Urine travels from each kidney through a ureter into the bladder. As the bladder fills, stretch receptors signal the nervous system; coordinated muscle activity allows urine to pass through the urethra."})
 ];
 
+const organFlow: Record<string, [string,string,string]> = {
+ brain:["Sensory input","Neural processing","Response"],
+ heart:["Body tissues","Lung circulation","Body circulation"],
+ lungs:["Inhaled air","Alveolar exchange","Exhaled air"],
+ liver:["Nutrients arrive","Metabolic processing","Bile & proteins"],
+ stomach:["Food enters","Mixing & enzymes","Chyme"],
+ kidneys:["Blood arrives","Nephron filtering","Urine"],
+ intestines:["Digestion","Nutrient absorption","Waste"],
+ pancreas:["Digestive enzymes","Hormone release","Glucose balance"],
+ spleen:["Blood enters","Cell screening","Immune response"],
+ bladder:["Kidneys","Urine storage","Release"]
+};
+
 function OrganAtlas() {
   const [selected,setSelected]=useState("heart");
   const [showDetail,setShowDetail]=useState(false);
@@ -257,6 +270,7 @@ function OrganAtlas() {
         <span className="px-kicker">ORGAN PROFILE / {organ.name.toUpperCase()}</span>
         <h3>{organ.name}</h3><p className="organ-role">{organ.role}</p>
         <div className="organ-facts">{organ.facts.map(([value,label])=><div key={label}><b>{value}</b><small>{label}</small></div>)}</div>
+        <div className="organ-flow"><span>PROCESS MAP / HOW IT WORKS</span><div>{organFlow[selected].map((step,index)=><div className="organ-flow-step" key={step}><b>{step}</b>{index<2&&<ArrowRight size={13}/>}</div>)}</div></div>
         <button className="organ-detail-toggle" onClick={()=>setShowDetail(v=>!v)}>{showDetail?"Hide anatomy notes":"Open anatomy notes"} <ArrowUpRight size={15}/></button>
         {showDetail&&<div className="organ-deep-note"><b>HOW IT WORKS</b><p>{organ.detail}</p></div>}
         <div className="organ-switcher"><span>EXPLORE ANOTHER ORGAN</span><div>{organAtlas.map(item=><button key={item.id} onClick={()=>{setSelected(item.id);setShowDetail(false)}} className={selected===item.id?"active":""}>{item.name}</button>)}</div></div>
