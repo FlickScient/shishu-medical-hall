@@ -49,8 +49,6 @@ function SiteHeader({ shop, language, onLanguage }: { shop: string; language: "e
   </header>;
 }
 
-"use client";
-
 function MoleculeStudio() {
   const [active, setActive] = useState("methane");
   const [rotation, setRotation] = useState(0);
