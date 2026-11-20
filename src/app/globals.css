@@ -780,3 +780,8 @@ body{font-family:Inter,"Noto Sans Bengali",ui-sans-serif,system-ui,-apple-system
 .organ-flow-step b{font-size:8px;line-height:1.4;color:#52746c;font-weight:700}
 .organ-flow svg{color:#5a9990;justify-self:center}
 @media(max-width:520px){.organ-flow>div{grid-template-columns:1fr 12px 1fr 12px 1fr;gap:3px}.organ-flow-step{min-height:42px;padding:6px 3px}.organ-flow-step b{font-size:7px}.organ-flow svg{width:11px}}
+
+.organ-flow>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:9px}
+.organ-flow-step{position:relative;min-height:45px;padding:8px 13px 8px 7px}
+.organ-flow-step svg{position:absolute;right:-12px;top:50%;transform:translateY(-50%);z-index:2}
+@media(max-width:520px){.organ-flow>div{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.organ-flow-step{padding:6px 11px 6px 5px}.organ-flow-step svg{right:-10px}}
