@@ -27,8 +27,13 @@ export default function InitialOwnerSetupPage() {
   }
 
   async function initializeOwner(db: ReturnType<typeof createClient>) {
-    const { error: signInError } = await db.auth.signInWithPassword({ email, password });
-    if (signInError) throw signInError;
+    const { data: currentSession, error: sessionError } = await db.auth.getSession();
+    if (sessionError) throw sessionError;
+    if (!currentSession.session?.user?.id) {
+      const { error: signInError } = await db.auth.signInWithPassword({ email: email.trim().toLowerCase(), password });
+      if (signInError) throw signInError;
+    }
+    if (token.trim().length !== 64) throw new Error("The private setup code must be exactly 64 characters.");
 
     const { error: setupError } = await db.rpc("bootstrap_store_owner", { p_token: token.trim() });
     if (setupError) throw setupError;
@@ -146,13 +151,13 @@ export default function InitialOwnerSetupPage() {
             )}
             {mode === "verify" && (
               <label className="block text-xs font-bold text-slate-500">6-DIGIT EMAIL VERIFICATION CODE
-                <input required inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={otp} onChange={e => setOtp(e.target.value.replace(/\\D/g, "").slice(0, 6))} placeholder="123456" className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-3 text-center text-lg font-bold tracking-[.35em]" />
+                <input required inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))} placeholder="123456" className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-3 text-center text-lg font-bold tracking-[.35em]" />
               </label>
             )}
             <label className="block text-xs font-bold text-slate-500">PRIVATE SETUP CODE
               <div className="relative mt-2">
                 <KeyRound className="absolute left-3 top-3 text-slate-400" size={16} />
-                <input required value={token} onChange={e => setToken(e.target.value)} placeholder="64-character one-time code" className="w-full rounded-xl border border-slate-200 py-3 pl-10 pr-3 text-sm" />
+                <input required value={token} onChange={e => setToken(e.target.value.slice(0,64))} minLength={64} maxLength={64} autoComplete="off" placeholder="Paste your 64-character one-time code" className="w-full rounded-xl border border-slate-200 py-3 pl-10 pr-3 text-sm" />
               </div>
             </label>
             <button disabled={busy} className="brand-gradient w-full rounded-xl px-4 py-4 text-sm font-bold text-white disabled:opacity-60">
