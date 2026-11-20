@@ -263,7 +263,7 @@ function OrganAtlas() {
         <div className="organ-model-toolbar"><span>LIVE 3D MODEL / {organ.name.toUpperCase()}</span><a href={fullViewUrl} target="_blank" rel="noreferrer">OPEN FULL VIEW <ArrowUpRight size={12}/></a></div>
         <div className="organ-model-frame">
           <iframe key={selected} src={viewerSrc} title={organ.name+" interactive 3D anatomical model"} loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/>
-          <div className="organ-model-hint"><span className="organ-live-dot"/> INTERACTIVE 3D REFERENCE <span>Use the model's controls to rotate / zoom</span></div>
+          <div className="organ-model-hint"><span className="organ-live-dot"/> INTERACTIVE 3D REFERENCE <span>Drag to rotate · scroll or pinch to zoom</span></div>
         </div>
         <div className="organ-switcher organ-switcher-3d"><span>SELECT AN ORGAN / 10 STRUCTURES</span><div>{organAtlas.map(item=><button key={item.id} onClick={()=>setSelected(item.id)} className={selected===item.id?"active":""} aria-pressed={selected===item.id}>{item.name}</button>)}</div></div>
       </div>
@@ -275,7 +275,7 @@ function OrganAtlas() {
         <div className="organ-facts">{organ.facts.map(([value,label])=><div key={label}><b>{value}</b><small>{label}</small></div>)}</div>
         <div className="organ-flow"><span>PROCESS MAP / HOW IT WORKS</span><div>{organFlow[selected].map((step,index)=><div className="organ-flow-step" key={step}><b>{step}</b>{index<2&&<ArrowRight size={13}/>}</div>)}</div></div>
         <div className="organ-deep-note"><b>HOW IT WORKS</b><p>{organ.detail}</p></div>
-        <div className="organ-model-credit">Model source: <a href={modelSource.url} target="_blank" rel="noreferrer">{modelSource.label}</a> · {modelSource.license}. Educational reference, not diagnostic imagery.</div>
+        <div className="organ-model-credit">Model source: <a href={modelSource.url} target="_blank" rel="noreferrer">{modelSource.label}</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">{modelSource.license}</a>. Educational reference, not diagnostic imagery.</div>
       </aside>
     </div>
     <div className="organ-atlas-foot"><span>ANATOMY / INTERACTIVE MODEL LIBRARY</span><span>Rotate and zoom the 3D reference · Educational use</span></div>
