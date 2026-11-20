@@ -858,3 +858,39 @@ body{font-family:Inter,"Noto Sans Bengali",ui-sans-serif,system-ui,-apple-system
  .px-stage-model{min-height:290px}
 }
 @media(prefers-reduced-motion:reduce){.organ-switcher-3d button{transition:none}}
+
+/* Store portal authentication surfaces */
+.auth-shell{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:42px 18px;background:radial-gradient(ellipse at 18% 10%,rgba(99,153,137,.18),transparent 34%),radial-gradient(ellipse at 88% 88%,rgba(53,95,111,.18),transparent 35%),#e9e9df;color:#163448}
+.auth-layout{width:min(100%,510px)}
+.auth-back{display:inline-flex;align-items:center;gap:9px;margin:0 0 22px;color:#617b7b;font-size:11px;font-weight:700;letter-spacing:.04em;transition:color .2s}
+.auth-back:hover{color:#173d50}
+.auth-card{position:relative;overflow:hidden;padding:clamp(25px,6vw,43px);background:rgba(250,250,244,.94);border:1px solid rgba(255,255,255,.9);box-shadow:0 28px 80px rgba(19,47,59,.13),0 2px 8px rgba(19,47,59,.04);backdrop-filter:blur(18px)}
+.auth-card:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,#183e52,#62968b,#d0a18b)}
+.auth-mark{width:48px;height:48px;display:grid;place-items:center;background:#17394b;color:#d9e9df;margin-bottom:26px}
+.auth-eyebrow{display:block;color:#628b7f;font-size:8px;font-weight:800;letter-spacing:.2em}
+.auth-card h1{margin:13px 0 10px;color:#15394b;font:500 clamp(33px,7vw,45px)/1.03 Georgia,serif;letter-spacing:-.045em}
+.auth-lede{max-width:390px;margin:0;color:#6d7f7c;font-size:12px;line-height:1.8}
+.auth-switch{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:4px;margin:26px 0 0;background:#e6e9df}
+.auth-switch button{padding:11px 10px;background:transparent;color:#6c817b;font-size:10px;font-weight:800;cursor:pointer}
+.auth-switch button.active{background:#17394b;color:#f4f4eb;box-shadow:0 3px 9px rgba(13,38,51,.13)}
+.auth-form{display:grid;gap:17px;margin-top:27px}
+.auth-form label{display:grid;gap:8px;color:#58716e;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.auth-form input{width:100%;height:48px;border:1px solid #d6ded5;border-radius:0;background:#fffefa;padding:0 14px;color:#17394b;font-size:13px;letter-spacing:normal;text-transform:none;outline:none;transition:border-color .2s,box-shadow .2s}
+.auth-form input:focus{border-color:#62968b;box-shadow:0 0 0 3px rgba(98,150,139,.14)}
+.auth-form input::placeholder{color:#a4b0a8}
+.auth-form .auth-otp{text-align:center;font-size:21px;font-weight:800;letter-spacing:.38em}
+.auth-submit{display:flex;align-items:center;justify-content:center;gap:10px;min-height:50px;margin-top:5px;background:#17394b;color:#f5f3e9;font-size:11px;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:background .2s,transform .2s}
+.auth-submit:hover:not(:disabled){background:#28596a;transform:translateY(-1px)}
+.auth-submit:disabled{opacity:.55;cursor:not-allowed}
+.auth-error,.auth-message{margin-top:18px;padding:13px 14px;font-size:11px;line-height:1.7;overflow-wrap:anywhere}
+.auth-error{background:#f7e9e4;color:#9b463e;border-left:3px solid #b85f52}
+.auth-message{background:#e5eee4;color:#3e6f5d;border-left:3px solid #6d9a80}
+.auth-first-owner{display:flex;gap:13px;margin-top:25px;padding:16px;background:#e8ebe2;color:#55716d}
+.auth-first-owner>svg{flex:none;margin-top:1px}
+.auth-first-owner b{display:block;color:#1b4352;font-size:10px}
+.auth-first-owner p{margin:6px 0 8px;color:#6c7e77;font-size:10px;line-height:1.6}
+.auth-first-owner a,.auth-inline-actions button{display:inline-flex;align-items:center;gap:6px;color:#2d716a;font-size:10px;font-weight:800}
+.auth-inline-actions{display:flex;justify-content:space-between;gap:14px;margin-top:16px;flex-wrap:wrap}
+.auth-footnote{margin-top:22px;padding-top:17px;border-top:1px solid #dce2d8;color:#8a9990;font-size:9px;line-height:1.75}
+@media(max-width:480px){.auth-shell{padding:24px 13px}.auth-card{padding:25px 20px}.auth-back{margin-bottom:16px}.auth-first-owner{padding:13px}.auth-inline-actions{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){.auth-back,.auth-form input,.auth-submit{transition:none}}
