@@ -1,5 +1,5 @@
-import { BioExperience } from "@/components/public-experience";
+import { BioIntelligentExperience } from "@/components/shishu-experience";
 
 export default function BioIntelligentPage() {
-  return <BioExperience />;
+  return <BioIntelligentExperience />;
 }
