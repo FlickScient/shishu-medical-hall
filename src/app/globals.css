@@ -772,3 +772,11 @@ body{font-family:Inter,"Noto Sans Bengali",ui-sans-serif,system-ui,-apple-system
 .health-guide ul{padding-left:16px}
 @media(max-width:850px){.pharma-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.pharma-grid{grid-template-columns:1fr}.directory-intro{padding-bottom:18px}.pharma-card{min-height:0}}
+
+.organ-flow{margin:18px 0 4px;padding:14px 0 12px;border-top:1px solid #d8e1d7;border-bottom:1px solid #d8e1d7}
+.organ-flow>span{display:block;margin-bottom:10px;color:#82968d;font-size:7px;letter-spacing:.15em;font-weight:850}
+.organ-flow>div{display:grid;grid-template-columns:1fr 16px 1fr 16px 1fr;align-items:center;gap:5px}
+.organ-flow-step{min-height:45px;padding:8px 7px;display:flex;align-items:center;justify-content:center;text-align:center;background:#e4e9df;border:1px solid #d7e0d6}
+.organ-flow-step b{font-size:8px;line-height:1.4;color:#52746c;font-weight:700}
+.organ-flow svg{color:#5a9990;justify-self:center}
+@media(max-width:520px){.organ-flow>div{grid-template-columns:1fr 12px 1fr 12px 1fr;gap:3px}.organ-flow-step{min-height:42px;padding:6px 3px}.organ-flow-step b{font-size:7px}.organ-flow svg{width:11px}}
