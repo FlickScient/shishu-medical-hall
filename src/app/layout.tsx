@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./home-experience-v2.css";
 
 export const metadata: Metadata = {
   title: "Shishu Medical Hall | অর্জুন ডাক্তারের দোকান",
