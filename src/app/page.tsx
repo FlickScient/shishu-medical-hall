@@ -14,7 +14,7 @@ export default async function HomePage() {
         profile = rows?.[0]?.content ?? {};
       }
     } catch {
-      // Keep the public homepage available when editable profile content is unavailable.
+      // The public site remains available if editable profile content is temporarily unavailable.
     }
     try {
       const response = await fetch(dataUrl.replace(/\/$/, "") + "/medicines?select=id", {
@@ -22,11 +22,12 @@ export default async function HomePage() {
         next: { revalidate: 300 }
       });
       if (response.ok) {
-        const match = response.headers.get("content-range")?.match(/\/(\d+)$/);
+        const contentRange = response.headers.get("content-range");
+        const match = contentRange?.match(/\/(\d+)$/);
         if (match) medicineCount = Number(match[1]);
       }
     } catch {
-      // The catalogue count is optional.
+      // Optional public count: do not let it affect homepage availability.
     }
   }
   return <HomeExperienceV3 profile={profile} medicineCount={medicineCount} />;
