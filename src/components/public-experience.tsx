@@ -187,6 +187,71 @@ const chapters = [
   {id:"research",no:"04",label:"Discovery",title:"From a scientific idea to a treatment.",sub:"DRUG DEVELOPMENT",intro:"A potential medicine moves through laboratory research, carefully designed clinical studies, regulatory review and ongoing safety monitoring.",facts:["Preclinical work studies a candidate before human trials.","Clinical trials evaluate safety and benefit in people.","Monitoring continues after a medicine is approved."],stat:"ONGOING",unit:"research does not stop at approval",icon:Microscope,accent:"green"}
 ];
 
+
+const organAtlas = [
+  {id:"brain",name:"Brain",system:"NERVOUS SYSTEM",tag:"CONTROL CENTRE",position:{left:"50%",top:"10%"},role:"The brain receives information, processes it and coordinates movement, sensation, memory, language and many automatic body functions.",facts:[["≈ 86B","neurons · estimated"],["24/7","electrical activity"],["3","major regions explored"]],path:"M50 13 C35 5 22 15 27 29 C15 37 22 53 34 55 C40 69 59 68 65 56 C81 54 85 39 73 30 C78 15 61 6 50 13Z",detail:"Billions of nerve cells communicate through electrical and chemical signals. The cerebrum supports conscious thought and movement; the cerebellum helps coordinate balance; the brainstem manages essential automatic functions."},
+  {id:"heart",name:"Heart",system:"CARDIOVASCULAR SYSTEM",tag:"THE PUMP",position:{left:"50%",top:"27%"},role:"A muscular pump that keeps blood moving through the lungs and the rest of the body, delivering oxygen and nutrients.",facts:[["4","chambers"],["≈ 100K","beats per day"],["2","circuits · pulmonary & systemic"]],path:"M50 18 C34 -1 10 12 14 35 C17 54 39 76 50 88 C64 73 86 52 87 34 C89 12 66 0 50 18Z",detail:"The right side sends blood to the lungs for gas exchange. The left side sends oxygen-rich blood around the body. Valves help keep blood flowing in the correct direction."},
+  {id:"lungs",name:"Lungs",system:"RESPIRATORY SYSTEM",tag:"GAS EXCHANGE",position:{left:"50%",top:"27%"},role:"Two branching, elastic organs where oxygen enters the blood and carbon dioxide leaves it during breathing.",facts:[["2","lungs"],["Millions","of alveoli"],["O₂ / CO₂","gas exchange"]],path:"M48 12 C28 5 14 20 13 43 C10 66 23 82 42 76 C49 72 49 52 50 39 C51 52 51 72 58 76 C77 82 90 66 87 43 C86 20 72 5 52 12Z",detail:"Air travels through the trachea, bronchi and smaller bronchioles to tiny air sacs called alveoli. Their thin walls allow oxygen and carbon dioxide to diffuse between air and blood."},
+  {id:"liver",name:"Liver",system:"DIGESTIVE & METABOLIC SYSTEM",tag:"CHEMICAL PROCESSING",position:{left:"58%",top:"42%"},role:"A large metabolic organ that processes nutrients, makes bile, stores energy and helps break down many substances.",facts:[["500+","known functions"],["Bile","supports digestion"],["Glucose","energy storage"]],path:"M12 30 C26 10 64 10 88 26 C93 36 82 61 67 68 C45 78 20 68 11 53 C6 44 7 36 12 30Z",detail:"The liver receives nutrient-rich blood from the digestive tract. It helps regulate blood chemistry, stores glycogen, produces important proteins and makes bile that supports fat digestion."},
+  {id:"stomach",name:"Stomach",system:"DIGESTIVE SYSTEM",tag:"FOOD BREAKDOWN",position:{left:"55%",top:"49%"},role:"A muscular, expandable organ that stores food briefly and mixes it with acid and digestive enzymes.",facts:[["pH 1–3","typical acidic range"],["Chyme","partly digested food"],["Muscle","mixing contractions"]],path:"M47 9 C29 6 25 22 32 35 C38 47 25 54 20 65 C14 79 29 88 45 79 C60 70 63 57 75 51 C90 43 87 24 73 20 C63 17 58 10 47 9Z",detail:"The stomach's muscular wall churns food into a semi-liquid mixture. Acid helps create an environment for digestive enzymes, while mucus protects the stomach lining."},
+  {id:"kidneys",name:"Kidneys",system:"URINARY SYSTEM",tag:"FILTER & BALANCE",position:{left:"50%",top:"61%"},role:"A pair of organs that filter blood, remove wastes into urine and regulate fluid, electrolyte and acid-base balance.",facts:[["≈ 1M","nephrons per kidney"],["24/7","filtration"],["Fluid","& salt balance"]],path:"M30 12 C9 12 8 40 17 57 C25 72 42 67 47 51 C52 36 47 16 30 12Z",detail:"Each kidney contains many nephrons. These microscopic filtering units adjust what stays in the blood and what leaves as urine. The kidneys also help regulate blood pressure and red blood cell production."},
+  {id:"intestines",name:"Intestines",system:"DIGESTIVE SYSTEM",tag:"ABSORB & SUPPLY",position:{left:"50%",top:"72%"},role:"The small intestine absorbs most nutrients; the large intestine absorbs water and helps form stool.",facts:[["≈ 6 m","small intestine · adult"],["Villi","increase surface area"],["Microbiome","living gut ecosystem"]],path:"M18 17 C18 6 38 5 38 17 L38 28 C38 38 62 38 62 28 L62 17 C62 5 82 6 82 17 L82 32 C82 44 62 44 62 55 L62 67 C62 80 38 80 38 67 L38 55 C38 44 18 44 18 32Z",detail:"The small intestine uses folds and villi to create a large surface for nutrient absorption. The large intestine reabsorbs water and houses a complex community of microbes."}
+];
+
+function OrganAtlas() {
+  const [selected,setSelected]=useState("heart");
+  const [showDetail,setShowDetail]=useState(false);
+  const organ=organAtlas.find(item=>item.id===selected)!;
+  return <section className="organ-atlas" id="organs">
+    <div className="organ-atlas-heading"><div><span className="px-kicker">THE HUMAN BODY / INTERACTIVE ANATOMY</span><h2>Seven windows.<br/><em>One living system.</em></h2></div><p>Select an organ on the body map or use the organ index. Each selection opens a visual anatomy card with its role, key structures and connected body systems.</p></div>
+    <div className="organ-atlas-console">
+      <div className="organ-body-stage">
+        <div className="organ-stage-meta"><span>ANATOMICAL SCAN / FRONT VIEW</span><span>FIG. 01 — 07</span></div>
+        <div className="organ-body-orbit orbit-a"/><div className="organ-body-orbit orbit-b"/>
+        <svg className="organ-body-silhouette" viewBox="0 0 300 620" role="img" aria-label="Interactive front-view map of major human organs">
+          <defs>
+            <linearGradient id="body-shell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#dbe9e7"/><stop offset=".48" stopColor="#9bbdbd"/><stop offset="1" stopColor="#557c8a"/></linearGradient>
+            <linearGradient id="organ-core" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#f4b1a0"/><stop offset=".55" stopColor="#d66d76"/><stop offset="1" stopColor="#87485f"/></linearGradient>
+            <filter id="body-depth"><feGaussianBlur stdDeviation="7"/></filter>
+          </defs>
+          <ellipse cx="150" cy="595" rx="73" ry="12" fill="#183b4b" opacity=".12" filter="url(#body-depth)"/>
+          <path d="M150 23 C122 23 105 44 107 72 C109 95 123 111 150 112 C177 111 191 95 193 72 C195 44 178 23 150 23Z" fill="url(#body-shell)" opacity=".48" stroke="#77a1a4" strokeWidth="2"/>
+          <path d="M107 125 C82 129 63 148 58 180 L38 279 C35 296 44 304 53 299 C61 296 63 281 68 264 L88 199 L91 317 C92 348 101 378 106 409 L93 555 C91 576 104 583 113 568 L145 424 L155 424 L187 568 C196 583 209 576 207 555 L194 409 C199 378 208 348 209 317 L212 199 L232 264 C237 281 239 296 247 299 C256 304 265 296 262 279 L242 180 C237 148 218 129 193 125 C179 119 166 116 150 116 C134 116 121 119 107 125Z" fill="url(#body-shell)" opacity=".22" stroke="#86aeb0" strokeWidth="2"/>
+          <path d="M150 115 L150 415" stroke="#a9ceca" strokeWidth="1.2" strokeDasharray="3 7" opacity=".8"/>
+          <path d="M150 126 C126 131 111 152 114 184 C117 210 131 222 147 221 L147 171 C148 154 149 138 150 126Z" fill="#7cb2ba" opacity=".32"/>
+          <path d="M150 126 C174 131 189 152 186 184 C183 210 169 222 153 221 L153 171 C152 154 151 138 150 126Z" fill="#7cb2ba" opacity=".32"/>
+          <path d="M150 231 C132 216 111 229 116 251 C120 271 138 291 150 300 C162 291 180 271 184 251 C189 229 168 216 150 231Z" fill="url(#organ-core)" stroke="#f0c0ad" strokeWidth="2"/>
+          <path d="M150 305 C126 295 112 315 120 339 C129 363 144 373 150 376 C156 373 171 363 180 339 C188 315 174 295 150 305Z" fill="#bd8b67" opacity=".9"/>
+          <path d="M120 387 C128 372 172 372 180 387 C191 410 176 434 150 438 C124 434 109 410 120 387Z" fill="#d69b78" opacity=".9"/>
+          <path d="M125 450 C105 441 107 468 124 480 C137 489 141 476 150 471 C159 476 163 489 176 480 C193 468 195 441 175 450 C164 455 160 462 150 461 C140 462 136 455 125 450Z" fill="#a6c1a5" opacity=".9"/>
+        </svg>
+        {organAtlas.map(item=><button key={item.id} className={"organ-hotspot "+(selected===item.id?"selected":"")} style={{left:item.position.left,top:item.position.top}} onClick={()=>{setSelected(item.id);setShowDetail(false)}} aria-label={"Explore "+item.name} aria-pressed={selected===item.id}><span>{item.id==="heart"?"♥":item.id==="brain"?"✳":item.id==="lungs"?"Ⅱ":item.id==="liver"?"◒":item.id==="stomach"?"◉":item.id==="kidneys"?"◈":"⌁"}</span></button>)}
+        <div className="organ-map-caption"><span>HUMAN ANATOMY</span><b>SELECT AN ORGAN</b></div>
+      </div>
+      <div className="organ-atlas-detail">
+        <div className="organ-detail-top"><span>{organ.system}</span><small>{organ.tag}</small></div>
+        <div className={"organ-render organ-"+organ.id}>
+          <div className="organ-render-orbit"/><div className="organ-render-orbit second"/>
+          <svg viewBox="0 0 100 100" role="img" aria-label={organ.name+" anatomical illustration"}>
+            <defs><linearGradient id="organ-render-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#ffc0ae"/><stop offset=".48" stopColor="#d97880"/><stop offset="1" stopColor="#8b4565"/></linearGradient><filter id="organ-render-shadow"><feGaussianBlur stdDeviation="2.8"/></filter></defs>
+            <path d={organ.path} transform="translate(0 2)" fill="#1c3d51" opacity=".15" filter="url(#organ-render-shadow)"/>
+            <path d={organ.path} fill="url(#organ-render-fill)" stroke="#f5c6b6" strokeWidth="1.2"/>
+            <path d="M50 18 C38 30 36 47 50 77" fill="none" stroke="#ffe0cf" strokeWidth="2" opacity=".65" strokeLinecap="round"/>
+          </svg>
+          <span className="organ-render-label">BIO / {String(organAtlas.findIndex(item=>item.id===selected)+1).padStart(2,"0")}</span>
+        </div>
+        <span className="px-kicker">ORGAN PROFILE / {organ.name.toUpperCase()}</span>
+        <h3>{organ.name}</h3><p className="organ-role">{organ.role}</p>
+        <div className="organ-facts">{organ.facts.map(([value,label])=><div key={label}><b>{value}</b><small>{label}</small></div>)}</div>
+        <button className="organ-detail-toggle" onClick={()=>setShowDetail(v=>!v)}>{showDetail?"Hide anatomy notes":"Open anatomy notes"} <ArrowUpRight size={15}/></button>
+        {showDetail&&<div className="organ-deep-note"><b>HOW IT WORKS</b><p>{organ.detail}</p></div>}
+        <div className="organ-switcher"><span>EXPLORE ANOTHER ORGAN</span><div>{organAtlas.map(item=><button key={item.id} onClick={()=>{setSelected(item.id);setShowDetail(false)}} className={selected===item.id?"active":""}>{item.name}</button>)}</div></div>
+      </div>
+    </div>
+    <div className="organ-atlas-foot"><span>ANATOMY / EDUCATIONAL MODEL</span><span>Illustrative anatomy · not to scale</span></div>
+  </section>;
+}
+
 export function BioExperience() {
   const [active,setActive] = useState("heart");
   const [expanded,setExpanded] = useState(false);
@@ -203,10 +268,11 @@ export function BioExperience() {
     </section>
     <section className="px-bio-intro-strip"><span>THE HUMAN BODY / AN OPEN BOOK</span><p>Every heartbeat, every cell, every medicine has a story. <b>Start exploring yours.</b></p><span>SCROLL TO EXPLORE ↓</span></section>
     <nav className="px-bio-sticky-nav" aria-label="Bio Intelligent section navigation">
-      <a href="#explorer">Chapters</a><a href="#connections">The bigger picture</a><a href="#disclaimer">Learning note</a>
+      <a href="#organs">Organs</a><a href="#explorer">Chapters</a><a href="#connections">The bigger picture</a><a href="#disclaimer">Learning note</a>
       <div className="px-bio-progress"><span style={{width:((activeIndex+1)/chapters.length*100)+"%"}}/></div>
       <small>CHAPTER {activeIndex+1} OF 4</small>
     </nav>
+    <OrganAtlas/>
     <section className="px-bio-explorer" id="explorer">
       <div className="px-explorer-heading"><div><span className="px-kicker">INTERACTIVE FIELD GUIDE / 01—04</span><h2>Choose a system.<br/><em>Follow the science.</em></h2></div><p>Move between chapters to explore four connected parts of biology and medicine. Each chapter reveals a different layer of the story.</p></div>
       <div className="px-explorer-layout">
