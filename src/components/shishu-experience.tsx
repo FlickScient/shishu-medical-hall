@@ -194,7 +194,7 @@ function ModelViewer({ model, title }: { model: string; title: string }) {
     }
     return () => viewer.remove();
   }, [model, title]);
-  return <div ref={host} className={styles.modelStage} role="img" aria-label={title} />;
+  return <div ref={host} className={styles.modelStage} aria-label={title} />;
 }
 
 export function BioIntelligentExperience() {
