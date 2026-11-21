@@ -27,11 +27,11 @@ function Header({ shop, language, toggle }: { shop: string; language?: "en" | "b
         <Link href="/medicines">Medicines</Link>
         <Link href="/pharma">Pharma & science</Link>
         <Link href="/bio-intelligent">Bio Intelligent</Link>
-        <Link href="/health-library">Health library</Link>
+        <Link href="/health-library">Health library</Link><Link href="/#faq">FAQ</Link><Link href="/#visit">Contact</Link>
       </nav>
       <div className={styles.headerActions}>
         {toggle && <button className={styles.language} onClick={toggle}>{language === "bn" ? "EN" : "বাংলা"}</button>}
-        <Link className={styles.portal} href="/dashboard">Store portal <span>↗</span></Link>
+        <Link className={styles.portal} href="/login">Sign in <span>↗</span></Link>
         <button className={styles.menuButton} aria-label="Toggle navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(v => !v)}>{menuOpen ? "×" : "☰"}</button>
       </div>
       {menuOpen && <nav className={styles.mobileNav}>
@@ -39,7 +39,8 @@ function Header({ shop, language, toggle }: { shop: string; language?: "en" | "b
         <Link onClick={() => setMenuOpen(false)} href="/pharma">Pharma & science</Link>
         <Link onClick={() => setMenuOpen(false)} href="/bio-intelligent">Bio Intelligent</Link>
         <Link onClick={() => setMenuOpen(false)} href="/health-library">Health library</Link>
-        <Link onClick={() => setMenuOpen(false)} href="/dashboard">Store portal</Link>
+        <Link onClick={() => setMenuOpen(false)} href="/#faq">FAQ</Link><Link onClick={() => setMenuOpen(false)} href="/#visit">Contact</Link>
+        <Link onClick={() => setMenuOpen(false)} href="/login">Sign in</Link>
       </nav>}
     </header>
   );
@@ -138,9 +139,19 @@ export function ShishuHomePage({ profile = {}, medicineCount = null }: { profile
         <div className={styles.readingCopy}><span className={styles.sectionLabel}>03 / A MOMENT TO LEARN</span>{tip ? <><h2>{tip.title}</h2><p>{tip.intro}</p><Link href={"/health-library#" + tip.id}>Read this guide ↗</Link></> : <><h2>Small steps.<br /><em>Better understanding.</em></h2><p>Explore practical health education in the Health Library.</p><Link href="/health-library">Visit the library ↗</Link></>}<button onClick={() => setTipIndex(i => (i + 1) % Math.max(guides.length, 1))} disabled={guides.length < 2}>Another reading <span>→</span></button></div>
       </section>
 
-      <section className={styles.visit}>
+      <section className={styles.faqSection} id="faq">
+        <div className={styles.faqHeading}><span className={styles.sectionLabel}>GOOD TO KNOW / 05</span><h2>Clear answers.<br /><em>No confusion.</em></h2><p>A quick guide to what this website offers — and what it does not.</p></div>
+        <div className={styles.faqItems}>
+          <details open><summary>Is this an online pharmacy?</summary><p>No. Shishu Medical Hall is a local pharmacy. This website is an information and learning platform, not an online medicine store.</p></details>
+          <details><summary>Can I use the website to choose or dose a medicine?</summary><p>No. Medicine references and health guides are educational only. A registered doctor or pharmacist should advise on personal treatment and dosage.</p></details>
+          <details><summary>Where does the medicine information come from?</summary><p>The public medicine directory links to MedEx Bangladesh. It does not copy or claim ownership of the MedEx database.</p></details>
+          <details><summary>How do I access the Store Portal?</summary><p>Use the Sign in link. First-time owner setup is private and requires the one-time setup code provided by the project administrator.</p></details>
+        </div>
+      </section>
+
+      <section className={styles.visit} id="visit">
         <div><span className={styles.sectionLabel}>04 / SHISHU MEDICAL HALL</span><h2>A familiar pharmacy.<br /><em>A clearer view of health.</em></h2><p>This website is an educational and information resource for the community. It is not an online medicine shop and does not provide personal diagnosis or prescriptions.</p></div>
-        <div className={styles.visitDetails}><span>VISIT / CONTACT</span><p>{profile.address || "Visit our pharmacy"}</p><p>{profile.phone || "Contact the pharmacy"}</p><Link href="/dashboard">Store portal access ↗</Link></div>
+        <div className={styles.visitDetails}><span>VISIT / CONTACT</span><p>{profile.address || "Visit our pharmacy"}</p><p>{profile.phone || "Contact the pharmacy"}</p><Link href="/login">Store Portal sign in ↗</Link></div>
       </section>
       <Footer profile={profile} shop={shop} />
     </main>
