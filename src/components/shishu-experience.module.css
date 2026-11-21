@@ -29,3 +29,111 @@
 @media(max-width:760px){.header{height:70px;padding:0 17px}.nav{display:none}.menuButton{display:block;width:39px;padding:0}.headerActions{gap:7px}.portal{height:37px;padding:0 11px;font-size:9px}.mobileNav{position:absolute;display:grid;top:calc(100% + 1px);left:0;right:0;padding:8px 19px 18px;background:#fbfcfa;border-bottom:1px solid #dce4e4;box-shadow:0 18px 28px #102e4014}.mobileNav a{padding:14px 0;border-bottom:1px solid #e7ece8;color:#3e5b68;font-size:12px;font-weight:700}.hero{grid-template-columns:1fr;min-height:0}.heroCopy{padding:58px 22px 45px}.hero h1{font-size:clamp(49px,12vw,72px);margin:23px 0 17px}.heroCopy>p{font-size:12px}.heroFacts{margin-top:34px;gap:10px}.heroVisual{min-height:420px}.heroImageCaption{left:21px;bottom:34px}.heroImageCaption b{font-size:31px}.scrollCue{display:none}.introStrip{grid-template-columns:1fr 1fr;padding:43px 21px;gap:22px}.introStrip>div:first-child{grid-column:1/-1}.introStrip h2{font-size:39px}.stat{padding-left:13px}.stat b{font-size:28px}.bioFeature{grid-template-columns:1fr}.bioCopy{padding:54px 22px 35px}.bioCopy h2{font-size:49px}.bioModel{min-height:430px}.modelOrbitLabel{right:11px}.editorial{padding:58px 17px 65px}.editorialHeading{display:block;margin-bottom:25px}.editorialHeading h2{font-size:46px}.editorialGrid{grid-template-columns:1fr;gap:13px}.editorialImage{height:220px}.editorialCardCopy{padding:20px}.editorialCardCopy h3{font-size:30px}.reading{grid-template-columns:1fr}.readingImage{min-height:300px}.readingCopy{padding:42px 22px 48px}.visit{grid-template-columns:1fr;gap:25px;padding:54px 22px}.visit h2{font-size:42px}.visitDetails{padding:19px}.footer{padding:42px 20px 18px}.footerMain{grid-template-columns:1fr 1fr;gap:30px 20px}.footerBrand{grid-column:1/-1}.footerBottom{flex-direction:column;gap:9px;font-size:7px}.bioHero{grid-template-columns:1fr}.bioHeroCopy{padding:42px 22px 32px}.backLink{margin-bottom:25px}.bioHero h1{font-size:52px}.bioHeroVisual{min-height:420px}.bioIntro{grid-template-columns:1fr;gap:10px;padding:22px}.bioIntro>span:last-child{text-align:left}.bioIntro p{font-size:17px}.explorer{padding:55px 14px 62px}.explorerHeading{display:block;margin-bottom:22px;padding:0 6px}.explorerHeading h2{font-size:44px}.explorerHeading>p{margin-top:15px}.explorerLayout{grid-template-columns:1fr}.chapterRail{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:9px}.chapterRail>span,.railNote{grid-column:1/-1}.chapterRail>span{padding:3px 4px 6px}.chapterRail button{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:10px 7px}.chapterRail button b{font-size:8px}.chapterRail button>span{display:none}.railNote{margin-top:5px;padding:9px 4px}.chapterViewer{min-height:380px}.viewerHud{left:8px;right:8px;top:8px;padding:8px;font-size:6px}.modelSource{left:8px;bottom:8px;max-width:calc(100% - 16px);font-size:6px}.chapterInfo{padding:23px 19px;min-height:0}.chapterInfo h3{margin:25px 0 11px;font-size:35px}.chapterControls{margin-top:26px}.bioConnection{grid-template-columns:1fr;gap:15px;padding:44px 22px}.bioConnection h2{font-size:37px}.bioConnection>a{grid-column:auto}.bioDisclaimer{padding:21px 22px}}
 @media(max-width:390px){.language{padding:0 8px}.portal{font-size:8px;padding:0 8px}.heroActions{gap:15px}.primaryButton{padding:13px}.chapterRail button b{font-size:7px}}
 @media(prefers-reduced-motion:reduce){.editorialCard,.editorialImage img,.primaryButton{transition:none}}
+
+/* Reference-led art direction: editorial healthcare + immersive science */
+.site{--ink:#102b49;--navy:#071d3c;--blue:#1552a0;--cyan:#79d8e8;--lime:#d9f52d;--paper:#f5f7fb;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+.header{height:78px;padding-inline:clamp(18px,5.2vw,86px);background:rgba(248,250,253,.94);backdrop-filter:blur(18px);border-bottom:1px solid #dfe7f2}
+.brand img{width:44px;height:44px;object-fit:contain}
+.nav a{font-size:11px;letter-spacing:.015em;color:#405b78}
+.portal{background:#102f67;padding:13px 17px;transition:transform .25s,background .25s}
+.portal:hover{transform:translateY(-2px);background:#1b4d9b}
+.hero{min-height:700px;grid-template-columns:.94fr 1.06fr;background:#061e48}
+.heroCopy{padding-left:clamp(28px,7vw,112px);padding-right:clamp(24px,5vw,72px)}
+.heroCopy h1{font-family:Arial,Helvetica,sans-serif;font-size:clamp(58px,7vw,102px);font-weight:400;line-height:.91;letter-spacing:-.085em;margin:31px 0 25px}
+.heroCopy h1 em{color:#b6dce7;font-style:normal;font-weight:300}
+.heroCopy p{font-size:14px;max-width:410px;color:#c3d3e6;line-height:1.9}
+.kicker{color:#9bd7dc}
+.heroLinks{gap:13px}
+.heroLinks a:first-child{background:#e7f4f7;color:#0b2c57;padding:15px 17px;border:0}
+.heroLinks a:last-child{padding:14px 4px}
+.heroImage{background:#123c77}
+.heroImage img{object-position:center;filter:saturate(.92) contrast(1.03)}
+.heroShade{background:linear-gradient(90deg,#061e4855,transparent 30%),linear-gradient(0deg,#06162fe0,transparent 54%)}
+.plate{background:#0a275cbd;padding:12px 15px;border:1px solid #b7d9e54a}
+.heroCaption b{font-family:Arial,Helvetica,sans-serif;font-style:normal;font-weight:400;font-size:clamp(23px,3vw,38px);letter-spacing:-.04em}
+.heroFoot{color:#b6d2dc}
+.index{padding-block:clamp(68px,8vw,112px);background:#f5f7fb}
+.index h2,.faqIntro h2{font-family:Arial,Helvetica,sans-serif;font-weight:400;letter-spacing:-.07em}
+.index h2 em,.faqIntro h2 em{color:#167f9b}
+.indexStats b{font-family:Arial,Helvetica,sans-serif;font-weight:400;letter-spacing:-.06em;color:#174d86}
+.feature{background:#eaf0f8;grid-template-columns:1.04fr .96fr;min-height:690px}
+.featureImage{min-height:690px;background:#dce6f4}
+.featureImage img{mix-blend-mode:normal;filter:saturate(.84);object-position:center}
+.featureText h2,.splitText h2,.medicineText h2{font-family:Arial,Helvetica,sans-serif;font-weight:400;letter-spacing:-.075em}
+.featureText h2 em,.splitText h2 em,.medicineText h2 em{color:#13859b}
+.featureText p,.splitText p,.medicineText p,.tipCopy p,.faqIntro p{font-size:13px;line-height:2;color:#60748b}
+.featureText>a,.splitText>a,.medicineText>a,.tipCopy>a{font-weight:700;border-bottom-color:#83a7c1}
+.splitFeature{background:#f7f8fb;min-height:640px}
+.splitImage{min-height:640px}
+.medicineBand{background:#092650;min-height:570px}
+.medicineText h2 em{color:#9edee6}
+.tip{background:#e4edf5}
+.tipCopy h2{font-family:Arial,Helvetica,sans-serif;font-weight:400;letter-spacing:-.07em}
+.faq{background:#f7f8fb}
+.faqList button b{font-size:13px}
+.footer{background:#061b3c}
+.footerMain a:hover{color:#b6e6e8}
+.modelStage{position:absolute;inset:0;min-width:0;min-height:0;overflow:hidden;background:radial-gradient(ellipse at 50% 43%,#b9e3f0 0%,#527fb2 38%,#0b2a5c 78%,#071b3d 100%)}
+.bioModel .modelStage{inset:0}
+.bioHeroVisual .modelStage{inset:0}
+.modelStage :global(model-viewer){width:100%;height:100%;--poster-color:transparent;background:transparent}
+.bioModel{isolation:isolate;background:radial-gradient(ellipse at 50% 44%,#a6e4ec 0%,#326b9a 39%,#0b2c60 78%)}
+.bioModel:before{content:"";position:absolute;inset:8% 12%;border:1px solid #d5f8f45c;border-radius:50%;transform:rotate(-24deg);pointer-events:none}
+.bioModel:after{content:"";position:absolute;inset:17% 4%;border:1px dashed #b4e8ed55;border-radius:50%;transform:rotate(22deg);pointer-events:none}
+.modelGlow{background:radial-gradient(circle,#b5f5f1a8 0%,#7dd6e52b 38%,transparent 68%);filter:blur(10px)}
+.modelLabel{z-index:3;background:#061f4bd9;border:1px solid #b9e5e54d;padding:13px 16px;backdrop-filter:blur(14px)}
+.modelLabel span{color:#a4e7e9}
+.modelLabel b{color:#f2f8fc}
+.modelOrbitLabel{z-index:3;color:#d3eef1}
+.bioHeroVisual{background:#071e42}
+.bioHeroVisual .modelStage{background:radial-gradient(ellipse at 50% 42%,#b3e6ee 0%,#467ca8 36%,#102f66 76%,#071b3d 100%)}
+.bioHeroStamp{z-index:3;background:#071f49d9;border:1px solid #b9e5e54d;padding:13px 16px}
+.bioHeroStamp span{color:#a4e7e9}
+.bioHeroStamp b{color:#f3f8fb}
+.bioHeroVertical{z-index:3;color:#b9dbe5}
+.explorer{background:#f5f7fb}
+.explorerHeading h2,.bioConnection h2{font-family:Arial,Helvetica,sans-serif;font-weight:400;letter-spacing:-.07em}
+.explorerHeading h2 em,.bioConnection h2 em{color:#13859b}
+.explorerLayout{gap:18px}
+.chapterRail{background:#0a2751}
+.chapterRail>span,.railNote{color:#a7c6d8}
+.chapterRail button{border-bottom-color:#31517a;color:#d9e7f2}
+.chapterRail button small,.chapterRail button span{color:#9fc9d7}
+.chapterRail button.activeChapter{background:#153e76;border-left:3px solid #c6ed47}
+.chapterPanel{background:#e7edf5;border:1px solid #d5e0ec;box-shadow:0 20px 60px #173a6612}
+.chapterViewer{position:relative;min-height:520px;background:#0a2a5b;overflow:hidden}
+.chapterViewer .modelStage{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,#c0edf1 0%,#487fa9 39%,#0a2b5e 82%)}
+.viewerHud{z-index:3;background:#08224fc9;color:#d9f0f1;border:1px solid #b5dce64a;padding:10px 13px;backdrop-filter:blur(12px)}
+.modelSource{z-index:3;background:#08224fc9;color:#d9f0f1}
+.chapterInfo{background:#f5f7fb}
+.chapterInfoTop{color:#16849a}
+.chapterInfo h3{font-family:Arial,Helvetica,sans-serif;font-weight:400;letter-spacing:-.06em}
+.chapterInfo>p,.factList{color:#61768c}
+.chapterStat{background:#e2edf4;border-color:#d2e0eb}
+.chapterStat b{color:#1552a0}
+.chapterControls button{background:#0c326b;color:white}
+.bioConnection{background:#e7eef7}
+.bioDisclaimer{background:#0a2348;color:#c5d8e8}
+.bioDisclaimer b{color:#a7e4e5}
+@media(max-width:850px){
+ .hero{min-height:0}
+ .heroImage{min-height:620px}
+ .heroCopy{padding:255px 28px 76px}
+ .heroCopy h1{font-size:clamp(58px,13vw,86px)}
+ .featureImage{min-height:440px}
+ .chapterViewer{min-height:410px}
+}
+@media(max-width:520px){
+ .header{height:72px}
+ .heroImage{min-height:570px}
+ .heroCopy{padding:230px 22px 70px}
+ .heroFoot{gap:10px;font-size:6px}
+ .index{padding:58px 22px}
+ .indexStats{gap:8px}
+ .indexStats b{font-size:25px}
+ .indexStats span{font-size:8px}
+ .featureImage,.splitImage{min-height:320px}
+ .chapterViewer{min-height:340px}
+ .modelLabel,.bioHeroStamp{left:12px;right:12px;bottom:12px}
+}
+@media(prefers-reduced-motion:reduce){.portal{transition:none}}
