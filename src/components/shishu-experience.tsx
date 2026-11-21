@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { healthGuides } from "@/lib/health-guides";
+import { Pill, BookOpen, Dna, ShieldCheck } from "lucide-react";
 import styles from "./shishu-experience.module.css";
 
 type Profile = {
@@ -81,7 +82,11 @@ export function ShishuHomePage({ profile = {}, medicineCount = null }: { profile
             <Link href="/health-library" className={styles.primaryButton}>Explore health knowledge <span>↗</span></Link>
             <Link href="/medicines" className={styles.textButton}>Browse medicine references <span>→</span></Link>
           </div>
-          <div className={styles.heroFacts}><span>01 / MEDICINE REFERENCES</span><span>02 / HEALTH EDUCATION</span><span>03 / BIOLOGY & SCIENCE</span></div>
+          <div className={styles.heroFacts}>
+            <div><span className={styles.heroFactIcon}><Pill size={16} /></span><b>Medicine<br />references</b></div>
+            <div><span className={styles.heroFactIcon}><BookOpen size={16} /></span><b>Health<br />education</b></div>
+            <div><span className={styles.heroFactIcon}><Dna size={16} /></span><b>Biology<br />& science</b></div>
+          </div>
         </div>
         <div className={styles.heroVisual}>
           <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=1500&q=88" alt="Healthcare professional in a clinical setting" />
@@ -89,6 +94,10 @@ export function ShishuHomePage({ profile = {}, medicineCount = null }: { profile
           <div className={styles.heroImageTop}><span>SHISHU MEDICAL HALL</span><span>EST. / LOCAL CARE</span></div>
           <div className={styles.heroImageCaption}><span>CARE, KNOWLEDGE & COMMUNITY</span><b>Health is personal.<br />Understanding should be clear.</b></div>
           <div className={styles.heroImageIndex}>01 — 04</div>
+        </div>
+        <div className={styles.heroFloatCard}>
+          <span className={styles.heroFloatIcon}><ShieldCheck size={18} /></span>
+          <div><b>{medicineCount === null ? "—" : medicineCount.toLocaleString("en-BD")}</b><small>Local medicine records</small></div>
         </div>
         <a href="#explore" className={styles.scrollCue}>SCROLL TO EXPLORE <span>↓</span></a>
       </section>
@@ -246,4 +255,4 @@ export function BioIntelligentExperience() {
       <Footer profile={{}} shop="Shishu Medical Hall" />
     </main>
   );
-    }
+}
