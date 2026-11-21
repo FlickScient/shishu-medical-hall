@@ -75,7 +75,7 @@ export function ShishuHomePage({ profile = {}, medicineCount = null }: { profile
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <span className={styles.eyebrow}><i /> A LOCAL PHARMACY · A WORLD OF KNOWLEDGE</span>
-          <h1>{language === "bn" ? <>স্বাস্থ্যকে বুঝুন।<br /><em>আরও আত্মবিশ্বাসে।</em></> : <>Care begins<br />with <em>clarity.</em></>}</h1>
+          <h1>{language === "bn" ? <>স্বাস্থ্যকে বুঝুন।<br /><em>আরও আত্মবিশ্বাসে।</em></> : <>Care begins <span className={styles.heroBadge}>♥</span><br />with <em>clarity.</em></>}</h1>
           <p>{language === "bn" ? "ওষুধ, মানবদেহ এবং আধুনিক স্বাস্থ্যবিজ্ঞানের বিষয়গুলো জানুন—সহজভাবে, নির্ভরযোগ্য তথ্যের ভিত্তিতে।" : "A neighbourhood pharmacy with a place to explore medicines, understand the human body and discover the science behind better healthcare."}</p>
           <div className={styles.heroActions}>
             <Link href="/health-library" className={styles.primaryButton}>Explore health knowledge <span>↗</span></Link>
@@ -246,4 +246,4 @@ export function BioIntelligentExperience() {
       <Footer profile={{}} shop="Shishu Medical Hall" />
     </main>
   );
-}
+    }
