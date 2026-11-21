@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { healthGuides } from "@/lib/health-guides";
 import styles from "./shishu-experience.module.css";
 
@@ -14,7 +14,6 @@ type Profile = {
 };
 
 const heartModel = "https://cdn.humanatlas.io/digital-objects/ref-organ/heart-female/v1.3/assets/3d-vh-f-heart.glb";
-const heartViewer = "https://www.innerscene.com/tools/3d-viewer?url=" + encodeURIComponent(heartModel) + "&embedded=1";
 
 function Header({ shop, language, toggle }: { shop: string; language?: "en" | "bn"; toggle?: () => void }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -110,7 +109,7 @@ export function ShishuHomePage({ profile = {}, medicineCount = null }: { profile
         </div>
         <div className={styles.bioModel}>
           <div className={styles.modelGlow} />
-          <iframe src={heartViewer} title="Interactive 3D human heart model" loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen />
+          <ModelViewer model={heartModel} title="Interactive 3D anatomical human heart" />
           <div className={styles.modelLabel}><span>ANATOMY / PLATE 001</span><b>HUMAN HEART · 3D REFERENCE</b></div>
           <div className={styles.modelOrbitLabel}>ROTATE · EXPLORE · LEARN</div>
         </div>
@@ -156,8 +155,35 @@ const chapters = [
 ];
 
 function ModelViewer({ model, title }: { model: string; title: string }) {
-  const src = "https://www.innerscene.com/tools/3d-viewer?url=" + encodeURIComponent(model) + "&embedded=1";
-  return <iframe src={src} title={title} loading="lazy" allow="fullscreen; xr-spatial-tracking" allowFullScreen />;
+  const host = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const node = host.current;
+    if (!node) return;
+    const viewer = document.createElement("model-viewer");
+    viewer.setAttribute("src", model);
+    viewer.setAttribute("alt", title);
+    viewer.setAttribute("camera-controls", "");
+    viewer.setAttribute("auto-rotate", "");
+    viewer.setAttribute("rotation-per-second", "12deg");
+    viewer.setAttribute("shadow-intensity", "1");
+    viewer.setAttribute("exposure", "1.05");
+    viewer.setAttribute("interaction-prompt", "auto");
+    viewer.setAttribute("camera-orbit", "0deg 72deg 105%");
+    viewer.setAttribute("loading", "lazy");
+    viewer.style.width = "100%";
+    viewer.style.height = "100%";
+    viewer.style.background = "transparent";
+    node.replaceChildren(viewer);
+    if (!document.querySelector('script[data-shishu-model-viewer="true"]')) {
+      const script = document.createElement("script");
+      script.type = "module";
+      script.src = "https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js";
+      script.dataset.shishuModelViewer = "true";
+      document.head.appendChild(script);
+    }
+    return () => viewer.remove();
+  }, [model, title]);
+  return <div ref={host} className={styles.modelStage} role="img" aria-label={title} />;
 }
 
 export function BioIntelligentExperience() {
